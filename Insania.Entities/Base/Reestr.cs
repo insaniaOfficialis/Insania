@@ -29,7 +29,7 @@ public abstract class Reestr : Base
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="isSystem">Признак системной записи</param>
-    public Reestr(string? user, bool isSystem): base(user)
+    public Reestr(string user, bool isSystem): base(user)
     {
         IsSystem = isSystem;
     }
@@ -40,7 +40,7 @@ public abstract class Reestr : Base
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
-    public Reestr(long id, string? user, bool isSystem): 
+    public Reestr(long id, string user, bool isSystem): 
         base(id, user)
     {
         IsSystem = isSystem;

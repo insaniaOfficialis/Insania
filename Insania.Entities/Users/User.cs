@@ -3,10 +3,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-namespace Domain.Entities.Identification;
+namespace Insania.Entities.Users;
 
 /// <summary>
-/// Модель сущности пользователей
+/// Модель сущности пользователя
 /// </summary>
 [Comment("Пользователи")]
 public class User : IdentityUser<long>
@@ -70,7 +70,7 @@ public class User : IdentityUser<long>
     }
 
     /// <summary>
-    /// Простой конструктор модели сущности пользователей
+    /// Простой конструктор модели сущности пользователя
     /// </summary>
     public User()
     {
@@ -80,7 +80,7 @@ public class User : IdentityUser<long>
     }
 
     /// <summary>
-    /// Конструктор модели сущности пользователей без id
+    /// Конструктор модели сущности пользователя без id
     /// </summary>
     /// <param name="login">Логин</param>
     /// <param name="email">Почта</param>
@@ -106,7 +106,7 @@ public class User : IdentityUser<long>
     }
 
     /// <summary>
-    /// Конструктор модели сущности пользователей с id
+    /// Конструктор модели сущности пользователя с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="login">Логин</param>

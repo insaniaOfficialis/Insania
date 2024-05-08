@@ -78,12 +78,12 @@ public abstract class Base
     /// Конструктор базовой сущности без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
-    public Base(string? user): this()
+    public Base(string user): this()
     {
         DateCreate = DateTime.UtcNow;
-        UserCreate = user ?? "system";
+        UserCreate = user;
         DateUpdate = DateTime.UtcNow;
-        UserUpdate = user ?? "system";
+        UserUpdate = user;
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public abstract class Base
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
-    public Base(long id, string? user): this(user)
+    public Base(long id, string user): this(user)
     {
         Id = id;
     }
@@ -101,10 +101,10 @@ public abstract class Base
     /// </summary>
     /// <param name="dateUpdate">Дата обновления</param>
     /// <param name="userUpdate">Пользователь, обновивший</param>
-    public void SetUpdate(string? user)
+    public void SetUpdate(string user)
     {
         DateUpdate = DateTime.UtcNow;
-        UserUpdate = user ?? "system";
+        UserUpdate = user;
     }
 
     /// <summary>

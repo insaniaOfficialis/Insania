@@ -9,7 +9,7 @@ namespace Insania.Entities.Base;
 /// <summary>
 /// Модель сущности справочника
 /// </summary>
-public abstract class Directory : Base
+public abstract class Guide : Base
 {
     /// <summary>
     /// Наименование
@@ -38,7 +38,7 @@ public abstract class Directory : Base
     /// <summary>
     /// Простой конструктор модели сущности справочника
     /// </summary>
-    public Directory() : base()
+    public Guide() : base()
     {
         Name = string.Empty;
         Alias = string.Empty;
@@ -49,7 +49,7 @@ public abstract class Directory : Base
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
-    public Directory(string user, string name) :
+    public Guide(string user, string name) :
         base(user)
     {
         Name = name;
@@ -62,7 +62,7 @@ public abstract class Directory : Base
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
-    public Directory(long id, string user, string name):
+    public Guide(long id, string user, string name):
         base(id, user)
     {
         Name = name;
