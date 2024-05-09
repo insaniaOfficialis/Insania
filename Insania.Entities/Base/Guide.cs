@@ -49,8 +49,7 @@ public abstract class Guide : Base
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
-    public Guide(string user, string name) :
-        base(user)
+    public Guide(string user, string name) : base(user)
     {
         Name = name;
         Alias = Transliteration.Translit(name);
@@ -62,8 +61,7 @@ public abstract class Guide : Base
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
-    public Guide(long id, string user, string name):
-        base(id, user)
+    public Guide(long id, string user, string name) : base(id, user)
     {
         Name = name;
         Alias = Transliteration.Translit(name);

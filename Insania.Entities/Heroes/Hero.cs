@@ -1,17 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
-using Insania.Entities.Players;
-using Insania.Entities.Chronology;
-using Domain.Entities.Sociology;
 using Insania.Entities.Appearance;
-using System.ComponentModel;
-using Insania.Entities.Users;
-using System.Numerics;
-using System.Reflection;
-using System;
+using Insania.Entities.Base;
+using Insania.Entities.Chronology;
+using Insania.Entities.Players;
+using Insania.Entities.Sociology;
 
 namespace Insania.Entities.Heroes;
 
