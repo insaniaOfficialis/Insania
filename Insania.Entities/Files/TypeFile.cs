@@ -29,7 +29,7 @@ public class TypeFile : Guide
     }
 
     /// <summary>
-    /// Конструктор сущности типа файлов без id
+    /// Конструктор модели сущности типа файлов без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>

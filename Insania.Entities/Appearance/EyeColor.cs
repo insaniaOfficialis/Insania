@@ -7,7 +7,7 @@ using Insania.Entities.Base;
 namespace Insania.Entities.Appearance;
 
 /// <summary>
-/// Модель сущности цветов глаз
+/// Модель сущности цвета глаз
 /// </summary>
 [Table("dir_eye_colors")]
 [Comment("Цвета глаз")]
@@ -21,7 +21,7 @@ public class EyeColor : Guide
     public string Rgb { get; private set; }
 
     /// <summary>
-    /// Простой конструктор модели сущности цветов глаз
+    /// Простой конструктор модели сущности цвета глаз
     /// </summary>
     public EyeColor() : base()
     {
@@ -29,7 +29,7 @@ public class EyeColor : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности рас цветов глаз id
+    /// Конструктор модели сущности рас цвета глаз id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
@@ -40,7 +40,7 @@ public class EyeColor : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности цветов глаз с id
+    /// Конструктор модели сущности цвета глаз с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>

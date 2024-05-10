@@ -7,14 +7,14 @@ using Insania.Entities.Base;
 namespace Insania.Entities.Appearance;
 
 /// <summary>
-/// Модель сущности типов телосложений
+/// Модель сущности типа телосложения
 /// </summary>
 [Table("dir_types_body")]
 [Comment("Типы телосложений")]
 public class TypeBody : Guide
 {
     /// <summary>
-    /// Простой конструктор модели сущности типов телосложений
+    /// Простой конструктор модели сущности типа телосложения
     /// </summary>
     public TypeBody() : base()
     {
@@ -22,7 +22,7 @@ public class TypeBody : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности типов телосложений без id
+    /// Конструктор модели сущности типа телосложения без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
@@ -32,7 +32,7 @@ public class TypeBody : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности типов телосложений с id
+    /// Конструктор модели сущности типа телосложения с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>

@@ -37,7 +37,7 @@ public class File : Reestr
     /// <summary>
     /// Навигационное свойство типа
     /// </summary>
-    [ForeignKey("TypeId")]
+    //[ForeignKey("TypeId")]
     public TypeFile Type { get; private set; }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class File : Reestr
     }
 
     /// <summary>
-    /// Конструктор сущности файла без id
+    /// Конструктор модели сущности файла без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="isSystem">Признак системной записи</param>

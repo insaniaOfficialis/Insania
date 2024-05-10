@@ -41,7 +41,7 @@ public class Month : Guide
     }
 
     /// <summary>
-    /// Конструктор сущности месяца без id
+    /// Конструктор модели сущности месяца без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Insania.Entities.Base;
 
-namespace Domain.Entities.Sociology;
+namespace Insania.Entities.Sociology;
 
 /// <summary>
 /// Модель сущности рас

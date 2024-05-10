@@ -7,7 +7,7 @@ using Insania.Entities.Base;
 namespace Insania.Entities.Appearance;
 
 /// <summary>
-/// Модель сущности цветов волос
+/// Модель сущности цвета волос
 /// </summary>
 [Table("dir_hair_colors")]
 [Comment("Цвета волос")]
@@ -21,7 +21,7 @@ public class HairColor : Guide
     public string Rgb { get; private set; }
 
     /// <summary>
-    /// Простой конструктор модели сущности цветов волос
+    /// Простой конструктор модели сущности цвета волос
     /// </summary>
     public HairColor() : base()
     {
@@ -29,7 +29,7 @@ public class HairColor : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности рас цветов волос id
+    /// Конструктор модели сущности рас цвета волос id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
@@ -40,7 +40,7 @@ public class HairColor : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности цветов волос с id
+    /// Конструктор модели сущности цвета волос с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>

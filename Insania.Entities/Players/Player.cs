@@ -36,14 +36,14 @@ public class Player : Reestr
     /// <summary>
     /// Простой конструктор модели сущности игрока
     /// </summary>
-    public Player()
+    public Player() : base()
     {
         LoyaltyPoints = 0;
         User = new();
     }
 
     /// <summary>
-    /// Конструктор сущности игрока без id
+    /// Конструктор модели сущности игрока без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="isSystem">Признак системной записи</param>

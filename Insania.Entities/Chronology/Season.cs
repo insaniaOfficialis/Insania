@@ -29,7 +29,7 @@ public class Season : Guide
     }
 
     /// <summary>
-    /// Конструктор сущности сезона без id
+    /// Конструктор модели сущности сезона без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>

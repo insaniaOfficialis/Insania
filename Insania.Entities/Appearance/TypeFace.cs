@@ -7,14 +7,14 @@ using Insania.Entities.Base;
 namespace Insania.Entities.Appearance;
 
 /// <summary>
-/// Модель сущности типов лиц
+/// Модель сущности типа лиц
 /// </summary>
 [Table("dir_types_face")]
 [Comment("Типы лиц")]
 public class TypeFace : Guide
 {
     /// <summary>
-    /// Простой конструктор модели сущности типов лиц
+    /// Простой конструктор модели сущности типа лиц
     /// </summary>
     public TypeFace() : base()
     {
@@ -22,7 +22,7 @@ public class TypeFace : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности типов лиц без id
+    /// Конструктор модели сущности типа лиц без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
@@ -32,7 +32,7 @@ public class TypeFace : Guide
     }
 
     /// <summary>
-    /// Конструктор модели сущности типов лиц с id
+    /// Конструктор модели сущности типа лиц с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>

@@ -182,7 +182,7 @@ public class Hero : Reestr
     /// <summary>
     /// Простой конструктор модели сущности персонажа
     /// </summary>
-    public Hero()
+    public Hero() : base()
     {
         Player = new();
         PersonalName = string.Empty;
@@ -195,7 +195,7 @@ public class Hero : Reestr
     }
 
     /// <summary>
-    /// Конструктор сущности персонажа без id
+    /// Конструктор модели сущности персонажа без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="isSystem">Признак системной записи</param>
