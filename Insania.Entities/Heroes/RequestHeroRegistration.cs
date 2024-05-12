@@ -275,7 +275,7 @@ public class RequestHeroRegistration : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на персонажа
+    /// Метод записи персонажа
     /// </summary>
     /// <param name="hero">Ссылка на персонажа</param>
     public void SetHero(Hero hero)
@@ -285,7 +285,7 @@ public class RequestHeroRegistration : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на статуса
+    /// Метод записи статуса
     /// </summary>
     /// <param name="status">Ссылка на статус</param>
     public void SetStatus(StatusRequestsHeroRegistration status)
@@ -295,7 +295,7 @@ public class RequestHeroRegistration : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на ответственного администратора
+    /// Метод записи ответственного администратора
     /// </summary>
     /// <param name="administrator">Ссылка на ответственного администратора</param>
     public void SetAdministrator(Administrator administrator)

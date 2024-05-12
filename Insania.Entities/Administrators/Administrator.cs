@@ -149,7 +149,7 @@ public class Administrator : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на пользователя
+    /// Метод записи пользователя
     /// </summary>
     /// <param name="user">Ссылка на пользователя</param>
     public void SetUser(User user)
@@ -159,7 +159,7 @@ public class Administrator : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на должность
+    /// Метод записи должности
     /// </summary>
     /// <param name="post">Ссылка на должность</param>
     public void SetPost(Post post)
@@ -169,7 +169,7 @@ public class Administrator : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на звание
+    /// Метод записи звания
     /// </summary>
     /// <param name="rank">Ссылка на звание</param>
     public void SetRank(Rank rank)
@@ -179,7 +179,7 @@ public class Administrator : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на капитул
+    /// Метод записи капитула
     /// </summary>
     /// <param name="chapter">Ссылка на капитул</param>
     public void SetChapter(Chapter chapter)

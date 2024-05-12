@@ -61,7 +61,7 @@ public class StatusRequestsHeroRegistration : Guide
     }
 
     /// <summary>
-    /// Метод записи ссылки на предыдущий статус
+    /// Метод записи предыдущего статуса
     /// </summary>
     /// <param name="previous">Ссылка на предыдущий статус</param>
     public void SetPrevious(StatusRequestsHeroRegistration previous)

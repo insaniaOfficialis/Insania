@@ -9,6 +9,8 @@ namespace Insania.Entities.Files;
 /// <summary>
 /// Модель сущности файла персонажа
 /// </summary>
+[Table("un_files_heroes")]
+[Comment("Файлы персонажей")]
 public class FileHero : EntityFile
 {
     /// <summary>
@@ -85,7 +87,7 @@ public class FileHero : EntityFile
     }
 
     /// <summary>
-    /// Метод записи ссылки на персонажа
+    /// Метод записи персонажа
     /// </summary>
     /// <param name="hero">Ссылка на персонажа</param>
     public void SetHero(Hero hero)

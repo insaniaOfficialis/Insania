@@ -73,7 +73,7 @@ public class Player : Reestr
     }
 
     /// <summary>
-    /// Метод записи ссылки на пользователя
+    /// Метод записи пользователя
     /// </summary>
     /// <param name="user">Ссылка на пользователя</param>
     public void SetUser(User user)

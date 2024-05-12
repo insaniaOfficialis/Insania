@@ -70,7 +70,7 @@ public class Month : Guide
     }
 
     /// <summary>
-    /// Метод записи ссылки на сезон
+    /// Метод записи сезона
     /// </summary>
     /// <param name="season">Ссылка на сезон</param>
     public void SetSeason(Season season)

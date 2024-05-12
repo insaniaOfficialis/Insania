@@ -52,7 +52,7 @@ public class Post : Guide
     }
 
     /// <summary>
-    /// Метод записи ссылки на сферу деятельности
+    /// Метод записи сферы деятельности
     /// </summary>
     /// <param name="scopeActivity">Сфера деятельности</param>
     public void SetScopeActivity(string scopeActivity)

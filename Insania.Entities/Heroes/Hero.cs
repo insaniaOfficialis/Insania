@@ -71,11 +71,11 @@ public class Hero : Reestr
     public Month BirthMonth { get; private set; }
 
     /// <summary>
-    /// Год рождения
+    /// Цикл рождения
     /// </summary>
-    [Column("birth_year")]
-    [Comment("Год рождения")]
-    public int BirthYear { get; private set; }
+    [Column("birth_cycle")]
+    [Comment("Цикл рождения")]
+    public int BirthCycle { get; private set; }
 
     /// <summary>
     /// Ссылка на нацию
@@ -124,7 +124,7 @@ public class Hero : Reestr
     /// <summary>
     /// Ссылка на цвет глаз
     /// </summary>
-    [Column("hair_color_id")]
+    [Column("eye_color_id")]
     [Comment("Ссылка на цвет глаз")]
     public long EyeColorId { get; private set; }
 
@@ -205,7 +205,7 @@ public class Hero : Reestr
     /// <param name="familyName">Имя семьи</param>
     /// <param name="birthDay">День рождения</param>
     /// <param name="birthMonth">Месяц рождения</param>
-    /// <param name="birthYear">Год рождения</param>
+    /// <param name="birthCycle">Цикл рождения</param>
     /// <param name="nation">Нация</param>
     /// <param name="gender">Пол</param>
     /// <param name="height">Рост</param>
@@ -218,7 +218,7 @@ public class Hero : Reestr
     /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
     public Hero(string user, bool isSystem, Player player, string personalName, string? prefixName, 
-        string? familyName, int birthDay, Month birthMonth, int birthYear, Nation nation, bool gender, int height,
+        string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
         int weight, HairColor hairColor, EyeColor eyeColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
         bool isCurrent, DateTime? freezingTo) : base(user, isSystem)
     {
@@ -230,7 +230,7 @@ public class Hero : Reestr
         BirthDay = birthDay;
         BirthMonthId = birthMonth.Id;
         BirthMonth = birthMonth;
-        BirthYear = birthYear;
+        BirthCycle = birthCycle;
         NationId = nation.Id;
         Nation = nation;
         Gender = gender;
@@ -261,7 +261,7 @@ public class Hero : Reestr
     /// <param name="familyName">Имя семьи</param>
     /// <param name="birthDay">День рождения</param>
     /// <param name="birthMonth">Месяц рождения</param>
-    /// <param name="birthYear">Год рождения</param>
+    /// <param name="birthCycle">Цикл рождения</param>
     /// <param name="nation">Нация</param>
     /// <param name="gender">Пол</param>
     /// <param name="height">Рост</param>
@@ -274,7 +274,7 @@ public class Hero : Reestr
     /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
     public Hero(long id, string user, bool isSystem, Player player, string personalName, string? prefixName,
-        string? familyName, int birthDay, Month birthMonth, int birthYear, Nation nation, bool gender, int height,
+        string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
         int weight, HairColor hairColor, EyeColor eyeColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
         bool isCurrent, DateTime? freezingTo) : base(id, user, isSystem)
     {
@@ -286,7 +286,7 @@ public class Hero : Reestr
         BirthDay = birthDay;
         BirthMonthId = birthMonth.Id;
         BirthMonth = birthMonth;
-        BirthYear = birthYear;
+        BirthCycle = birthCycle;
         NationId = nation.Id;
         Nation = nation;
         Gender = gender;
@@ -362,12 +362,12 @@ public class Hero : Reestr
     }
 
     /// <summary>
-    /// Метод записи года рождения
+    /// Метод записи цикла рождения
     /// </summary>
-    /// <param name="birthYear">Год рождения</param>
-    public void SetBirthYear(int birthYear)
+    /// <param name="birthCycle">Цикл рождения</param>
+    public void SetBirthCycle(int birthCycle)
     {
-        BirthYear = birthYear;
+        BirthCycle = birthCycle;
     }
 
     /// <summary>

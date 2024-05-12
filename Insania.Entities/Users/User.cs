@@ -8,6 +8,7 @@ namespace Insania.Entities.Users;
 /// <summary>
 /// Модель сущности пользователя
 /// </summary>
+[Table("sys_users")]
 [Comment("Пользователи")]
 public class User : IdentityUser<long>
 {

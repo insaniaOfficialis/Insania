@@ -103,7 +103,7 @@ public class Chapter : Reestr
     }
 
     /// <summary>
-    /// Метод записи верховности
+    /// Метод записи признака верховности
     /// </summary>
     /// <param name="isParamount">Признак верховности</param>
     public void SetIsParamount (bool isParamount)

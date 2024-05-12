@@ -89,7 +89,7 @@ public abstract class EntityFile : BaseEntity
     }
 
     /// <summary>
-    /// Метод записи ссылки на файл
+    /// Метод записи файла
     /// </summary>
     /// <param name="file">Ссылка на файл</param>
     public void SetFile(File file)
