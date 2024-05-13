@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 using Insania.Entities.Context;
-using Insania.Entities.System;
-using Insania.Entities.Users;
-using Serilog;
+using Insania.Entities.Models.System;
+using Insania.Entities.Models.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,18 +34,15 @@ services.AddDbContext<ApplicationContext>(options =>
 //builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 //Добавляем параметры идентификации
-builder.Services.AddIdentity<User, Role>(options => 
-        options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddControllersWithViews();
 
 //Добавляем параметры авторизации
-builder.Services.AddAuthorization(auth =>
-{
-    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-        .AddAuthenticationSchemes("Bearer")
-        .RequireAuthenticatedUser().Build());
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+    .AddAuthenticationSchemes("Bearer")
+    .RequireAuthenticatedUser().Build());
 
 //Добавляем параметры сериализации и десериализации json
 builder.Services.Configure<JsonOptions>(options =>
@@ -94,11 +91,10 @@ builder.Services.AddAuthentication(options => {
 
 //Добавляем параметры логирования
 Log.Logger = new LoggerConfiguration()
-               .MinimumLevel.Verbose()
-               .WriteTo.File(path: config["LoggingOptions:FilePath"]!,
-                    rollingInterval: RollingInterval.Day)
-               .WriteTo.Debug()
-               .CreateLogger();
+    .MinimumLevel.Verbose()
+    .WriteTo.File(path: config["LoggingOptions:FilePath"]!, rollingInterval: RollingInterval.Day)
+    .WriteTo.Debug()
+    .CreateLogger();
 services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Log.Logger, dispose: true));
 
 //Добавляем параметры документации
@@ -114,15 +110,13 @@ services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-//Добавляем параетры конвеера запросов
+//Добавляем параметры конвеера запросов
 //app.UseMiddleware<LoggingMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=RegistrationController}/{action=Check}");
+app.MapControllerRoute(name: "default", pattern: "{controller=RegistrationController}/{action=Check}");
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {

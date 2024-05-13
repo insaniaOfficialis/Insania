@@ -2,17 +2,18 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Administrators;
-using Insania.Entities.Appearance;
-using Insania.Entities.Chronology;
-using Insania.Entities.Files;
-using File = Insania.Entities.Files.File;
-using Insania.Entities.Heroes;
-using Insania.Entities.Players;
-using Insania.Entities.Politics;
-using Insania.Entities.Sociology;
-using Insania.Entities.System;
-using Insania.Entities.Users;
+using Insania.Entities.Models.Administrators;
+using Insania.Entities.Models.Appearance;
+using Insania.Entities.Models.Biology;
+using Insania.Entities.Models.Chronology;
+using File = Insania.Entities.Models.Files.File;
+using Insania.Entities.Models.Files;
+using Insania.Entities.Models.Heroes;
+using Insania.Entities.Models.Players;
+using Insania.Entities.Models.Politics;
+using Insania.Entities.Models.System;
+using Insania.Entities.Models.Users;
+using Insania.Entities.Models.Geography;
 
 namespace Insania.Entities.Context;
 
@@ -23,6 +24,22 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     IdentityUserRole<long>, IdentityUserLogin<long>, IdentityRoleClaim<long>, 
     IdentityUserToken<long>>
 {
+    #region Вне категорий
+
+    #endregion
+
+    #region Пользователи
+
+
+    #endregion
+
+    #region Системное
+
+    #endregion
+
+    #region Права доступа
+
+    #endregion
 
     #region Игроки
 
@@ -43,22 +60,22 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     /// <summary>
     /// Биографии персонажей
     /// </summary>
-    public DbSet<BiographyHeroes> BiographiesHeroes { get; set; }
+    public DbSet<BiographyHero> BiographiesHeroes { get; set; }
 
     /// <summary>
-    /// Статусы заявок на регистрацию персонажа
+    /// Статусы заявки на регистрацию персонажа
     /// </summary>
-    public DbSet<StatusRequestsHeroRegistration> StatusesRequestsHeroRegistrations { get; set; }
+    public DbSet<StatusRequestHeroRegistration> StatusesRequestsHeroesRegistrations { get; set; }
 
     /// <summary>
     /// Заявки на регистрацию персонажа
     /// </summary>
-    public DbSet<RequestHeroRegistration> RequestsHeroRegistration { get; set; }
+    public DbSet<RequestHeroRegistration> RequestsHeroesRegistration { get; set; }
 
     /// <summary>
-    /// Биографии заявок на регистрацию персонажа
+    /// Биографии заявки на регистрацию персонажа
     /// </summary>
-    public DbSet<BiographyRequestHeroRegistration> BiographiesRequestsHeroRegistration { get; set; }
+    public DbSet<BiographyRequestHeroRegistration> BiographiesRequestsHeroesRegistration { get; set; }
 
     #endregion
 
@@ -105,31 +122,45 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     /// <summary>
     /// Цвета волос
     /// </summary>
-    public DbSet<HairColor> HairColors { get; set; }
+    public DbSet<HairsColor> HairsColors { get; set; }
 
     /// <summary>
     /// Цвета глаз
     /// </summary>
-    public DbSet<EyeColor> EyeColors { get; set; }
+    public DbSet<EyesColor> EyesColors { get; set; }
 
     /// <summary>
     /// Типы телосложений
     /// </summary>
-    public DbSet<TypeBody> TypeBodies { get; set; }
+    public DbSet<TypeBody> TypesBodies { get; set; }
 
     /// <summary>
     /// Типы лиц
     /// </summary>
-    public DbSet<TypeFace> TypeFaces { get; set; }
+    public DbSet<TypeFace> TypesFaces { get; set; }
+
+    #endregion
+
+    #region Информационные статьи
 
     #endregion
 
     #region Политика
 
     /// <summary>
-    /// Типы организаций
+    /// Области
     /// </summary>
-    public DbSet<TypeOrganization> TypiesOrganizations { get; set; }
+    public DbSet<Area> Areas { get; set; }
+
+    /// <summary>
+    /// Страны
+    /// </summary>
+    public DbSet<Country> Countries { get; set; }
+
+    /// <summary>
+    /// Фракции
+    /// </summary>
+    public DbSet<Fraction> Fractions { get; set; }
 
     /// <summary>
     /// Организации
@@ -137,9 +168,47 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     public DbSet<Organization> Organizations { get; set; }
 
     /// <summary>
-    /// Страны
+    /// Владения
     /// </summary>
-    public DbSet<Country> Countries { get; set; }
+    public DbSet<Ownership> Ownerships { get; set; }
+
+    /// <summary>
+    /// Регионы
+    /// </summary>
+    public DbSet<Region> Regions { get; set; }
+
+    /// <summary>
+    /// Типы организаций
+    /// </summary>
+    public DbSet<TypeOrganization> TypiesOrganizations { get; set; }
+
+    #endregion
+
+    #region Экономика
+
+    #endregion
+
+    #region Общие
+
+    #endregion
+
+    #region Новости
+
+    #endregion
+
+    #region Чаты и сообщения
+
+    #endregion
+
+    #region Обращения
+
+    #endregion
+
+    #region Уведомления
+
+    #endregion
+
+    #region Тесты
 
     #endregion
 
@@ -157,12 +226,16 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
     #endregion
 
+    #region Социология
+
+    #endregion
+
     #region Файлы
 
     /// <summary>
     /// Типы файлов
     /// </summary>
-    public DbSet<TypeFile> TypeFiles { get; set; }
+    public DbSet<TypeFile> TypesFiles { get; set; }
 
     /// <summary>
     /// Файлы
@@ -172,7 +245,33 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     /// <summary>
     /// Файлы персонажей
     /// </summary>
-    public DbSet<FileHero> FileHeroes { get; set; }
+    public DbSet<FileHero> FilesHeroes { get; set; }
+
+    #endregion
+
+    #region География
+
+    /// <summary>
+    /// Географические объекты
+    /// </summary>
+    public DbSet<GeographicalObject> GeographicalObjects { get; set; }
+
+    /// <summary>
+    /// Типы географических объектов
+    /// </summary>
+    public DbSet<TypeGeographicalObject> TypesGeographicalObjects { get; set; }
+
+    #endregion
+
+    #region Карта
+
+    #endregion
+
+    #region Культура
+
+    #endregion
+
+    #region Технологии
 
     #endregion
 

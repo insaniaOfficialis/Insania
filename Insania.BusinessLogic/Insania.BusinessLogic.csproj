@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Insania.Entities\Insania.Entities.csproj" />
+    <ProjectReference Include="..\Insania.Models\Insania.Models.csproj" />
+  </ItemGroup>
+
 </Project>
