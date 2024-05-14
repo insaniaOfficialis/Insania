@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-namespace Insania.Entities.Models.System;
+namespace Insania.Entities.Models.AccessRights;
 
 /// <summary>
 /// Модели сущности роли

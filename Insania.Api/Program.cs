@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using Insania.Entities.Context;
-using Insania.Entities.Models.System;
+using Insania.Entities.Models.AccessRights;
 using Insania.Entities.Models.Users;
 
 var builder = WebApplication.CreateBuilder(args);

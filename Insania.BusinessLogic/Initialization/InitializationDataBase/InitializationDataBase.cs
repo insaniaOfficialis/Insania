@@ -3,8 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using Insania.Entities.Context;
-using Insania.Entities.Models.System;
+using Insania.Entities.Models.AccessRights;
 using Insania.Entities.Models.Users;
+using Insania.Models.Exceptions;
+using Insania.Models.Ecxeption;
+using Microsoft.EntityFrameworkCore;
 
 namespace Insania.BusinessLogic.Initialization.InitializationDataBase;
 
@@ -56,6 +59,12 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
         try
         {
             //ПОЛЬЗОВАТЕЛИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRoles"]))
+            {
+                await InitializationRoles();
+            }
+
+            //ПОЛЬЗОВАТЕЛИ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationUsers"]))
             {
                 await InitializationUsers();
@@ -79,17 +88,12 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     {
         try
         {
-            //РОЛИ
-            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationUsers"]))
-            {
-                await InitializationUsers();
-            }
+            
         }
         catch (Exception ex)
         {
-            _logger.LogError("InitializeDatabase. Ошибка: {exception}", ex);
+            _logger.LogError("InitializeDatabase. InitializationUsers. Ошибка: {exception}", ex);
         }
-
     }
 
     #endregion
@@ -104,13 +108,60 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации ролей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationRoles() { }
+    public async Task InitializationRoles()
+    {
+        try
+        {
+            //Проверяем наличие роли гостя
+            if (await _roleManager.FindByNameAsync("guest") == null)
+            {
+                //Добавляем роль гостя
+                Role role = new("guest");
+                var result = await _roleManager.CreateAsync(role) ?? throw new Exception(Errors.FailedCreateRole);
+
+                //Если не успешно, выдаём ошибку
+                if (!result.Succeeded)
+                    throw new Exception(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
+            }
+
+            //Проверяем наличие роли пользователя
+            if (await _roleManager.FindByNameAsync("user") == null)
+            {
+                //Добавляем роль пользователя
+                Role role = new("user");
+                var result = await _roleManager.CreateAsync(role) ?? throw new Exception(Errors.FailedCreateRole);
+
+                //Если не успешно, выдаём ошибку
+                if (!result.Succeeded)
+                    throw new Exception(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
+            }
+
+            //Проверяем наличие роли админа
+            if (await _roleManager.FindByNameAsync("admin") == null)
+            {
+                //Добавляем роль админа
+                Role role = new("admin");
+                var result = await _roleManager.CreateAsync(role) ?? throw new Exception(Errors.FailedCreateRole);
+
+                //Если не успешно, выдаём ошибку
+                if (!result.Succeeded)
+                    throw new Exception(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("InitializeDatabase. InitializationRoles. Ошибка: {exception}", ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации ролей пользователей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationUsersRoles() { }
+    public async Task InitializationUsersRoles()
+    {
+
+    }
 
     #endregion
 
