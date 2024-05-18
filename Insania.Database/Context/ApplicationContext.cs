@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Models.Administrators;
-using Insania.Entities.Models.Appearance;
-using Insania.Entities.Models.Biology;
-using Insania.Entities.Models.Chronology;
-using File = Insania.Entities.Models.Files.File;
-using Insania.Entities.Models.Files;
-using Insania.Entities.Models.Heroes;
-using Insania.Entities.Models.Players;
-using Insania.Entities.Models.Politics;
-using Insania.Entities.Models.AccessRights;
-using Insania.Entities.Models.Users;
-using Insania.Entities.Models.Geography;
+using Insania.Database.Entities.AccessRights;
+using Insania.Database.Entities.Administrators;
+using Insania.Database.Entities.Appearance;
+using Insania.Database.Entities.Biology;
+using Insania.Database.Entities.Chronology;
+using File = Insania.Database.Entities.Files.File;
+using Insania.Database.Entities.Files;
+using Insania.Database.Entities.Geography;
+using Insania.Database.Entities.Heroes;
+using Insania.Database.Entities.Players;
+using Insania.Database.Entities.Politics;
+using Insania.Database.Entities.System;
+using Insania.Database.Entities.Users;
 
 namespace Insania.Entities.Context;
 
@@ -30,10 +31,14 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
     #region Пользователи
 
-
     #endregion
 
     #region Системное
+
+    /// <summary>
+    /// Скрипты
+    /// </summary>
+    public DbSet<Script> Scripts { get; set; }
 
     #endregion
 

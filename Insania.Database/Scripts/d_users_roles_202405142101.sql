@@ -1,1 +1,0 @@
-INSERT INTO public.sys_users_roles ("UserId", "RoleId") VALUES(1, 3);

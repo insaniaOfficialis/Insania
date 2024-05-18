@@ -10,8 +10,8 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using Insania.Entities.Context;
-using Insania.Entities.Models.AccessRights;
-using Insania.Entities.Models.Users;
+using Insania.Database.Entities.AccessRights;
+using Insania.Database.Entities.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +108,7 @@ services.AddSwaggerGen(options =>
 
 //Внедряем зависимости для сервисов
 
+//Строим приложение
 var app = builder.Build();
 
 //Добавляем параметры конвеера запросов
@@ -125,9 +126,5 @@ app.UseSwaggerUI(options =>
 
 app.MapGet("/", () => "Hello World!");
 
-//Проводим первоначальную инициализацию
-/*using var scope = app.Services.CreateScope();
-var initialize = scope.ServiceProvider.GetService<IInitialization>();
-await initialize!.InitializeDatabase();*/
-
+//Запускае приложение
 app.Run();
