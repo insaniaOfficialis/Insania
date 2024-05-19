@@ -18,7 +18,7 @@ public class EyesColor : Guide
     /// </summary>
     [Column("rgb")]
     [Comment("Rgb-модель цвета")]
-    public string Rgb { get; private set; }
+    public string? Rgb { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности цвета глаз
@@ -34,7 +34,7 @@ public class EyesColor : Guide
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
     /// <param name="rgb">Rgb-модель цвета</param>
-    public EyesColor(string user, string name, string rgb) : base(user, name)
+    public EyesColor(string user, string name, string? rgb) : base(user, name)
     {
         Rgb = rgb;
     }
@@ -45,7 +45,7 @@ public class EyesColor : Guide
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="rgb">Rgb-модель цвета</param>
-    public EyesColor(long id, string user, string name, string rgb) : base(id, user, name)
+    public EyesColor(long id, string user, string name, string? rgb) : base(id, user, name)
     {
         Rgb = rgb;
     }

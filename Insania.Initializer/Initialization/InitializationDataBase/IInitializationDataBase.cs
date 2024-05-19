@@ -13,6 +13,13 @@ public interface IInitializationDataBase
     /// <returns></returns>
     Task Initialization();
 
+    /// <summary>
+    /// Метод выполнения скриптов
+    /// </summary>
+    /// <param name="filePath">Путь к файлу</param>
+    /// <returns></returns>
+    Task ExecuteScript(string filePath);
+
     #endregion
 
     #region Пользователи

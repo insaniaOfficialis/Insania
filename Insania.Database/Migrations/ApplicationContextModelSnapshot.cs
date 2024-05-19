@@ -343,7 +343,6 @@ namespace Insania.Database.Migrations
                         .HasComment("Наименование");
 
                     b.Property<string>("Rgb")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("rgb")
                         .HasComment("Rgb-модель цвета");
@@ -1382,12 +1381,12 @@ namespace Insania.Database.Migrations
                         .HasColumnType("boolean")
                         .HasComment("Пол (истина - мужской/ложь - женский)");
 
-                    b.Property<long>("HairColorId")
+                    b.Property<long?>("HairColorId")
                         .HasColumnType("bigint")
                         .HasColumnName("hair_color_id")
                         .HasComment("Ссылка на цвет волос");
 
-                    b.Property<long>("HairsColorId")
+                    b.Property<long?>("HairsColorId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Height")
@@ -2834,9 +2833,7 @@ namespace Insania.Database.Migrations
 
                     b.HasOne("Insania.Database.Entities.Appearance.HairsColor", "HairsColor")
                         .WithMany()
-                        .HasForeignKey("HairsColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HairsColorId");
 
                     b.HasOne("Insania.Database.Entities.Biology.Nation", "Nation")
                         .WithMany()

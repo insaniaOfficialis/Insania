@@ -18,7 +18,7 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    rgb = table.Column<string>(type: "text", nullable: false, comment: "Rgb-модель цвета"),
+                    rgb = table.Column<string>(type: "text", nullable: true, comment: "Rgb-модель цвета"),
                     date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
@@ -657,8 +657,8 @@ namespace Insania.Database.Migrations
                     Gender = table.Column<bool>(type: "boolean", nullable: false, comment: "Пол (истина - мужской/ложь - женский)"),
                     height = table.Column<int>(type: "integer", nullable: false, comment: "Рост"),
                     weight = table.Column<int>(type: "integer", nullable: false, comment: "Вес"),
-                    hair_color_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на цвет волос"),
-                    HairsColorId = table.Column<long>(type: "bigint", nullable: false),
+                    hair_color_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на цвет волос"),
+                    HairsColorId = table.Column<long>(type: "bigint", nullable: true),
                     eye_color_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на цвет глаз"),
                     type_body_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип телосложения"),
                     type_face_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип лица"),
@@ -685,8 +685,7 @@ namespace Insania.Database.Migrations
                         name: "FK_re_heroes_dir_hairs_colors_HairsColorId",
                         column: x => x.HairsColorId,
                         principalTable: "dir_hairs_colors",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_re_heroes_dir_months_birth_month_id",
                         column: x => x.birth_month_id,

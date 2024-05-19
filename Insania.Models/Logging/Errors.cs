@@ -54,6 +54,10 @@ public static class Errors
 
     #region Внешность
 
+    public const string EmptyEyesColor = "Пустой цвет глаз";
+    public const string EmptyTypeBody = "Пустой тип телосложения";
+    public const string EmptyTypeFace = "Пустой тип лица";
+
     #endregion
 
     #region Информационные статьи
@@ -94,6 +98,7 @@ public static class Errors
 
     #region Биология
 
+    public const string EmptyNation = "Пустая нация";
     public const string EmptyRace = "Пустая раса";
 
     #endregion

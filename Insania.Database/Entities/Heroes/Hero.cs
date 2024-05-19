@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 using Insania.Database.Entities.Appearance;
-using Insania.Entities.Base;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
+using Insania.Entities.Base;
 
 namespace Insania.Database.Entities.Heroes;
 
@@ -114,12 +114,12 @@ public class Hero : Reestr
     /// </summary>
     [Column("hair_color_id")]
     [Comment("Ссылка на цвет волос")]
-    public long HairColorId { get; private set; }
+    public long? HairColorId { get; private set; }
 
     /// <summary>
     /// Навигационное свойство цвета волос
     /// </summary>
-    public HairsColor HairsColor { get; private set; }
+    public HairsColor? HairsColor { get; private set; }
 
     /// <summary>
     /// Ссылка на цвет глаз
@@ -219,7 +219,7 @@ public class Hero : Reestr
     /// <param name="freezingTo">Заморозка до</param>
     public Hero(string user, bool isSystem, Player player, string personalName, string? prefixName,
         string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
-        int weight, HairsColor hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
+        int weight, HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
         bool isCurrent, DateTime? freezingTo) : base(user, isSystem)
     {
         PlayerId = player.Id;
@@ -236,7 +236,7 @@ public class Hero : Reestr
         Gender = gender;
         Height = height;
         Weight = weight;
-        HairColorId = hairsColor.Id;
+        HairColorId = hairsColor?.Id;
         HairsColor = hairsColor;
         EyesColorId = eyesColor.Id;
         EyesColor = eyesColor;
@@ -275,7 +275,7 @@ public class Hero : Reestr
     /// <param name="freezingTo">Заморозка до</param>
     public Hero(long id, string user, bool isSystem, Player player, string personalName, string? prefixName,
         string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
-        int weight, HairsColor hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
+        int weight, HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
         bool isCurrent, DateTime? freezingTo) : base(id, user, isSystem)
     {
         PlayerId = player.Id;
@@ -292,7 +292,7 @@ public class Hero : Reestr
         Gender = gender;
         Height = height;
         Weight = weight;
-        HairColorId = hairsColor.Id;
+        HairColorId = hairsColor?.Id;
         HairsColor = hairsColor;
         EyesColorId = eyesColor.Id;
         EyesColor = eyesColor;
