@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using Insania.Database.Entities.Administrators;
 using Insania.Database.Entities.Players;
 
 namespace Insania.Database.Entities.Users;
@@ -82,6 +83,11 @@ public class User : IdentityUser<long>
     /// Навигационное свойство игрока
     /// </summary>
     public Player? Player { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство администратора
+    /// </summary>
+    public Administrator? Administrator { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности пользователя

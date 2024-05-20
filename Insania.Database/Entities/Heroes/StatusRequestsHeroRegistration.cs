@@ -18,12 +18,12 @@ public class StatusRequestHeroRegistration : Guide
     /// </summary>
     [Column("previous_id")]
     [Comment("Ссылка на предыдущий статус")]
-    public long PreviousId { get; private set; }
+    public long? PreviousId { get; private set; }
 
     /// <summary>
     /// Навигационное свойство предыдущего статуса
     /// </summary>
-    public StatusRequestHeroRegistration Previous { get; private set; }
+    public StatusRequestHeroRegistration? Previous { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности статуса заявки на регистрацию персонажа
@@ -39,10 +39,9 @@ public class StatusRequestHeroRegistration : Guide
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
     /// <param name="previous">Ссылка на предыдущий статус</param>
-    public StatusRequestHeroRegistration(string user, string name,
-        StatusRequestHeroRegistration previous) : base(user, name)
+    public StatusRequestHeroRegistration(string user, string name, StatusRequestHeroRegistration? previous) : base(user, name)
     {
-        PreviousId = previous.Id;
+        PreviousId = previous?.Id;
         Previous = previous;
     }
 
@@ -53,10 +52,10 @@ public class StatusRequestHeroRegistration : Guide
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="previous">Ссылка на предыдущий статус</param>
-    public StatusRequestHeroRegistration(long id, string user, string name,
-        StatusRequestHeroRegistration previous) : base(id, user, name)
+    public StatusRequestHeroRegistration(long id, string user, string name, StatusRequestHeroRegistration? previous) : base(id,
+        user, name)
     {
-        PreviousId = previous.Id;
+        PreviousId = previous?.Id;
         Previous = previous;
     }
 

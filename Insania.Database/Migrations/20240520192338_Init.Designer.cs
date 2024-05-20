@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240519171410_Init")]
+    [Migration("20240520192338_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -107,7 +107,8 @@ namespace Insania.Database.Migrations
 
                     b.HasIndex("RankId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("re_administrators", t =>
                         {
@@ -145,11 +146,6 @@ namespace Insania.Database.Migrations
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
-                    b.Property<bool>("IsParamount")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_paramount")
-                        .HasComment("Признак верховности");
-
                     b.Property<bool>("IsSystem")
                         .HasColumnType("boolean")
                         .HasColumnName("is_system")
@@ -160,6 +156,11 @@ namespace Insania.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name")
                         .HasComment("Наименование");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id")
+                        .HasComment("Ссылка на родителя");
 
                     b.Property<string>("UserCreate")
                         .IsRequired()
@@ -176,6 +177,8 @@ namespace Insania.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("re_chapters", t =>
                         {
@@ -582,7 +585,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("language_for_personal_names")
-                        .HasComment("Язык для названий");
+                        .HasComment("Язык для имён");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1384,13 +1387,10 @@ namespace Insania.Database.Migrations
                         .HasColumnType("boolean")
                         .HasComment("Пол (истина - мужской/ложь - женский)");
 
-                    b.Property<long?>("HairColorId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("hair_color_id")
-                        .HasComment("Ссылка на цвет волос");
-
                     b.Property<long?>("HairsColorId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("hairs_color_id")
+                        .HasComment("Ссылка на цвет волос");
 
                     b.Property<int>("Height")
                         .HasColumnType("integer")
@@ -1720,7 +1720,7 @@ namespace Insania.Database.Migrations
                         .HasColumnName("name")
                         .HasComment("Наименование");
 
-                    b.Property<long>("PreviousId")
+                    b.Property<long?>("PreviousId")
                         .HasColumnType("bigint")
                         .HasColumnName("previous_id")
                         .HasComment("Ссылка на предыдущий статус");
@@ -1960,15 +1960,8 @@ namespace Insania.Database.Migrations
                         .HasColumnName("language_for_personal_names")
                         .HasComment("Язык для названий");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name")
-                        .HasComment("Наименование");
-
-                    b.Property<string>("NumberOnMap")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("NumberOnMap")
+                        .HasColumnType("integer")
                         .HasColumnName("number_on_map")
                         .HasComment("Номер на карте");
 
@@ -1991,7 +1984,8 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("OrganizationId")
+                        .IsUnique();
 
                     b.ToTable("re_countries", t =>
                         {
@@ -2103,7 +2097,7 @@ namespace Insania.Database.Migrations
                         .HasColumnName("name")
                         .HasComment("Наименование");
 
-                    b.Property<long>("ParentId")
+                    b.Property<long?>("ParentId")
                         .HasColumnType("bigint")
                         .HasColumnName("parent_id")
                         .HasComment("Ссылка на родителя");
@@ -2682,8 +2676,8 @@ namespace Insania.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Insania.Database.Entities.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Administrator")
+                        .HasForeignKey("Insania.Database.Entities.Administrators.Administrator", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2704,7 +2698,13 @@ namespace Insania.Database.Migrations
                         .WithMany()
                         .HasForeignKey("CountryId");
 
+                    b.HasOne("Insania.Database.Entities.Administrators.Chapter", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
                     b.Navigation("Country");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Biology.Nation", b =>
@@ -2906,9 +2906,7 @@ namespace Insania.Database.Migrations
                 {
                     b.HasOne("Insania.Database.Entities.Heroes.StatusRequestHeroRegistration", "Previous")
                         .WithMany()
-                        .HasForeignKey("PreviousId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PreviousId");
 
                     b.Navigation("Previous");
                 });
@@ -2970,8 +2968,8 @@ namespace Insania.Database.Migrations
             modelBuilder.Entity("Insania.Database.Entities.Politics.Country", b =>
                 {
                     b.HasOne("Insania.Database.Entities.Politics.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
+                        .WithOne("Country")
+                        .HasForeignKey("Insania.Database.Entities.Politics.Country", "OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2982,9 +2980,7 @@ namespace Insania.Database.Migrations
                 {
                     b.HasOne("Insania.Database.Entities.Politics.Organization", "Parent")
                         .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParentId");
 
                     b.HasOne("Insania.Database.Entities.Politics.TypeOrganization", "Type")
                         .WithMany()
@@ -3016,8 +3012,15 @@ namespace Insania.Database.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.Politics.Organization", b =>
+                {
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.Users.User", b =>
                 {
+                    b.Navigation("Administrator");
+
                     b.Navigation("Player");
                 });
 #pragma warning restore 612, 618

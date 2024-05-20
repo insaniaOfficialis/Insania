@@ -39,9 +39,15 @@ public static class Errors
 
     #region Персонажи
 
+    public const string EmptyHero= "Пустой персонаж";
+    public const string EmptyStatusRequestsHeroesRegistration = "Пустой статус заявок на регистрацию персонажей";
+
     #endregion
 
     #region Администраторы
+
+    public const string EmptyPost = "Пустая должность";
+    public const string EmptyRank = "Пустое звание";
 
     #endregion
 
@@ -65,6 +71,11 @@ public static class Errors
     #endregion
 
     #region Политика
+
+    public const string EmptyChapter = "Пустой капитул";
+    public const string EmptyCountry = "Пустая страна";
+    public const string EmptyOrganization = "Пустая организация";
+    public const string EmptyTypeOrganization = "Пустой тип организации";
 
     #endregion
 
@@ -108,6 +119,9 @@ public static class Errors
     #endregion
 
     #region Файлы
+
+    public const string EmptyFile = "Пустой файл";
+    public const string EmptyTypeFile = "Пустой тип файла";
 
     #endregion
 

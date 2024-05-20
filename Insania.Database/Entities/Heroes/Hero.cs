@@ -112,9 +112,9 @@ public class Hero : Reestr
     /// <summary>
     /// Ссылка на цвет волос
     /// </summary>
-    [Column("hair_color_id")]
+    [Column("hairs_color_id")]
     [Comment("Ссылка на цвет волос")]
-    public long? HairColorId { get; private set; }
+    public long? HairsColorId { get; private set; }
 
     /// <summary>
     /// Навигационное свойство цвета волос
@@ -236,7 +236,7 @@ public class Hero : Reestr
         Gender = gender;
         Height = height;
         Weight = weight;
-        HairColorId = hairsColor?.Id;
+        HairsColorId = hairsColor?.Id;
         HairsColor = hairsColor;
         EyesColorId = eyesColor.Id;
         EyesColor = eyesColor;
@@ -292,7 +292,7 @@ public class Hero : Reestr
         Gender = gender;
         Height = height;
         Weight = weight;
-        HairColorId = hairsColor?.Id;
+        HairsColorId = hairsColor?.Id;
         HairsColor = hairsColor;
         EyesColorId = eyesColor.Id;
         EyesColor = eyesColor;
@@ -413,7 +413,7 @@ public class Hero : Reestr
     /// <param name="hairsColor">Цвет волос</param>
     public void SetHairColor(HairsColor hairsColor)
     {
-        HairColorId = hairsColor.Id;
+        HairsColorId = hairsColor.Id;
         HairsColor = hairsColor;
     }
 

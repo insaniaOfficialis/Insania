@@ -143,7 +143,7 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    previous_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на предыдущий статус"),
+                    previous_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на предыдущий статус"),
                     date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
@@ -159,8 +159,7 @@ namespace Insania.Database.Migrations
                         name: "FK_dir_statuses_requests_heroes_registration_dir_statuses_requ~",
                         column: x => x.previous_id,
                         principalTable: "dir_statuses_requests_heroes_registration",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 },
                 comment: "Статусы заявок на регистрацию персонажей");
 
@@ -402,7 +401,7 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     race_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на расу"),
-                    language_for_personal_names = table.Column<string>(type: "text", nullable: false, comment: "Язык для названий"),
+                    language_for_personal_names = table.Column<string>(type: "text", nullable: false, comment: "Язык для имён"),
                     date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
@@ -521,7 +520,7 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     type_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип"),
-                    parent_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на родителя"),
+                    parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
                     date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
@@ -542,8 +541,7 @@ namespace Insania.Database.Migrations
                         name: "FK_re_organizations_re_organizations_parent_id",
                         column: x => x.parent_id,
                         principalTable: "re_organizations",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 },
                 comment: "Организации");
 
@@ -580,8 +578,7 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    number_on_map = table.Column<string>(type: "text", nullable: false, comment: "Номер на карте"),
+                    number_on_map = table.Column<int>(type: "integer", nullable: false, comment: "Номер на карте"),
                     color_on_map = table.Column<string>(type: "text", nullable: false, comment: "Цвет на карте"),
                     language_for_personal_names = table.Column<string>(type: "text", nullable: false, comment: "Язык для названий"),
                     organization_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на организацию"),
@@ -657,8 +654,7 @@ namespace Insania.Database.Migrations
                     Gender = table.Column<bool>(type: "boolean", nullable: false, comment: "Пол (истина - мужской/ложь - женский)"),
                     height = table.Column<int>(type: "integer", nullable: false, comment: "Рост"),
                     weight = table.Column<int>(type: "integer", nullable: false, comment: "Вес"),
-                    hair_color_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на цвет волос"),
-                    HairsColorId = table.Column<long>(type: "bigint", nullable: true),
+                    hairs_color_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на цвет волос"),
                     eye_color_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на цвет глаз"),
                     type_body_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип телосложения"),
                     type_face_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип лица"),
@@ -682,8 +678,8 @@ namespace Insania.Database.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_re_heroes_dir_hairs_colors_HairsColorId",
-                        column: x => x.HairsColorId,
+                        name: "FK_re_heroes_dir_hairs_colors_hairs_color_id",
+                        column: x => x.hairs_color_id,
                         principalTable: "dir_hairs_colors",
                         principalColumn: "id");
                     table.ForeignKey(
@@ -727,7 +723,7 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     country_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на страну"),
-                    is_paramount = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак верховности"),
+                    parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
                     date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
@@ -738,6 +734,11 @@ namespace Insania.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_re_chapters", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_re_chapters_re_chapters_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "re_chapters",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_re_chapters_re_countries_country_id",
                         column: x => x.country_id,
@@ -1077,7 +1078,8 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_re_administrators_user_id",
                 table: "re_administrators",
-                column: "user_id");
+                column: "user_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_re_areas_country_id",
@@ -1135,9 +1137,15 @@ namespace Insania.Database.Migrations
                 column: "country_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_re_chapters_parent_id",
+                table: "re_chapters",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_re_countries_organization_id",
                 table: "re_countries",
-                column: "organization_id");
+                column: "organization_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_re_files_type_id",
@@ -1165,9 +1173,9 @@ namespace Insania.Database.Migrations
                 column: "eye_color_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_re_heroes_HairsColorId",
+                name: "IX_re_heroes_hairs_color_id",
                 table: "re_heroes",
-                column: "HairsColorId");
+                column: "hairs_color_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_re_heroes_nation_id",

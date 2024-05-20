@@ -14,18 +14,11 @@ namespace Insania.Database.Entities.Politics;
 public class Country : Reestr
 {
     /// <summary>
-    /// Наименование
-    /// </summary>
-    [Column("name")]
-    [Comment("Наименование")]
-    public string Name { get; private set; }
-
-    /// <summary>
     /// Номер на карте
     /// </summary>
     [Column("number_on_map")]
     [Comment("Номер на карте")]
-    public string NumberOnMap { get; private set; }
+    public int NumberOnMap { get; private set; }
 
     /// <summary>
     /// Цвет на карте
@@ -58,8 +51,6 @@ public class Country : Reestr
     /// </summary>
     public Country() : base()
     {
-        Name = string.Empty;
-        NumberOnMap = string.Empty;
         ColorOnMap = string.Empty;
         LanguageForNames = string.Empty;
         Organization = new();
@@ -70,15 +61,13 @@ public class Country : Reestr
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="isSystem">Признак системной записи</param>
-    /// <param name="name">Наименование</param>
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="languageForNames">Язык для названий</param>
     /// <param name="organization">Ссылка на организацию</param>
-    public Country(string user, bool isSystem, string name, string numberOnMap, string colorOnMap, 
+    public Country(string user, bool isSystem, int numberOnMap, string colorOnMap, 
         string languageForNames, Organization organization) : base(user, isSystem)
     {
-        Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         LanguageForNames = languageForNames;
@@ -92,15 +81,13 @@ public class Country : Reestr
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
-    /// <param name="name">Наименование</param>
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="languageForNames">Язык для названий</param>
     /// <param name="organization">Ссылка на организацию</param>
-    public Country(long id, string user, bool isSystem, string name, string numberOnMap, string colorOnMap,
+    public Country(long id, string user, bool isSystem, int numberOnMap, string colorOnMap,
         string languageForNames, Organization organization) : base(id, user, isSystem)
     {
-        Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         LanguageForNames = languageForNames;
@@ -109,19 +96,10 @@ public class Country : Reestr
     }
 
     /// <summary>
-    /// Метод записи наименования
-    /// </summary>
-    /// <param name="name">Наименование</param>
-    public void SetName(string name)
-    {
-        Name = name;
-    }
-
-    /// <summary>
     /// Метод записи номера на карте
     /// </summary>
     /// <param name="numberOnMap">Номер на карте</param>
-    public void SetNumberOnMap(string numberOnMap)
+    public void SetNumberOnMap(int numberOnMap)
     {
         NumberOnMap = numberOnMap;
     }

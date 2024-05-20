@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 using Insania.Entities.Context;
+using Insania.Database.Entities.Administrators;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Chronology;
@@ -16,6 +17,7 @@ using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Files;
 using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Players;
+using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.System;
 using Insania.Database.Entities.Users;
 using Insania.Models.Exceptions;
@@ -33,7 +35,7 @@ namespace Insania.Initializer.Initialization.InitializationDataBase;
 /// <param name="userManager">Менедже пользователей</param>
 /// <param name="applicationContext">Контекст основной базы данных</param>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<User> userManager,
+public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<User> userManager, 
     ApplicationContext applicationContext, IConfiguration configuration) : IInitializationDataBase
 {
     /// <summary>
@@ -60,6 +62,11 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Путь к скрпитам
     /// </summary>
     private string? ScriptsPath { get; set; }
+
+    /// <summary>
+    /// Создающий пользователь
+    /// </summary>
+    private readonly string _userCreated = "initializer";
 
     #region Вне категорий
 
@@ -122,8 +129,44 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //ПЕРСОНАЖИ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationHeroes"])) await InitializationHeroes();
 
+            //БИОГРАФИИ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationBiographiesHeroes"])) await InitializationBiographiesHeroes();
+
             //ТИПЫ ФАЙЛОВ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesFiles"])) await InitializationTypesFiles();
+
+            //ФАЙЛЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFiles"])) await InitializationFiles();
+
+            //ФАЙЛЫ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFilesHeroes"])) await InitializationFilesHeroes();
+
+            //СТАТУСЫ НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationStatusesRequestsHeroesRegistration"])) await InitializationStatusesRequestsHeroesRegistration();
+
+            //ДОЛЖНОСТИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationPosts"])) await InitializationPosts();
+
+            //ЗВАНИЯ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRanks"])) await InitializationRanks();
+
+            //ТИПЫ ОРГАНИЗАЦИЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesOrganizations"])) await InitializationTypesOrganizations();
+
+            //ОРГАНИЗАЦИИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationOrganizations"])) await InitializationOrganizations();
+
+            //СТРАНЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationCountries"])) await InitializationCountries();
+
+            //КАПИТУЛЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationChapters"])) await InitializationChapters();
+
+            //АДМИНИСТРАТОРЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationAdministrators"])) await InitializationAdministrators();
+
+            //ЗАЯВКИ НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
+            //if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRequestsHeroesRegistration"])) await InitializationRequestsHeroesRegistration();
         }
         catch (Exception ex)
         {
@@ -168,7 +211,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             else Console.WriteLine("{0} {1} из-за ошибки {2}", Informations.NotExecutedScript, filePath, resultExecution);
 
             //Добавляем новый скрипт в базу
-            Script script = new("initializer", true, filePath, isSuccess, resultExecution);
+            Script script = new(_userCreated, true, filePath, isSuccess, resultExecution);
             await _applicationContext.Scripts.AddAsync(script);
             await _applicationContext.SaveChangesAsync();
         }
@@ -415,7 +458,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Players.AnyAsync(x => x.User == user))
             {
                 //Добавляем игрока пользователю божество
-                Player player = new("initializer", true, user, 999999);
+                Player player = new(_userCreated, true, user, 999999);
                 await _applicationContext.Players.AddAsync(player);
 
                 //Логгируем
@@ -458,7 +501,145 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации биографий персонажей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationBiographiesHeroes() { }
+    public async Task InitializationBiographiesHeroes()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationBiographiesHeroesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем биографию персонажа Амлус -9999 - -1
+            Hero? hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyHero);
+            Month? month = await _applicationContext.Months.FirstAsync(x => x.Name == "Гроз") ?? throw new InnerException(Errors.EmptyMonth);
+            if (!await _applicationContext.BiographiesHeroes.AnyAsync(x => x.Hero == hero && x.DayBegin == 1 && x.MonthBegin == month && x.CycleBegin == -9999))
+            {
+                //Добавляем биографию персонажа Амлус -9999 - -1
+                Month? monthEnd = await _applicationContext.Months.FirstAsync(x => x.Name == "Сборов") ?? throw new InnerException(Errors.EmptyMonth);
+                BiographyHero biographyHero = new(_userCreated, true, hero, 1, month, -9999, 30, monthEnd, -1, "Алмус был одним из " +
+                    "первых ратиозавров обосновавшихся в Асфалии. Будучи одним из самых древних Бессметрных, а также весьма " +
+                    "могущественным магов, исследовавшим тайны небес и истоки магии, он быстро стал главой асфалийской колонии. " +
+                    "Он принимал участие в создании рас четвёртой волны, а позже основоположником их религиозных доктрин. Он " +
+                    "первым ввёл в Асфалии божественную магию, изучив и проработав этот феномен, он заявязал на себя и других " +
+                    "Бессметрных колони магические потоки. Долгое время он изучал тайны магии и её корни. Однако конец его" +
+                    "исследованиям положила высадка людей в Асфалии");
+                await _applicationContext.BiographiesHeroes.AddAsync(biographyHero);
+
+                //Логгируем
+                Console.WriteLine("Алмус/-9999 - -1{0}", Informations.BiographyHeroAdded);
+            }
+            else Console.WriteLine("Алмус/-9999 - -1{0}", Informations.BiographyHeroAlreadyAdded);
+            hero = null;
+            month = null;
+
+            //Проверяем биографию персонажа Амлус 0 - 223
+            hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyHero);
+            month = await _applicationContext.Months.FirstAsync(x => x.Name == "Золота") ?? throw new InnerException(Errors.EmptyMonth);
+            if (!await _applicationContext.BiographiesHeroes.AnyAsync(x => x.Hero == hero && x.DayBegin == 1 && x.MonthBegin == month && x.CycleBegin == 0))
+            {
+                //Добавляем биографию персонажа Амлус 0 - 223
+                Month? monthEnd = await _applicationContext.Months.FirstAsync(x => x.Name == "Сборов") ?? throw new InnerException(Errors.EmptyMonth);
+                BiographyHero biographyHero = new(_userCreated, true, hero, 1, month, 0, 30, monthEnd, 223, "Поначалу Алмус не " +
+                    "отнёсся серьёзно к высадке людей. Оторванный от Эмбрии и следовавший философии мирной колонизации, он не " +
+                    "знал о войнах Дитики, и рассматривал людей исключтельно с академической стороны. Однако быстрое размножение" +
+                    "людей, их алчность и чуство собственности, всё чаще приводило к конфликтам с расами 4 волны. И вскоре Алмус" +
+                    "с отсальными Бессмертными пристальнее обратил на них внимание. Однако несколько войн, когда воины " +
+                    "хладнокровный в суровом северном климмате понесли суровые потери, заставили его пересмотреть политику. " +
+                    "Однако и посланные войска 4 волны не принесли быстрой победы. Всё магическое могущество Бессмертных ломалось " +
+                    "о дикую жажду жизни людей. Их одарённые сжигали свои магоканалы лишь бы победить, а войны бросались в " +
+                    "самоубийсственные атака. Такого яростного отпора ратиозавры не ожидали. Тогда Алмус предложил переселить с " +
+                    "Дитики орков, которые удачно показали себя в войнах с людьми. Однако орки, оказавшиеся под более слабым " +
+                    "слабым контролем ратиозавров восстали и объединились с людьми. После череды неудач хитрый план одного из " +
+                    "молодых Бессмертных о внесении разлада в ряды людей и орков легло на благодатную почву. Алмус лично " +
+                    "участвовал в создании артефакта, что менял генотип этих рас. И его подпись стоит на ряду с 9 " +
+                    "подписями главных Бессмертных Асфалии.");
+                await _applicationContext.BiographiesHeroes.AddAsync(biographyHero);
+
+                //Логгируем
+                Console.WriteLine("Алмус/0 - 223{0}", Informations.BiographyHeroAdded);
+            }
+            else Console.WriteLine("Алмус/0 - 223{0}", Informations.BiographyHeroAlreadyAdded);
+            hero = null;
+            month = null;
+
+            //Проверяем биографию персонажа Амлус 224 - 642
+            hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyHero);
+            month = await _applicationContext.Months.FirstAsync(x => x.Name == "Золота") ?? throw new InnerException(Errors.EmptyMonth);
+            if (!await _applicationContext.BiographiesHeroes.AnyAsync(x => x.Hero == hero && x.DayBegin == 1 && x.MonthBegin == month && x.CycleBegin == 224))
+            {
+                //Добавляем биографию персонажа Амлус 224 - 642
+                Month? monthEnd = await _applicationContext.Months.FirstAsync(x => x.Name == "Сборов") ?? throw new InnerException(Errors.EmptyMonth);
+                BiographyHero biographyHero = new(_userCreated, true, hero, 1, month, 224, 30, monthEnd, 642, "Во вторую эпоху " +
+                    "Алмус смог вернуться спокойно к своим исследованиям, пока люди и орки меняя свой генотип плодили новые расы " +
+                    "и после начинали войны между собой по расовому признаку. Крах единой сильно коалиции позволил ратиозаврам " +
+                    "частично вернуть контроль над северными ресурсами. В метрополии усилия Алмуса и его сторонников высоко " +
+                    "оценили и даже предложили место в Великом Совете Бессмертных. Однако именно в этот момент начался Великий " +
+                    "Северный Мор, который разнёсся пожаром по всем землям Асфалии на плечах бегущих проихводных рас людей и " +
+                    "орков. Ратиозавры во главе с Алмусом приложили множество усилий, чтобы остановить болезнь. Однако, когда " +
+                    "начали умирать первые Бессмертные из числа молодых панику охватила всю асфалийскую колонию. Бегущие " +
+                    "Бессмертные несмотря на все запреты старших товарищей занесли болезнь в Эмбрию и Дитику. Алмус и его " +
+                    "ближайшее окружение до последнего сопротивлялись болезни, используя свои магические возможности. Однако " +
+                    "болезнь заняла весь основной поток их магических каналов, превратив их в бессмертных, но слабых существ. " +
+                    "В этом ратиозавром помогли исследования Алмуса божественной магии. Это позволило им оставаться сильнее " +
+                    "большинства других выживших Бессмертных. Но всё же недосаточно, чтобы сопротивляться растущей угрозе " +
+                    "смертных рас. Поэтому Алмус принял решение со свои окружением отправиться на Кораловые острова, где " +
+                    "продолжить искать лекарство от болезни.");
+                await _applicationContext.BiographiesHeroes.AddAsync(biographyHero);
+
+                //Логгируем
+                Console.WriteLine("Алмус/224 - 642{0}", Informations.BiographyHeroAdded);
+            }
+            else Console.WriteLine("Алмус/224 - 642{0}", Informations.BiographyHeroAlreadyAdded);
+            hero = null;
+            month = null;
+
+            //Проверяем биографию персонажа Амлус 643 - 
+            hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyHero);
+            month = await _applicationContext.Months.FirstAsync(x => x.Name == "Золота") ?? throw new InnerException(Errors.EmptyMonth);
+            if (!await _applicationContext.BiographiesHeroes.AnyAsync(x => x.Hero == hero && x.DayBegin == 1 && x.MonthBegin == month && x.CycleBegin == 643))
+            {
+                //Добавляем биографию персонажа Амлус 643 - 
+                BiographyHero biographyHero = new(_userCreated, true, hero, 1, month, 643, null, null, null, "До текущего даты Алмус " +
+                    "находится на Кораловых островах, где используя идущий поток от верующих ищет лекарство от мора. Однако " +
+                    "уменьшающийся поток энергии от верующих оставляет всё меньше надежд на благополучный исход. Алмус угасает, " +
+                    "хотя благодаря своим знаниям, опыту и накопленным артефактам остаётся одним из сильнейших существ " +
+                    "Терравитрии.");
+                await _applicationContext.BiographiesHeroes.AddAsync(biographyHero);
+
+                //Логгируем
+                Console.WriteLine("Алмус/643 - {0}", Informations.BiographyHeroAdded);
+            }
+            else Console.WriteLine("Алмус/643 - {0}", Informations.BiographyHeroAlreadyAdded);
+            hero = null;
+            month = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_biographies_heroes_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации биографий заявок на регистрацию персонажей
@@ -491,7 +672,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Heroes.AnyAsync(x => x.Player == player))
             {
                 //Добавляем персонажа Амлус пользователю божество
-                Hero hero = new("initializer", true, player, "Алмус", null, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null);
+                Hero hero = new(_userCreated, true, player, "Алмус", null, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null);
                 await _applicationContext.Heroes.AddAsync(hero);
 
                 //Логгируем
@@ -539,10 +720,109 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     public async Task InitializationRequestsHeroesRegistration() { }
 
     /// <summary>
-    /// Метод инициализации статусов регистраций персонажей
+    /// Метод инициализации статусов заявок на регистрацию персонажей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationStatusesRequestsHeroesRegistration() { }
+    public async Task InitializationStatusesRequestsHeroesRegistration()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationStatusesRequestsHeroesRegistrationsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем статус новая
+            StatusRequestHeroRegistration? status = null;
+            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Новая"))
+            {
+                //Добавляем статус новая
+                StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Новая", status);
+                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+            }
+            else Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            status = null;
+
+            //Проверяем статус на рассмотрении
+            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "Новая") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "На рассмотрении"))
+            {
+                //Добавляем статус на рассмотрении
+                StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "На рассмотрении", status);
+                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+            }
+            else Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            status = null;
+
+            //Проверяем статус принята
+            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Принята"))
+            {
+                //Добавляем статус принята
+                StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Принята", status);
+                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+            }
+            else Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            status = null;
+
+            //Проверяем статус отклонена
+            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Отклонена"))
+            {
+                //Добавляем статус отклонена
+                StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Отклонена", status);
+                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+            }
+            else Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            status = null;
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_statuses_requests_heroes_registration_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 
@@ -552,25 +832,906 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации администраторов
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationAdministrators() { }
+    public async Task InitializationAdministrators()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationAdmistratorsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем администратора пользователя демиург
+            User? user = await _userManager.FindByNameAsync("demiurge") ?? throw new InnerException(Errors.EmptyUser);
+            Post? post = await _applicationContext.Posts.FirstAsync(x => x.Name == "Демиург") ?? throw new InnerException(Errors.EmptyPost);
+            Rank? rank = await _applicationContext.Ranks.FirstAsync(x => x.Name == "Демиург") ?? throw new InnerException(Errors.EmptyRank);
+            Chapter? chapter = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Administrators.AnyAsync(x => x.User == user))
+            {
+                //Добавляем администратора пользователю демиург
+                Administrator administrator = new(_userCreated, true, user, post, rank, chapter, 999999, null);
+                await _applicationContext.Administrators.AddAsync(administrator);
+
+                //Логгируем
+                Console.WriteLine("demiurge{0}", Informations.AdministratorAdded);
+            }
+            else Console.WriteLine("demiurge{0}", Informations.AdministratorAlreadyAdded);
+            user = null;
+            post = null;
+            rank = null;
+            chapter = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_admistrators_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации капитулов
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationChapters() { }
+    public async Task InitializationChapters()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationChaptersMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем капитул Генеральный капитул
+            Country? country = null;
+            Chapter? parent = null;
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Генеральный капитул"))
+            {
+                //Добавляем капитул Генеральный капитул
+                Chapter chapter = new(_userCreated, true, "Генеральный капитул", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Генеральный капитул{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Генеральный капитул{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Альвраатской империи
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyCountry);            
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Альвраатской империи"))
+            {
+                //Добавляем капитул Альвраатской империи
+                Chapter chapter = new(_userCreated, true, "Капитул Альвраатской империи", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Альвраатской империи{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Альвраатской империи{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул княжества Саорса
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Княжество Саорса") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул княжества Саорса"))
+            {
+                //Добавляем капитул княжества Саорса
+                Chapter chapter = new(_userCreated, true, "Капитул княжества Саорса", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул княжества Саорса{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул княжества Саорса{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул королевства Берген
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Королевство Берген") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул королевства Берген"))
+            {
+                //Добавляем капитул королевства Берген
+                Chapter chapter = new(_userCreated, true, "Капитул королевства Берген", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул королевства Берген{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул королевства Берген{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Фесгарского княжества
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Фесгарское княжество") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Фесгарского княжества"))
+            {
+                //Добавляем капитул Фесгарского княжества
+                Chapter chapter = new(_userCreated, true, "Капитул Фесгарского княжества", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Фесгарского княжества{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Фесгарского княжества{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Сверденского каганата
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Сверденский каганат") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Сверденского каганата"))
+            {
+                //Добавляем капитул Сверденского каганата
+                Chapter chapter = new(_userCreated, true, "Капитул Сверденского каганата", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Сверденского каганата{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Сверденского каганата{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул ханства Тавалин
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Ханство Тавалин") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул ханства Тавалин"))
+            {
+                //Добавляем капитул ханства Тавалин
+                Chapter chapter = new(_userCreated, true, "Капитул ханства Тавалин", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул ханства Тавалин{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул ханства Тавалин{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул княжества Саргиб
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Княжество Саргиб") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул княжества Саргиб"))
+            {
+                //Добавляем капитул княжества Саргиб
+                Chapter chapter = new(_userCreated, true, "Капитул княжества Саргиб", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул княжества Саргиб{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул княжества Саргиб{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул царства Банду
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Царство Банду") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул царства Банду"))
+            {
+                //Добавляем капитул царства Банду
+                Chapter chapter = new(_userCreated, true, "Капитул царства Банду", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул царства Банду{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул царства Банду{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул королевства Нордер
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Королевство Нордер") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул королевства Нордер"))
+            {
+                //Добавляем капитул королевства Нордер
+                Chapter chapter = new(_userCreated, true, "Капитул королевства Нордер", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул королевства Нордер{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул королевства Нордер{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Альтерского княжества
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Альтерское княжество") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Альтерского княжества"))
+            {
+                //Добавляем капитул Альтерского княжества
+                Chapter chapter = new(_userCreated, true, "Капитул Альтерского княжества", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Альтерского княжества{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Альтерского княжества{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Орлиадарской конфедерации
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Орлиадарская конфедерация") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Орлиадарской конфедерации"))
+            {
+                //Добавляем капитул Орлиадарской конфедерации
+                Chapter chapter = new(_userCreated, true, "Капитул Орлиадарской конфедерации", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Орлиадарской конфедерации{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Орлиадарской конфедерации{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул королевства Удстир
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Королевство Удстир") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул королевства Удстир"))
+            {
+                //Добавляем капитул королевства Удстир
+                Chapter chapter = new(_userCreated, true, "Капитул королевства Удстир", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул королевства Удстир{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул королевства Удстир{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул королевства Вервирунг
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Королевство Вервирунг") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул королевства Вервирунг"))
+            {
+                //Добавляем капитул королевства Вервирунг
+                Chapter chapter = new(_userCreated, true, "Капитул королевства Вервирунг", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул королевства Вервирунг{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул королевства Вервирунг{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Дестинского ордена
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Дестинский орден") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Дестинского ордена"))
+            {
+                //Добавляем капитул Дестинского ордена
+                Chapter chapter = new(_userCreated, true, "Капитул Дестинского ордена", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Дестинского ордена{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Дестинского ордена{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул вольного города Лийсет
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Вольный город Лийсет") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул вольного города Лийсет"))
+            {
+                //Добавляем капитул вольного города Лийсет
+                Chapter chapter = new(_userCreated, true, "Капитул вольного города Лийсет", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул вольного города Лийсет{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул вольного города Лийсет{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Лисцийской империи
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Лисцийская империя") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Лисцийской империи"))
+            {
+                //Добавляем капитул Лисцийской империи
+                Chapter chapter = new(_userCreated, true, "Капитул Лисцийской империи", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Лисцийской империи{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Лисцийской империи{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул королевства Вальтир
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Королевство Вальтир") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул королевства Вальтир"))
+            {
+                //Добавляем капитул королевства Вальтир
+                Chapter chapter = new(_userCreated, true, "Капитул королевства Вальтир", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул королевства Вальтир{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул королевства Вальтир{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул вассального княжества Гратис
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Вассальное княжество Гратис") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул вассального княжества Гратис"))
+            {
+                //Добавляем капитул вассального княжества Гратис
+                Chapter chapter = new(_userCreated, true, "Капитул вассального княжества Гратис", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул вассального княжества Гратис{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул вассального княжества Гратис{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул княжества Ректа
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Княжество Ректа") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул княжества Ректа"))
+            {
+                //Добавляем капитул княжества Ректа
+                Chapter chapter = new(_userCreated, true, "Капитул княжества Ректа", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул княжества Ректа{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул княжества Ректа{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Волара
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Волар") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Волара"))
+            {
+                //Добавляем капитул Волара
+                Chapter chapter = new(_userCreated, true, "Капитул Волара", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Волара{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Волара{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул союза Иль-Ладро
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Союз Иль-Ладро") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул союза Иль-Ладро"))
+            {
+                //Добавляем капитул союза Иль-Ладро
+                Chapter chapter = new(_userCreated, true, "Капитул союза Иль-Ладро", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул союза Иль-Ладро{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул союза Иль-Ладро{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Проверяем капитул Мергерской унии
+            country = await _applicationContext.Countries.Include(x => x.Organization).FirstAsync(x => x.Organization.Name == "Мергерская Уния") ?? throw new InnerException(Errors.EmptyCountry);
+            parent = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
+            if (!await _applicationContext.Chapters.AnyAsync(x => x.Name == "Капитул Мергерской унии"))
+            {
+                //Добавляем капитул Мергерской унии
+                Chapter chapter = new(_userCreated, true, "Капитул Мергерской унии", country, parent);
+                await _applicationContext.Chapters.AddAsync(chapter);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Капитул Мергерской унии{0}", Informations.ChapterAdded);
+            }
+            else Console.WriteLine("Капитул Мергерской унии{0}", Informations.ChapterAlreadyAdded);
+            country = null;
+            parent = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_chapters_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации должностей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationPosts() { }
+    public async Task InitializationPosts()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationPostsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем должность демиург
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Демиург"))
+            {
+                //Добавляем должность демиург
+                Post post = new(_userCreated, "Демиург", "Общий контроль мира и проекта");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Демиург{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Демиург{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность магистр
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Магистр"))
+            {
+                //Добавляем должность магистр
+                Post post = new(_userCreated, "Магистр", "Управление капитулом");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Магистр{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Магистр{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность комтур
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Комтур"))
+            {
+                //Добавляем должность комтур
+                Post post = new(_userCreated, "Комтур", "Управление администрацией капитула");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Комтур{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Комтур{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность распорядитель
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Распорядитель"))
+            {
+                //Добавляем должность распорядитель
+                Post post = new(_userCreated, "Распорядитель", "Приём игроков");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Распорядитель{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Распорядитель{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность мейстер
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Распорядитель"))
+            {
+                //Добавляем должность мейстер
+                Post post = new(_userCreated, "Мейстер", "Гражданское и политическое судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Мейстер{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Мейстер{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность маршал
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Маршал"))
+            {
+                //Добавляем должность маршал
+                Post post = new(_userCreated, "Маршал", "Военное судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Маршал{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Маршал{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность инженер
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Инженер"))
+            {
+                //Добавляем должность инженер
+                Post post = new(_userCreated, "Инженер", "Технологическое судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Инженер{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Инженер{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность интендант
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Интендант"))
+            {
+                //Добавляем должность интендант
+                Post post = new(_userCreated, "Интендант", "Экономическое судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Интендант{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Интендант{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность архимаг
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Архимаг"))
+            {
+                //Добавляем должность архимаг
+                Post post = new(_userCreated, "Архимаг", "Магическое судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Архимаг{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Архимаг{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность жрец
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Жрец"))
+            {
+                //Добавляем должность жрец
+                Post post = new(_userCreated, "Жрец", "Религиозное судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Жрец{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Жрец{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность бард
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Бард"))
+            {
+                //Добавляем должность бард
+                Post post = new(_userCreated, "Бард", "Культурное судейство");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Бард{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Бард{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность глашатай
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Глашатай"))
+            {
+                //Добавляем должность глашатай
+                Post post = new(_userCreated, "Глашатай", "Публикация и контроль новстей");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Глашатай{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Глашатай{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность посол
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Посол"))
+            {
+                //Добавляем должность посол
+                Post post = new(_userCreated, "Посол", "Ведение рекламной и представительной деятельности");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Посол{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Посол{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность архивариус
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Архивариус"))
+            {
+                //Добавляем должность архивариус
+                Post post = new(_userCreated, "Архивариус", "Контроль статистики и летоисчисления");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Архивариус{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Архивариус{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность картограф
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Картограф"))
+            {
+                //Добавляем должность картограф
+                Post post = new(_userCreated, "Картограф", "Ведение карты");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Картограф{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Картограф{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность гофмалер
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Гофмалер"))
+            {
+                //Добавляем должность гофмалер
+                Post post = new(_userCreated, "Гофмалер", "Создание и модификация дизайна");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Гофмалер{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Гофмалер{0}", Informations.PostAlreadyAdded);
+
+            //Проверяем должность разработчик
+            if (!await _applicationContext.Posts.AnyAsync(x => x.Name == "Разработчик"))
+            {
+                //Добавляем должность разработчик
+                Post post = new(_userCreated, "Разработчик", "Разработка и сопровождение программных продуктов");
+                await _applicationContext.Posts.AddAsync(post);
+
+                //Логгируем
+                Console.WriteLine("Разработчик{0}", Informations.PostAdded);
+            }
+            else Console.WriteLine("Разработчик{0}", Informations.PostAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_posts_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации званий
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationRanks() { }
+    public async Task InitializationRanks()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationRanksMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем звание демиург
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Демиург"))
+            {
+                //Добавляем звание демиург
+                Rank rank = new(_userCreated, "Демиург", 1024);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Демиург{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Демиург{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание верховный
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Верховный"))
+            {
+                //Добавляем звание верховный
+                Rank rank = new(_userCreated, "Верховный", 16);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Верховный{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Верховный{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание главный
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Главный"))
+            {
+                //Добавляем звание главный
+                Rank rank = new(_userCreated, "Главный", 8);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Главный{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Главный{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание ведущий
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Ведущий"))
+            {
+                //Добавляем звание ведущий
+                Rank rank = new(_userCreated, "Ведущий", 4);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Ведущий{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Ведущий{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание старший
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Старший"))
+            {
+                //Добавляем звание старший
+                Rank rank = new(_userCreated, "Старший", 2);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Старший{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Старший{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание младший
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Младший"))
+            {
+                //Добавляем звание младший
+                Rank rank = new(_userCreated, "Младший", 1);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Младший{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Младший{0}", Informations.RankAlreadyAdded);
+
+            //Проверяем звание фамилиар
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Фамилиар"))
+            {
+                //Добавляем звание фамилиар
+                Rank rank = new(_userCreated, "Фамилиар", 0.5);
+                await _applicationContext.Ranks.AddAsync(rank);
+
+                //Логгируем
+                Console.WriteLine("Фамилиар{0}", Informations.RankAdded);
+            }
+            else Console.WriteLine("Фамилиар{0}", Informations.RankAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_ranks_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 
@@ -595,7 +1756,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Золота"))
             {
                 //Добавляем месяц золота
-                Month month = new("initializer", "Золота", season, 1);
+                Month month = new(_userCreated, "Золота", season, 1);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -609,7 +1770,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Ливней"))
             {
                 //Добавляем месяц ливней
-                Month month = new("initializer", "Ливней", season, 2);
+                Month month = new(_userCreated, "Ливней", season, 2);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -623,7 +1784,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Заморозков"))
             {
                 //Добавляем месяц заморозков
-                Month month = new("initializer", "Заморозков", season, 3);
+                Month month = new(_userCreated, "Заморозков", season, 3);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -637,7 +1798,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Снегопадов"))
             {
                 //Добавляем месяц снегопадов
-                Month month = new("initializer", "Снегопадов", season, 4);
+                Month month = new(_userCreated, "Снегопадов", season, 4);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -651,7 +1812,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Морозов"))
             {
                 //Добавляем месяц морозов
-                Month month = new("initializer", "Морозов", season, 5);
+                Month month = new(_userCreated, "Морозов", season, 5);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -665,7 +1826,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Оттепели"))
             {
                 //Добавляем месяц оттепели
-                Month month = new("initializer", "Оттепели", season, 6);
+                Month month = new(_userCreated, "Оттепели", season, 6);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -679,7 +1840,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Цветения"))
             {
                 //Добавляем месяц цветения
-                Month month = new("initializer", "Цветения", season, 7);
+                Month month = new(_userCreated, "Цветения", season, 7);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -693,7 +1854,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Посевов"))
             {
                 //Добавляем месяц посевов
-                Month month = new("initializer", "Посевов", season, 8);
+                Month month = new(_userCreated, "Посевов", season, 8);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -707,7 +1868,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Гроз"))
             {
                 //Добавляем месяц гроз
-                Month month = new("initializer", "Гроз", season, 9);
+                Month month = new(_userCreated, "Гроз", season, 9);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -721,7 +1882,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Поспевания"))
             {
                 //Добавляем месяц поспевания
-                Month month = new("initializer", "Поспевания", season, 10);
+                Month month = new(_userCreated, "Поспевания", season, 10);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -735,7 +1896,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Жары"))
             {
                 //Добавляем месяц жары
-                Month month = new("initializer", "Жары", season, 11);
+                Month month = new(_userCreated, "Жары", season, 11);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -749,7 +1910,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Months.AnyAsync(x => x.Season == season && x.Name == "Сборов"))
             {
                 //Добавляем месяц сборов
-                Month month = new("initializer", "Сборов", season, 12);
+                Month month = new(_userCreated, "Сборов", season, 12);
                 await _applicationContext.Months.AddAsync(month);
 
                 //Логгируем
@@ -802,7 +1963,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Seasons.AnyAsync(x => x.Name == "Дождей"))
             {
                 //Добавляем сезон дождей
-                Season season = new("initializer", "Дождей", 1);
+                Season season = new(_userCreated, "Дождей", 1);
                 await _applicationContext.Seasons.AddAsync(season);
 
                 //Логгируем
@@ -814,7 +1975,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Seasons.AnyAsync(x => x.Name == "Снега"))
             {
                 //Добавляем сезон снега
-                Season season = new("initializer", "Снега", 2);
+                Season season = new(_userCreated, "Снега", 2);
                 await _applicationContext.Seasons.AddAsync(season);
 
                 //Логгируем
@@ -826,7 +1987,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Seasons.AnyAsync(x => x.Name == "Расцвета"))
             {
                 //Добавляем сезон расцвета
-                Season season = new("initializer", "Расцвета", 3);
+                Season season = new(_userCreated, "Расцвета", 3);
                 await _applicationContext.Seasons.AddAsync(season);
 
                 //Логгируем
@@ -838,7 +1999,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Seasons.AnyAsync(x => x.Name == "Тепла"))
             {
                 //Добавляем сезон тепла
-                Season season = new("initializer", "Тепла", 4);
+                Season season = new(_userCreated, "Тепла", 4);
                 await _applicationContext.Seasons.AddAsync(season);
 
                 //Логгируем
@@ -894,7 +2055,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Синие"))
             {
                 //Добавляем цвет глаз синие
-                EyesColor eyesColor = new("initializer", "Синие", "#0000FF");
+                EyesColor eyesColor = new(_userCreated, "Синие", "#0000FF");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -906,7 +2067,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Голубые"))
             {
                 //Добавляем цвет глаз голубые
-                EyesColor eyesColor = new("initializer", "Голубые", "#42AAFF");
+                EyesColor eyesColor = new(_userCreated, "Голубые", "#42AAFF");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -918,7 +2079,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Серые"))
             {
                 //Добавляем цвет глаз серые
-                EyesColor eyesColor = new("initializer", "Серые", "#808080");
+                EyesColor eyesColor = new(_userCreated, "Серые", "#808080");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -930,7 +2091,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Зелёные"))
             {
                 //Добавляем цвет глаз зелёные
-                EyesColor eyesColor = new("initializer", "Зелёные", "#008000");
+                EyesColor eyesColor = new(_userCreated, "Зелёные", "#008000");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -942,7 +2103,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Буро-жёлто-зелёные"))
             {
                 //Добавляем цвет глаз буро-жёлто-зелёные
-                EyesColor eyesColor = new("initializer", "Буро-жёлто-зелёные", "#7F8F18");
+                EyesColor eyesColor = new(_userCreated, "Буро-жёлто-зелёные", "#7F8F18");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -954,7 +2115,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Жёлтые"))
             {
                 //Добавляем цвет глаз жёлтые
-                EyesColor eyesColor = new("initializer", "Жёлтые", "#FFFF00");
+                EyesColor eyesColor = new(_userCreated, "Жёлтые", "#FFFF00");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -966,7 +2127,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Светло-карие"))
             {
                 //Добавляем цвет глаз светло-карие
-                EyesColor eyesColor = new("initializer", "Светло-карие", "#987654");
+                EyesColor eyesColor = new(_userCreated, "Светло-карие", "#987654");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -978,7 +2139,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Карие"))
             {
                 //Добавляем цвет глаз карие
-                EyesColor eyesColor = new("initializer", "Карие", "#70493D");
+                EyesColor eyesColor = new(_userCreated, "Карие", "#70493D");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -990,7 +2151,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Тёмно-карие"))
             {
                 //Добавляем цвет глаз тёмно-карие
-                EyesColor eyesColor = new("initializer", "Тёмно-карие", "#654321");
+                EyesColor eyesColor = new(_userCreated, "Тёмно-карие", "#654321");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -1002,7 +2163,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Чёрные"))
             {
                 //Добавляем цвет глаз чёрные
-                EyesColor eyesColor = new("initializer", "Чёрные", "#000000");
+                EyesColor eyesColor = new(_userCreated, "Чёрные", "#000000");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -1014,7 +2175,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Красные"))
             {
                 //Добавляем цвет глаз красные
-                EyesColor eyesColor = new("initializer", "Красные", "#FF0000");
+                EyesColor eyesColor = new(_userCreated, "Красные", "#FF0000");
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -1026,7 +2187,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.EyesColors.AnyAsync(x => x.Name == "Гетерохромия"))
             {
                 //Добавляем цвет глаз гетерохромия
-                EyesColor eyesColor = new("initializer", "Гетерохромия", null);
+                EyesColor eyesColor = new(_userCreated, "Гетерохромия", null);
                 await _applicationContext.EyesColors.AddAsync(eyesColor);
 
                 //Логгируем
@@ -1078,7 +2239,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Брюнет"))
             {
                 //Добавляем цвет волос брюнет
-                HairsColor hairsColor = new("initializer", "Брюнет", "#2D170E");
+                HairsColor hairsColor = new(_userCreated, "Брюнет", "#2D170E");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1090,7 +2251,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Рыжий"))
             {
                 //Добавляем цвет волос рыжий
-                HairsColor hairsColor = new("initializer", "Рыжий", "#91302B");
+                HairsColor hairsColor = new(_userCreated, "Рыжий", "#91302B");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1102,7 +2263,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Блондин"))
             {
                 //Добавляем цвет волос блондин
-                HairsColor hairsColor = new("initializer", "Блондин", "#FAF0BE");
+                HairsColor hairsColor = new(_userCreated, "Блондин", "#FAF0BE");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1114,7 +2275,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Шатен"))
             {
                 //Добавляем цвет волос шатен
-                HairsColor hairsColor = new("initializer", "Шатен", "#742802");
+                HairsColor hairsColor = new(_userCreated, "Шатен", "#742802");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1126,7 +2287,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Русый"))
             {
                 //Добавляем цвет волос русый
-                HairsColor hairsColor = new("initializer", "Русый", "#8E7962");
+                HairsColor hairsColor = new(_userCreated, "Русый", "#8E7962");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1138,7 +2299,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Седой"))
             {
                 //Добавляем цвет волос седой
-                HairsColor hairsColor = new("initializer", "Седой", "#C6C3B5");
+                HairsColor hairsColor = new(_userCreated, "Седой", "#C6C3B5");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1150,7 +2311,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.HairsColors.AnyAsync(x => x.Name == "Платиновый"))
             {
                 //Добавляем цвет волос платиновый
-                HairsColor hairsColor = new("initializer", "Платиновый", "#E5E4E2");
+                HairsColor hairsColor = new(_userCreated, "Платиновый", "#E5E4E2");
                 await _applicationContext.HairsColors.AddAsync(hairsColor);
 
                 //Логгируем
@@ -1202,7 +2363,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Эктоморф"))
             {
                 //Добавляем тип телосложения эктоморф
-                TypeBody typeBody = new("initializer", "Эктоморф");
+                TypeBody typeBody = new(_userCreated, "Эктоморф");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1214,7 +2375,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Эндоморф"))
             {
                 //Добавляем тип телосложения эндоморф
-                TypeBody typeBody = new("initializer", "Эндоморф");
+                TypeBody typeBody = new(_userCreated, "Эндоморф");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1226,7 +2387,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Мезоморф"))
             {
                 //Добавляем тип телосложения мезоморф
-                TypeBody typeBody = new("initializer", "Мезоморф");
+                TypeBody typeBody = new(_userCreated, "Мезоморф");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1238,7 +2399,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Эктомезоморф"))
             {
                 //Добавляем тип телосложения эктомезоморф
-                TypeBody typeBody = new("initializer", "Эктомезоморф");
+                TypeBody typeBody = new(_userCreated, "Эктомезоморф");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1250,7 +2411,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Эктоэндоморф с фигурой-грушей"))
             {
                 //Добавляем тип телосложения эктоэндоморф с фигурой-грушей
-                TypeBody typeBody = new("initializer", "Эктоэндоморф с фигурой-грушей");
+                TypeBody typeBody = new(_userCreated, "Эктоэндоморф с фигурой-грушей");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1262,7 +2423,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Мезоэндоморф"))
             {
                 //Добавляем тип телосложения мезоэндоморф
-                TypeBody typeBody = new("initializer", "Мезоэндоморф");
+                TypeBody typeBody = new(_userCreated, "Мезоэндоморф");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1274,7 +2435,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesBodies.AnyAsync(x => x.Name == "Эндоморф с фигурой-яблоком"))
             {
                 //Добавляем тип телосложения эндоморф с фигурой-яблоком
-                TypeBody typeBody = new("initializer", "Эндоморф с фигурой-яблоком");
+                TypeBody typeBody = new(_userCreated, "Эндоморф с фигурой-яблоком");
                 await _applicationContext.TypesBodies.AddAsync(typeBody);
 
                 //Логгируем
@@ -1326,7 +2487,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Овальное"))
             {
                 //Добавляем тип лиц овальное
-                TypeFace typeFace = new("initializer", "Овальное");
+                TypeFace typeFace = new(_userCreated, "Овальное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1338,7 +2499,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Квадратное"))
             {
                 //Добавляем тип лиц квадратное
-                TypeFace typeFace = new("initializer", "Квадратное");
+                TypeFace typeFace = new(_userCreated, "Квадратное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1350,7 +2511,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Круглое"))
             {
                 //Добавляем тип лиц круглое
-                TypeFace typeFace = new("initializer", "Круглое");
+                TypeFace typeFace = new(_userCreated, "Круглое");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1362,7 +2523,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Прямоугольное"))
             {
                 //Добавляем тип лиц прямоугольное
-                TypeFace typeFace = new("initializer", "Прямоугольное");
+                TypeFace typeFace = new(_userCreated, "Прямоугольное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1374,7 +2535,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Ромбовидное"))
             {
                 //Добавляем тип лиц ромбовидное
-                TypeFace typeFace = new("initializer", "Ромбовидное");
+                TypeFace typeFace = new(_userCreated, "Ромбовидное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1386,7 +2547,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Треугольное"))
             {
                 //Добавляем тип лиц треугольное
-                TypeFace typeFace = new("initializer", "Треугольное");
+                TypeFace typeFace = new(_userCreated, "Треугольное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1398,7 +2559,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFaces.AnyAsync(x => x.Name == "Грушевидное"))
             {
                 //Добавляем тип лиц грушевидное
-                TypeFace typeFace = new("initializer", "Грушевидное");
+                TypeFace typeFace = new(_userCreated, "Грушевидное");
                 await _applicationContext.TypesFaces.AddAsync(typeFace);
 
                 //Логгируем
@@ -1450,7 +2611,349 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации стран
     /// </summary>
     /// <exception cref="InnerException"></exception>
-    public async Task InitializationCountries() { }
+    public async Task InitializationCountries()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationCountriesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем страну Альвраатская империя
+            Organization? organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Альвраатская империя
+                Country country = new(_userCreated, true, 1, "#20D1DB", "Исландский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Альвраатская империя{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Альвраатская империя{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Княжество Саорса
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Княжество Саорса") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Княжество Саорса
+                Country country = new(_userCreated, true, 2, "#607F47", "Ирландский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Княжество Саорса{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Княжество Саорса{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Королевство Берген
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Королевство Берген") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Королевство Берген
+                Country country = new(_userCreated, true, 3, "#00687C", "Шведский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Королевство Берген{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Королевство Берген{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Фесгарское княжество
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Фесгарское княжество") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Фесгарское княжество
+                Country country = new(_userCreated, true, 4, "#B200FF", "Шотландский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Фесгарское княжество{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Фесгарское княжество{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Сверденский каганат
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Сверденский каганат") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Сверденский каганат
+                Country country = new(_userCreated, true, 5, "#7F3B00", "Норвежский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Сверденский каганат{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Сверденский каганат{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Ханство Тавалин
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Ханство Тавалин") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Ханство Тавалин
+                Country country = new(_userCreated, true, 6, "#7F006D", "Эстонский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Ханство Тавалин{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Ханство Тавалин{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Княжество Саргиб
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Княжество Саргиб") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Княжество Саргиб
+                Country country = new(_userCreated, true, 7, "#007F0E", "Литовский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Княжество Саргиб{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Княжество Саргиб{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Царство Банду
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Царство Банду") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Царство Банду
+                Country country = new(_userCreated, true, 8, "#47617C", "Хинди", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Царство Банду{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Царство Банду{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Королевство Нордер
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Королевство Нордер") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Королевство Нордер
+                Country country = new(_userCreated, true, 9, "#D82929", "Немецкий", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Королевство Нордер{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Королевство Нордер{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Альтерское княжество
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альтерское княжество") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Альтерское княжество
+                Country country = new(_userCreated, true, 10, "#4ACC39", "Французский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Альтерское княжество{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Альтерское княжество{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Орлиадарская конфедерация
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Орлиадарская конфедерация") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Орлиадарская конфедерация
+                Country country = new(_userCreated, true, 11, "#AF9200", "Французский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Орлиадарская конфедерация{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Орлиадарская конфедерация{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Королевство Удстир
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Королевство Удстир") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Королевство Удстир
+                Country country = new(_userCreated, true, 12, "#8CAF00", "Датский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Королевство Удстир{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Королевство Удстир{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Королевство Вервирунг
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Королевство Вервирунг") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Королевство Вервирунг
+                Country country = new(_userCreated, true, 13, "#7F1700", "Немецкий", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Королевство Вервирунг{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Королевство Вервирунг{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Дестинский орден
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дестинский орден") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Дестинский орден
+                Country country = new(_userCreated, true, 14, "#2B7C55", "Итальянский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Дестинский орден{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Дестинский орден{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Вольный город Лийсет
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Вольный город Лийсет") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Вольный город Лийсет
+                Country country = new(_userCreated, true, 15, "#7B7F00", "Итальянский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Вольный город Лийсет{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Вольный город Лийсет{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Лисцийская империя
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Лисцийская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Лисцийская империя
+                Country country = new(_userCreated, true, 16, "#7F002E", "Итальянский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Лисцийская империя{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Лисцийская империя{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Королевство Вальтир
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Королевство Вальтир") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Королевство Вальтир
+                Country country = new(_userCreated, true, 17, "#B05BFF", "Финский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Королевство Вальтир{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Королевство Вальтир{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Вассальное княжество Гратис
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Вассальное княжество Гратис") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Вассальное княжество Гратис
+                Country country = new(_userCreated, true, 18, "#005DFF", "Итальянский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Вассальное княжество Гратис{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Вассальное княжество Гратис{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Княжество Ректа
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Княжество Ректа") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Княжество Ректа
+                Country country = new(_userCreated, true, 19, "#487F00", "Эсперанто", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Княжество Ректа{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Княжество Ректа{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Волар
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Волар") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Волар
+                Country country = new(_userCreated, true, 20, "#32217A", "Испанский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Волар{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Волар{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Союз Иль-Ладро
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Союз Иль-Ладро") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Союз Иль-Ладро
+                Country country = new(_userCreated, true, 21, "#35513B", "Итальянский", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Союз Иль-Ладро{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Союз Иль-Ладро{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Мергерская Уния
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Мергерская Уния") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Мергерская Уния
+                Country country = new(_userCreated, true, 22, "#BC3CB4", "Латынь", organization);
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Мергерская Уния{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Мергерская Уния{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_countries_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации фракций
@@ -1462,7 +2965,349 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации организаций
     /// </summary>
     /// <exception cref="InnerException"></exception>
-    public async Task InitializationOrganizations() { }
+    public async Task InitializationOrganizations()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationOrganizationsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем организацию Альвраатская империя
+            TypeOrganization? typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Альвраатская империя"))
+            {
+                //Добавляем организацию Альвраатская империя
+                Organization organization = new(_userCreated, true, "Альвраатская империя", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Альвраатская империя{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Альвраатская империя{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Княжество Саорса
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Саорса"))
+            {
+                //Добавляем организацию Княжество Саорса
+                Organization organization = new(_userCreated, true, "Княжество Саорса", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Княжество Саорса{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Княжество Саорса{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Королевство Берген
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Берген"))
+            {
+                //Добавляем организацию Королевство Берген
+                Organization organization = new(_userCreated, true, "Королевство Берген", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Королевство Берген{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Королевство Берген{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Фесгарское княжество
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Фесгарское княжество"))
+            {
+                //Добавляем организацию Фесгарское княжество
+                Organization organization = new(_userCreated, true, "Фесгарское княжество", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Фесгарское княжество{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Фесгарское княжество{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Сверденский каганат
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Сверденский каганат"))
+            {
+                //Добавляем организацию Сверденский каганат
+                Organization organization = new(_userCreated, true, "Сверденский каганат", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Сверденский каганат{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Сверденский каганат{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Ханство Тавалин
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Ханство Тавалин"))
+            {
+                //Добавляем организацию Ханство Тавалин
+                Organization organization = new(_userCreated, true, "Ханство Тавалин", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Ханство Тавалин{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Ханство Тавалин{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Княжество Саргиб
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Саргиб"))
+            {
+                //Добавляем организацию Княжество Саргиб
+                Organization organization = new(_userCreated, true, "Княжество Саргиб", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Княжество Саргиб{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Княжество Саргиб{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Царство Банду
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Царство Банду"))
+            {
+                //Добавляем организацию Царство Банду
+                Organization organization = new(_userCreated, true, "Царство Банду", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Царство Банду{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Царство Банду{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Королевство Нордер
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Нордер"))
+            {
+                //Добавляем организацию Королевство Нордер
+                Organization organization = new(_userCreated, true, "Королевство Нордер", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Королевство Нордер{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Королевство Нордер{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Альтерское княжество
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Альтерское княжество"))
+            {
+                //Добавляем организацию Альтерское княжество
+                Organization organization = new(_userCreated, true, "Альтерское княжество", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Альтерское княжество{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Альтерское княжество{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Орлиадарская конфедерация
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Орлиадарская конфедерация"))
+            {
+                //Добавляем организацию Орлиадарская конфедерация
+                Organization organization = new(_userCreated, true, "Орлиадарская конфедерация", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Орлиадарская конфедерация{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Орлиадарская конфедерация{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Королевство Удстир
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Удстир"))
+            {
+                //Добавляем организацию Королевство Удстир
+                Organization organization = new(_userCreated, true, "Королевство Удстир", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Королевство Удстир{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Королевство Удстир{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Королевство Вервирунг
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Вервирунг"))
+            {
+                //Добавляем организацию Королевство Вервирунг
+                Organization organization = new(_userCreated, true, "Королевство Вервирунг", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Королевство Вервирунг{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Королевство Вервирунг{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Дестинский орден
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дестинский орден"))
+            {
+                //Добавляем организацию Дестинский орден
+                Organization organization = new(_userCreated, true, "Дестинский орден", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Дестинский орден{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дестинский орден{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Вольный город Лийсет
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Вольный город Лийсет"))
+            {
+                //Добавляем организацию Вольный город Лийсет
+                Organization organization = new(_userCreated, true, "Вольный город Лийсет", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Вольный город Лийсет{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Вольный город Лийсет{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Лисцийская империя
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Лисцийская империя"))
+            {
+                //Добавляем организацию Лисцийская империя
+                Organization organization = new(_userCreated, true, "Лисцийская империя", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Лисцийская империя{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Лисцийская империя{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Королевство Вальтир
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Вальтир"))
+            {
+                //Добавляем организацию Королевство Вальтир
+                Organization organization = new(_userCreated, true, "Королевство Вальтир", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Королевство Вальтир{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Королевство Вальтир{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Вассальное княжество Гратис
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Вассальное княжество Гратис"))
+            {
+                //Добавляем организацию Вассальное княжество Гратис
+                Organization organization = new(_userCreated, true, "Вассальное княжество Гратис", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Вассальное княжество Гратис{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Вассальное княжество Гратис{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Княжество Ректа
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Ректа"))
+            {
+                //Добавляем организацию Княжество Ректа
+                Organization organization = new(_userCreated, true, "Княжество Ректа", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Княжество Ректа{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Княжество Ректа{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Волар
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Волар"))
+            {
+                //Добавляем организацию Волар
+                Organization organization = new(_userCreated, true, "Волар", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Волар{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Волар{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Союз Иль-Ладро
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Союз Иль-Ладро"))
+            {
+                //Добавляем организацию Союз Иль-Ладро
+                Organization organization = new(_userCreated, true, "Союз Иль-Ладро", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Союз Иль-Ладро{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Союз Иль-Ладро{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Проверяем организацию Мергерская Уния
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Мергерская Уния"))
+            {
+                //Добавляем организацию Мергерская Уния
+                Organization organization = new(_userCreated, true, "Мергерская Уния", typeOrganization, null);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Логгируем
+                Console.WriteLine("Мергерская Уния{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Мергерская Уния{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_organizations_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации владений
@@ -1480,7 +3325,137 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации типов организаций
     /// </summary>
     /// <exception cref="InnerException"></exception>
-    public async Task InitializationTypesOrganizations() { }
+    public async Task InitializationTypesOrganizations()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationTypiesOrganizationsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем тип организации государство
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Государство"))
+            {
+                //Добавляем тип организации государство
+                TypeOrganization typeOrganization = new(_userCreated, "Государство");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Государство{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Государство{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации семья
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Семья"))
+            {
+                //Добавляем тип организации семья
+                TypeOrganization typeOrganization = new(_userCreated, "Семья");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Семья{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Семья{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации правительственное формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Правительственное формирование"))
+            {
+                //Добавляем тип организации правительственное формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Правительственное формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Правительственное формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Правительственное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации военное формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Военное формирование"))
+            {
+                //Добавляем тип организации военное формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Военное формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Военное формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Военное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации религиозное формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Религиозное формирование"))
+            {
+                //Добавляем тип организации религиозное формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Религиозное формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Религиозное формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Религиозное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации магическое формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Магическое формирование"))
+            {
+                //Добавляем тип организации магическое формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Магическое формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Магическое формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Магическое формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации торговое формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Торговое формирование"))
+            {
+                //Добавляем тип организации торговое формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Торговое формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Торговое формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Торговое формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Проверяем тип организации культурное формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Культурное формирование"))
+            {
+                //Добавляем тип организации культурное формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Культурное формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Культурное формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Культурное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_typies_orgnanizations_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 
@@ -1533,7 +3508,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Древний"))
             {
                 //Добавляем нацию древних
-                Nation nation = new("initializer", "Древний", race, "Латынь");
+                Nation nation = new(_userCreated, "Древний", race, "Латынь");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1547,7 +3522,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Альв"))
             {
                 //Добавляем нацию альвов
-                Nation nation = new("initializer", "Альв", race, "Исландский");
+                Nation nation = new(_userCreated, "Альв", race, "Исландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1561,7 +3536,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Западный вампир"))
             {
                 //Добавляем нацию западных вампиров
-                Nation nation = new("initializer", "Западный вампир", race, "Шотландский");
+                Nation nation = new(_userCreated, "Западный вампир", race, "Шотландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1575,7 +3550,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Восточный вампир"))
             {
                 //Добавляем нацию восточных вампиров
-                Nation nation = new("initializer", "Восточный вампир", race, "Шотландский");
+                Nation nation = new(_userCreated, "Восточный вампир", race, "Шотландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1589,7 +3564,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Серый орк"))
             {
                 //Добавляем нацию серых орков
-                Nation nation = new("initializer", "Серый орк", race, "Норвежский");
+                Nation nation = new(_userCreated, "Серый орк", race, "Норвежский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1603,7 +3578,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Чёрный орк"))
             {
                 //Добавляем нацию чёрных орков
-                Nation nation = new("initializer", "Чёрный орк", race, "Норвежский");
+                Nation nation = new(_userCreated, "Чёрный орк", race, "Норвежский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1617,7 +3592,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Зелёный орк"))
             {
                 //Добавляем нацию зелёных орков
-                Nation nation = new("initializer", "Зелёный орк", race, "Норвежский");
+                Nation nation = new(_userCreated, "Зелёный орк", race, "Норвежский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1631,7 +3606,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Белый орк"))
             {
                 //Добавляем нацию белых орков
-                Nation nation = new("initializer", "Белый орк", race, "Норвежский");
+                Nation nation = new(_userCreated, "Белый орк", race, "Норвежский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1645,7 +3620,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Южный орк"))
             {
                 //Добавляем нацию южных орков
-                Nation nation = new("initializer", "Южный орк", race, "Норвежский");
+                Nation nation = new(_userCreated, "Южный орк", race, "Норвежский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1659,7 +3634,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Лисциец"))
             {
                 //Добавляем нацию лисцийцев
-                Nation nation = new("initializer", "Лисциец", race, "Итальянский");
+                Nation nation = new(_userCreated, "Лисциец", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1673,7 +3648,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Рифут"))
             {
                 //Добавляем нацию рифутов
-                Nation nation = new("initializer", "Рифут", race, "Итальянский");
+                Nation nation = new(_userCreated, "Рифут", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1687,7 +3662,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Ластат"))
             {
                 //Добавляем нацию ластатов
-                Nation nation = new("initializer", "Ластат", race, "Итальянский");
+                Nation nation = new(_userCreated, "Ластат", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1701,7 +3676,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Дестинец"))
             {
                 //Добавляем нацию дестинцев
-                Nation nation = new("initializer", "Дестинец", race, "Итальянский");
+                Nation nation = new(_userCreated, "Дестинец", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1715,7 +3690,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Илмариец"))
             {
                 //Добавляем нацию илмарийцев
-                Nation nation = new("initializer", "Илмариец", race, "Итальянский");
+                Nation nation = new(_userCreated, "Илмариец", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1729,7 +3704,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Асуд"))
             {
                 //Добавляем нацию асудов
-                Nation nation = new("initializer", "Асуд", race, "Итальянский");
+                Nation nation = new(_userCreated, "Асуд", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1743,7 +3718,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Вальтирец"))
             {
                 //Добавляем нацию вальтирцев
-                Nation nation = new("initializer", "Вальтирец", race, "Итальянский");
+                Nation nation = new(_userCreated, "Вальтирец", race, "Итальянский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1757,7 +3732,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Саорсин"))
             {
                 //Добавляем нацию саорсинов
-                Nation nation = new("initializer", "Саорсин", race, "Ирландский");
+                Nation nation = new(_userCreated, "Саорсин", race, "Ирландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1771,7 +3746,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Теоранец"))
             {
                 //Добавляем нацию теоранцев
-                Nation nation = new("initializer", "Теоранец", race, "Ирландский");
+                Nation nation = new(_userCreated, "Теоранец", race, "Ирландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1785,7 +3760,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Анкостец"))
             {
                 //Добавляем нацию анкостцев
-                Nation nation = new("initializer", "Анкостец", race, "Ирландский");
+                Nation nation = new(_userCreated, "Анкостец", race, "Ирландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1799,7 +3774,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Тавалинец"))
             {
                 //Добавляем нацию тавалинцев
-                Nation nation = new("initializer", "Тавалинец", race, "Эстонский");
+                Nation nation = new(_userCreated, "Тавалинец", race, "Эстонский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1813,7 +3788,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Иглессиец"))
             {
                 //Добавляем нацию иглессийцев
-                Nation nation = new("initializer", "Иглессиец", race, "Литовский");
+                Nation nation = new(_userCreated, "Иглессиец", race, "Литовский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1827,7 +3802,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Плекиец"))
             {
                 //Добавляем нацию плекийцев
-                Nation nation = new("initializer", "Плекиец", race, "Литовский");
+                Nation nation = new(_userCreated, "Плекиец", race, "Литовский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1841,7 +3816,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Сиервин"))
             {
                 //Добавляем нацию сиервинов
-                Nation nation = new("initializer", "Сиервин", race, "Литовский");
+                Nation nation = new(_userCreated, "Сиервин", race, "Литовский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1855,7 +3830,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Виегиец"))
             {
                 //Добавляем нацию виегийцев
-                Nation nation = new("initializer", "Виегиец", race, "Литовский");
+                Nation nation = new(_userCreated, "Виегиец", race, "Литовский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1869,7 +3844,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Горный тролль"))
             {
                 //Добавляем нацию горных троллей
-                Nation nation = new("initializer", "Горный тролль", race, "Шведский");
+                Nation nation = new(_userCreated, "Горный тролль", race, "Шведский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1883,7 +3858,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Снежный тролль"))
             {
                 //Добавляем нацию снежных троллей
-                Nation nation = new("initializer", "Снежный тролль", race, "Шведский");
+                Nation nation = new(_userCreated, "Снежный тролль", race, "Шведский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1897,7 +3872,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Болотный тролль"))
             {
                 //Добавляем нацию болотных троллей
-                Nation nation = new("initializer", "Болотный тролль", race, "Шведский");
+                Nation nation = new(_userCreated, "Болотный тролль", race, "Шведский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1911,7 +3886,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Лесной тролль"))
             {
                 //Добавляем нацию лесных троллей
-                Nation nation = new("initializer", "Лесной тролль", race, "Шведский");
+                Nation nation = new(_userCreated, "Лесной тролль", race, "Шведский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1925,7 +3900,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Баккер"))
             {
                 //Добавляем нацию баккеров
-                Nation nation = new("initializer", "Баккер", race, "Немецкий");
+                Nation nation = new(_userCreated, "Баккер", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1939,7 +3914,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Нордерец"))
             {
                 //Добавляем нацию нордерцев
-                Nation nation = new("initializer", "Нордерец", race, "Немецкий");
+                Nation nation = new(_userCreated, "Нордерец", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1953,7 +3928,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Вервирунгец"))
             {
                 //Добавляем нацию вервирунгцев
-                Nation nation = new("initializer", "Вервирунгец", race, "Немецкий");
+                Nation nation = new(_userCreated, "Вервирунгец", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1967,7 +3942,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Шмид"))
             {
                 //Добавляем нацию шмидов
-                Nation nation = new("initializer", "Шмид", race, "Немецкий");
+                Nation nation = new(_userCreated, "Шмид", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1981,7 +3956,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Кригер"))
             {
                 //Добавляем нацию кригеров
-                Nation nation = new("initializer", "Кригер", race, "Немецкий");
+                Nation nation = new(_userCreated, "Кригер", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -1995,7 +3970,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Куфман"))
             {
                 //Добавляем нацию куфманов
-                Nation nation = new("initializer", "Куфман", race, "Немецкий");
+                Nation nation = new(_userCreated, "Куфман", race, "Немецкий");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2009,7 +3984,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Ихтид"))
             {
                 //Добавляем нацию ихтидов
-                Nation nation = new("initializer", "Ихтид", race, "Хинди");
+                Nation nation = new(_userCreated, "Ихтид", race, "Хинди");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2023,7 +3998,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Удстирец"))
             {
                 //Добавляем нацию удстирцев
-                Nation nation = new("initializer", "Удстирец", race, "Датский");
+                Nation nation = new(_userCreated, "Удстирец", race, "Датский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2037,7 +4012,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Фискирец"))
             {
                 //Добавляем нацию фискирцев
-                Nation nation = new("initializer", "Фискирец", race, "Датский");
+                Nation nation = new(_userCreated, "Фискирец", race, "Датский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2051,7 +4026,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Монт"))
             {
                 //Добавляем нацию монтов
-                Nation nation = new("initializer", "Монт", race, "Датский");
+                Nation nation = new(_userCreated, "Монт", race, "Датский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2065,7 +4040,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Волчий метаморф"))
             {
                 //Добавляем нацию волчьих метаморфов
-                Nation nation = new("initializer", "Волчий метаморф", race, "Эсперанто");
+                Nation nation = new(_userCreated, "Волчий метаморф", race, "Эсперанто");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2079,7 +4054,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Медвежий метаморф"))
             {
                 //Добавляем нацию медвежьих метаморфов
-                Nation nation = new("initializer", "Медвежий метаморф", race, "Эсперанто");
+                Nation nation = new(_userCreated, "Медвежий метаморф", race, "Эсперанто");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2093,7 +4068,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Кошачий метаморф"))
             {
                 //Добавляем нацию кошачьих метаморфов
-                Nation nation = new("initializer", "Кошачий метаморф", race, "Эсперанто");
+                Nation nation = new(_userCreated, "Кошачий метаморф", race, "Эсперанто");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2107,7 +4082,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Высший эльф"))
             {
                 //Добавляем нацию высших эльфов
-                Nation nation = new("initializer", "Высший эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Высший эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2121,7 +4096,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Ночной эльф"))
             {
                 //Добавляем нацию ночных эльфов
-                Nation nation = new("initializer", "Ночной эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Ночной эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2135,7 +4110,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Кровавый эльф"))
             {
                 //Добавляем нацию кровавых эльфов
-                Nation nation = new("initializer", "Кровавый эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Кровавый эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2149,7 +4124,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Лесной эльф"))
             {
                 //Добавляем нацию лесных эльфов
-                Nation nation = new("initializer", "Лесной эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Лесной эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2163,7 +4138,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Горный эльф"))
             {
                 //Добавляем нацию горных эльфов
-                Nation nation = new("initializer", "Горный эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Горный эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2177,7 +4152,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Речной эльф"))
             {
                 //Добавляем нацию речных эльфов
-                Nation nation = new("initializer", "Речной эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Речной эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2191,7 +4166,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Солнечный эльф"))
             {
                 //Добавляем нацию солнечных эльфов
-                Nation nation = new("initializer", "Солнечный эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Солнечный эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2205,7 +4180,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Морской эльф"))
             {
                 //Добавляем нацию морских эльфов
-                Nation nation = new("initializer", "Морской эльф", race, "Французский");
+                Nation nation = new(_userCreated, "Морской эльф", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2219,7 +4194,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Дану"))
             {
                 //Добавляем нацию дану
-                Nation nation = new("initializer", "Дану", race, "Французский");
+                Nation nation = new(_userCreated, "Дану", race, "Французский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2233,7 +4208,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Элвин"))
             {
                 //Добавляем нацию элвинов
-                Nation nation = new("initializer", "Элвин", race, "Эсперанто");
+                Nation nation = new(_userCreated, "Элвин", race, "Эсперанто");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2247,7 +4222,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Антропозавр"))
             {
                 //Добавляем нацию антропозавров
-                Nation nation = new("initializer", "Антропозавр", race, "Латынь");
+                Nation nation = new(_userCreated, "Антропозавр", race, "Латынь");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2261,7 +4236,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Наг"))
             {
                 //Добавляем нацию нагов
-                Nation nation = new("initializer", "Наг", race, "Латынь");
+                Nation nation = new(_userCreated, "Наг", race, "Латынь");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2275,7 +4250,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Цивилизованный мраат"))
             {
                 //Добавляем нацию цивилизованных мраатов
-                Nation nation = new("initializer", "Цивилизованный мраат", race, "Исландский");
+                Nation nation = new(_userCreated, "Цивилизованный мраат", race, "Исландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2289,7 +4264,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Дикий  мраат"))
             {
                 //Добавляем нацию диких мраатов
-                Nation nation = new("initializer", "Дикий  мраат", race, "Исландский");
+                Nation nation = new(_userCreated, "Дикий  мраат", race, "Исландский");
                 await _applicationContext.Nations.AddAsync(nation);
 
                 //Логгируем
@@ -2342,7 +4317,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Древний"))
             {
                 //Добавляем расу древних
-                Race race = new("initializer", "Древний");
+                Race race = new(_userCreated, "Древний");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2354,7 +4329,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Альв"))
             {
                 //Добавляем расу альвов
-                Race race = new("initializer", "Альв");
+                Race race = new(_userCreated, "Альв");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2366,7 +4341,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Вампир"))
             {
                 //Добавляем расу вампиров
-                Race race = new("initializer", "Вампир");
+                Race race = new(_userCreated, "Вампир");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2378,7 +4353,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Орк"))
             {
                 //Добавляем расу орков
-                Race race = new("initializer", "Орк");
+                Race race = new(_userCreated, "Орк");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2390,7 +4365,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Человек"))
             {
                 //Добавляем расу людей
-                Race race = new("initializer", "Человек");
+                Race race = new(_userCreated, "Человек");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2402,7 +4377,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Тролль"))
             {
                 //Добавляем расу троллей
-                Race race = new("initializer", "Тролль");
+                Race race = new(_userCreated, "Тролль");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2414,7 +4389,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Дворф"))
             {
                 //Добавляем расу дворфов
-                Race race = new("initializer", "Дворф");
+                Race race = new(_userCreated, "Дворф");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2426,7 +4401,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Ихтид"))
             {
                 //Добавляем расу ихтидов
-                Race race = new("initializer", "Ихтид");
+                Race race = new(_userCreated, "Ихтид");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2438,7 +4413,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Гоблин"))
             {
                 //Добавляем расу гоблинов
-                Race race = new("initializer", "Гоблин");
+                Race race = new(_userCreated, "Гоблин");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2450,7 +4425,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Огр"))
             {
                 //Добавляем расу огров
-                Race race = new("initializer", "Огр");
+                Race race = new(_userCreated, "Огр");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2462,7 +4437,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Метаморф"))
             {
                 //Добавляем расу метоморфов
-                Race race = new("initializer", "Метаморф");
+                Race race = new(_userCreated, "Метаморф");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2474,7 +4449,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Эльф"))
             {
                 //Добавляем расу эльфов
-                Race race = new("initializer", "Эльф");
+                Race race = new(_userCreated, "Эльф");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2486,7 +4461,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Дану"))
             {
                 //Добавляем расу дану
-                Race race = new("initializer", "Дану");
+                Race race = new(_userCreated, "Дану");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2498,7 +4473,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Элвин"))
             {
                 //Добавляем расу элвинов
-                Race race = new("initializer", "Элвин");
+                Race race = new(_userCreated, "Элвин");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2510,7 +4485,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Антропозавр"))
             {
                 //Добавляем расу антропозавров
-                Race race = new("initializer", "Антропозавр");
+                Race race = new(_userCreated, "Антропозавр");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2522,7 +4497,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Наг"))
             {
                 //Добавляем расу нагов
-                Race race = new("initializer", "Наг");
+                Race race = new(_userCreated, "Наг");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2534,7 +4509,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Races.AnyAsync(x => x.Name == "Мраат"))
             {
                 //Добавляем расу мраатов
-                Race race = new("initializer", "Мраат");
+                Race race = new(_userCreated, "Мраат");
                 await _applicationContext.Races.AddAsync(race);
 
                 //Логгируем
@@ -2580,13 +4555,111 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации файлов
     /// </summary>
     /// <exception cref="InnerException"></exception>
-    public async Task InitializationFiles() { }
+    public async Task InitializationFiles() 
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationFilesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем файл Almus.jpg
+            TypeFile? typeFile = await _applicationContext.TypesFiles.FirstAsync(x => x.Name == "Персонажи") ?? throw new InnerException(Errors.EmptyTypeFile);
+            if (!await _applicationContext.Files.AnyAsync(x => x.Name == "Almus.jpg"))
+            {
+                //Добавляем файл Almus.jpg
+                FileEntity file = new(_userCreated, true, "Almus.jpg", typeFile);
+                await _applicationContext.Files.AddAsync(file);
+
+                //Логгируем
+                Console.WriteLine("Almus.jpg{0}", Informations.FileAdded);
+            }
+            else Console.WriteLine("Almus.jpg{0}", Informations.FileAlreadyAdded);
+            typeFile = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_files_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации файлов персонажей
     /// </summary>
     /// <exception cref="InnerException"></exception>
-    public async Task InitializationFilesHeroes() { }
+    public async Task InitializationFilesHeroes()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationFilesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем файл Almus.jpg персонажу Алмус
+            FileEntity? fileEntity = await _applicationContext.Files.FirstAsync(x => x.Name == "Almus.jpg") ?? throw new InnerException(Errors.EmptyFile);
+            Hero? hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.PersonalName == "Алмус" && x.Player.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyHero);
+            if (!await _applicationContext.FilesHeroes.AnyAsync(x => x.File == fileEntity && x.Hero == hero))
+            {
+                //Добавляем файл Almus.jpg пероснажу Алмус
+                FileHero fileHero = new(_userCreated, fileEntity, hero);
+                await _applicationContext.FilesHeroes.AddAsync(fileHero);
+
+                //Логгируем
+                Console.WriteLine("Almus.jpg/Алмус{0}", Informations.FileHeroAdded);
+            }
+            else Console.WriteLine("Almus.jpg/Алмус{0}", Informations.FileHeroAlreadyAdded);
+            fileEntity = null;
+            hero = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_files_heroes_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации типов файлов
@@ -2606,7 +4679,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.TypesFiles.AnyAsync(x => x.Name == "Персонажи"))
             {
                 //Добавляем тип файлов персонажей
-                TypeFile typeFile = new("initializer", "Персонажи", "E:\\Program\\Files\\Personazhi");
+                TypeFile typeFile = new(_userCreated, "Персонажи", "E:\\Program\\Files\\");
                 await _applicationContext.TypesFiles.AddAsync(typeFile);
 
                 //Логгируем

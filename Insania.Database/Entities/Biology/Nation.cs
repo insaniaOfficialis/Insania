@@ -29,7 +29,7 @@ public class Nation : Guide
     /// Язык для названий
     /// </summary>
     [Column("language_for_personal_names")]
-    [Comment("Язык для названий")]
+    [Comment("Язык для имён")]
     public string LanguageForNames { get; private set; }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class Nation : Guide
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="name">Наименование</param>
     /// <param name="race">Ссылка на расу</param>
-    /// <param name="languageForNames"></param>
+    /// <param name="languageForNames">Язык для имён</param>
     public Nation(string user, string name, Race race, string languageForNames) : base(user, name)
     {
         RaceId = race.Id;
@@ -62,7 +62,7 @@ public class Nation : Guide
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="race">Ссылка на расу</param>
-    /// <param name="languageForNames">Язык для названий</param>
+    /// <param name="languageForNames">Язык для имён</param>
     public Nation(long id, string user, string name, Race race, string languageForNames) : base(id, user,
         name)
     {

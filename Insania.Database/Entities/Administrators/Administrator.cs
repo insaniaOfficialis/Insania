@@ -104,7 +104,7 @@ public class Administrator : Reestr
     /// <param name="honorPoints">Баллы почёта</param>
     /// <param name="mentor">Ссылка на наставника</param>
     public Administrator(string user, bool isSystem, User userPlayer, Post post, Rank rank,
-        Chapter chapter, int honorPoints, Administrator mentor) : base(user, isSystem)
+        Chapter chapter, int honorPoints, Administrator? mentor) : base(user, isSystem)
     {
         UserId = userPlayer.Id;
         User = userPlayer;
@@ -115,7 +115,7 @@ public class Administrator : Reestr
         ChapterId = chapter.Id;
         Chapter = chapter;
         HonorPoints = honorPoints;
-        MentorId = mentor.Id;
+        MentorId = mentor?.Id;
         Mentor = mentor;
     }
 
@@ -132,7 +132,7 @@ public class Administrator : Reestr
     /// <param name="honorPoints">Баллы почёта</param>
     /// <param name="mentor">Ссылка на наставника</param>
     public Administrator(long id, string user, bool isSystem, User userPlayer, Post post,
-        Rank rank, Chapter chapter, int honorPoints, Administrator mentor) : base(id, user,
+        Rank rank, Chapter chapter, int honorPoints, Administrator? mentor) : base(id, user,
         isSystem)
     {
         UserId = userPlayer.Id;
@@ -144,7 +144,7 @@ public class Administrator : Reestr
         ChapterId = chapter.Id;
         Chapter = chapter;
         HonorPoints = honorPoints;
-        MentorId = mentor.Id;
+        MentorId = mentor?.Id;
         Mentor = mentor;
     }
 

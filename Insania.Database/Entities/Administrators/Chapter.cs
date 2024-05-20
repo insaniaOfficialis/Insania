@@ -2,8 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
 using Insania.Database.Entities.Politics;
+using Insania.Entities.Base;
 
 namespace Insania.Database.Entities.Administrators;
 
@@ -34,11 +34,16 @@ public class Chapter : Reestr
     public Country? Country { get; private set; }
 
     /// <summary>
-    /// Признак верховности
+    /// Ссылка на родителя
     /// </summary>
-    [Column("is_paramount")]
-    [Comment("Признак верховности")]
-    public bool IsParamount { get; private set; }
+    [Column("parent_id")]
+    [Comment("Ссылка на родителя")]
+    public long? ParentId { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство родителя
+    /// </summary>
+    public Chapter? Parent { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности капитула
@@ -55,14 +60,14 @@ public class Chapter : Reestr
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="country">Ссылка на страну</param>
-    /// <param name="isParamount">Признак верховности</param>
-    public Chapter(string user, bool isSystem, string name, Country? country,
-        bool isParamount) : base(user, isSystem)
+    /// <param name="parent">Ссылка на родителя</param>
+    public Chapter(string user, bool isSystem, string name, Country? country, Chapter? parent) : base(user, isSystem)
     {
         Name = name;
         CountryId = country?.Id;
         Country = country;
-        IsParamount = isParamount;
+        ParentId = parent?.Id;
+        Parent = parent;
     }
 
     /// <summary>
@@ -73,14 +78,14 @@ public class Chapter : Reestr
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="country">Ссылка на страну</param>
-    /// <param name="isParamount">Признак верховности</param>
-    public Chapter(long id, string user, bool isSystem, string name, Country? country,
-        bool isParamount) : base(id, user, isSystem)
+    /// <param name="parent">Ссылка на родителя</param>
+    public Chapter(long id, string user, bool isSystem, string name, Country? country, Chapter? parent) : base(id, user, isSystem)
     {
         Name = name;
         CountryId = country?.Id;
         Country = country;
-        IsParamount = isParamount;
+        ParentId = parent?.Id;
+        Parent = parent;
     }
 
     /// <summary>
@@ -103,11 +108,12 @@ public class Chapter : Reestr
     }
 
     /// <summary>
-    /// Метод записи признака верховности
+    /// Метод записи родителя
     /// </summary>
-    /// <param name="isParamount">Признак верховности</param>
-    public void SetIsParamount(bool isParamount)
+    /// <param name="type">Ссылка на родителя</param>
+    public void SetParent(Chapter parent)
     {
-        IsParamount = isParamount;
+        ParentId = parent.Id;
+        Parent = parent;
     }
 }

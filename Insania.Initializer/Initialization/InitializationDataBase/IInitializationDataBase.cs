@@ -90,7 +90,7 @@ public interface IInitializationDataBase
     Task InitializationRequestsHeroesRegistration();
 
     /// <summary>
-    /// Метод инициализации статусов регистраций персонажей
+    /// Метод инициализации статусов заявок на регистрацию персонажей
     /// </summary>
     /// <returns></returns>
     Task InitializationStatusesRequestsHeroesRegistration();

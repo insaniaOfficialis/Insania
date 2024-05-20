@@ -66,8 +66,7 @@ public class Program
     public static void Main()
     {
         //Получаем сервис инициализации базы данных
-        IInitializationDataBase initializationDataBase = _serviceProvider
-            .GetRequiredService<IInitializationDataBase>() 
+        IInitializationDataBase initializationDataBase = _serviceProvider .GetRequiredService<IInitializationDataBase>() 
             ?? throw new InnerException(Errors.EmptyServiceInitializtionDataBase);
 
         //Запускаем инициализацию базы данных

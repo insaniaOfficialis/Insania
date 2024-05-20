@@ -48,13 +48,29 @@ public static class Informations
 
     #region Персонажи
 
+    public const string BiographyHeroAdded = "-биография персонажа добавлена";
+    public const string BiographyHeroAlreadyAdded = "-биография персонажа уже добавлена";
+    public const string EnteredInitializationBiographiesHeroesMethod = "Вошли в метод инициализации биографией персонажей";    
     public const string EnteredInitializationHeroesMethod = "Вошли в метод инициализации персонажей";
+    public const string EnteredInitializationStatusesRequestsHeroesRegistrationsMethod = "Вошли в метод инициализации статусов заявок регистрации персонажей";
     public const string HeroAdded = "-персонаж добавлен";
     public const string HeroAlreadyAdded = "-персонаж уже добавлен";
+    public const string StatusesRequestsHeroesRegistrationsAdded = "-статус заявок на регистрацию персонажей добавлен";
+    public const string StatusesRequestsHeroesRegistrationsAlreadyAdded = "-статус заявок на регистрацию персонажей уже добавлен";
 
     #endregion
 
     #region Администраторы
+
+    public const string AdministratorAdded = "-администратор добавлен";
+    public const string AdministratorAlreadyAdded = "-администратор уже добавлен";
+    public const string EnteredInitializationAdmistratorsMethod = "Вошли в метод инициализации администраторов";
+    public const string EnteredInitializationPostsMethod = "Вошли в метод инициализации должностей";
+    public const string EnteredInitializationRanksMethod = "Вошли в метод инициализации званий";
+    public const string PostAdded = "-должность добавлена";
+    public const string PostAlreadyAdded = "-должность уже добавлена";
+    public const string RankAdded = "-звание добавлено";
+    public const string RankAlreadyAdded = "-звание уже добавлено";
 
     #endregion
 
@@ -73,10 +89,16 @@ public static class Informations
 
     public const string EnteredInitializationEyesColorsMethod = "Вошли в метод инициализации цветов глаз";
     public const string EnteredInitializationHairsColorsMethod = "Вошли в метод инициализации цветов волос";
+    public const string EnteredInitializationTypesBodiesMethod = "Вошли в метод инициализации типов телосложений";
+    public const string EnteredInitializationTypesFacesMethod = "Вошли в метод инициализации типов лиц";
     public const string EyesColorAdded = "-цвет глаз добавлен";
     public const string EyesColorAlreadyAdded = "-цвет волос уже добавлен";
     public const string HairsColorAdded = "-цвет волос добавлен";
     public const string HairsColorAlreadyAdded = "-цвет волос уже добавлен";
+    public const string TypeBodyAdded = "-тип телосложения добавлен";
+    public const string TypeBodyAlreadyAdded = "-тип телосложения уже добавлен";
+    public const string TypeFaceAdded = "-тип лица добавлен";
+    public const string TypeFaceAlreadyAdded = "-тип лица уже добавлен";
 
     #endregion
 
@@ -85,6 +107,19 @@ public static class Informations
     #endregion
 
     #region Политика
+
+    public const string ChapterAdded = "-капитул добавлен";
+    public const string ChapterAlreadyAdded = "-капитул уже добавлен";
+    public const string CountryAdded = "-страна добавлена";
+    public const string CountryAlreadyAdded = "-страна уже добавлена";
+    public const string EnteredInitializationChaptersMethod = "Вошли в метод инициализации капитулов";
+    public const string EnteredInitializationCountriesMethod = "Вошли в метод инициализации стран";
+    public const string EnteredInitializationOrganizationsMethod = "Вошли в метод инициализации организаций";
+    public const string EnteredInitializationTypiesOrganizationsMethod = "Вошли в метод инициализации типов организаций";
+    public const string OrganizationAdded = "-организация добавлена";
+    public const string OrganizationAlreadyAdded = "-организация уже добавлена";
+    public const string TypeOrganizationAdded = "-тип организации добавлен";
+    public const string TypeOrganizationAlreadyAdded = "-тип организации уже добавлен";
 
     #endregion
 
@@ -120,16 +155,10 @@ public static class Informations
 
     public const string EnteredInitializationNationsMethod = "Вошли в метод инициализации наций";
     public const string EnteredInitializationRacesMethod = "Вошли в метод инициализации рас";
-    public const string EnteredInitializationTypesBodiesMethod = "Вошли в метод инициализации типов телосложений";
-    public const string EnteredInitializationTypesFacesMethod = "Вошли в метод инициализации типов лиц";
     public const string NationAdded = "-нация добавлена";
     public const string NationAlreadyAdded = "-нация уже добавлена";
     public const string RaceAdded = "-раса добавлена";
     public const string RaceAlreadyAdded = "-раса уже добавлена";
-    public const string TypeBodyAdded = "-тип телосложения добавлен";
-    public const string TypeBodyAlreadyAdded = "-тип телосложения уже добавлен";
-    public const string TypeFaceAdded = "-тип лиц добавлен";
-    public const string TypeFaceAlreadyAdded = "-тип лиц уже добавлен";
 
     #endregion
 
@@ -139,7 +168,12 @@ public static class Informations
 
     #region Файлы
 
+    public const string EnteredInitializationFilesMethod = "Вошли в метод инициализации файлов";
     public const string EnteredInitializationTypesFilesMethod = "Вошли в метод инициализации типов файлов";
+    public const string FileAdded = "-файл добавлен";
+    public const string FileAlreadyAdded = "-файл уже добавлен";
+    public const string FileHeroAdded = "-файл персонажа добавлен";
+    public const string FileHeroAlreadyAdded = "-файл персонажа уже добавлен";
     public const string TypeFilesAdded = "-тип файлов добавлен";
     public const string TypeFilesAlreadyAdded = "-тип файлов уже добавлен";
 

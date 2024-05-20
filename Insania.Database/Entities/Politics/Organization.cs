@@ -37,12 +37,17 @@ public class Organization : Reestr
     /// </summary>
     [Column("parent_id")]
     [Comment("Ссылка на родителя")]
-    public long ParentId { get; private set; }
+    public long? ParentId { get; private set; }
 
     /// <summary>
     /// Навигационное свойство родителя
     /// </summary>
-    public Organization Parent { get; private set; }
+    public Organization? Parent { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство страны
+    /// </summary>
+    public Country? Country { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности организации
@@ -62,13 +67,13 @@ public class Organization : Reestr
     /// <param name="name">Наименование</param>
     /// <param name="type">Ссылка на тип</param>
     /// <param name="parent">Ссылка на родителя</param>
-    public Organization(string user, bool isSystem, string name, TypeOrganization type, Organization parent) 
-        : base(user, isSystem)
+    public Organization(string user, bool isSystem, string name, TypeOrganization type, Organization? parent) : base(user, 
+        isSystem)
     {
         Name = name;
         TypeId = type.Id;
         Type = type;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
     }
 
@@ -81,13 +86,13 @@ public class Organization : Reestr
     /// <param name="name">Наименование</param>
     /// <param name="type">Ссылка на тип</param>
     /// <param name="parent">Ссылка на родителя</param>
-    public Organization(long id, string user, bool isSystem, string name, TypeOrganization type, Organization parent) 
-        : base(id, user, isSystem)
+    public Organization(long id, string user, bool isSystem, string name, TypeOrganization type, Organization? parent) : base(id,
+        user, isSystem)
     {
         Name = name;
         TypeId = type.Id;
         Type = type;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
     }
 
