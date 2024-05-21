@@ -166,7 +166,10 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationAdministrators"])) await InitializationAdministrators();
 
             //ЗАЯВКИ НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
-            //if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRequestsHeroesRegistration"])) await InitializationRequestsHeroesRegistration();
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRequestsHeroesRegistration"])) await InitializationRequestsHeroesRegistration();
+
+            //БИОГРАФИИ ЗАЯВОК НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationBiographiesRequestsHeroesRegistration"])) await InitializationBiographiesRequestsHeroesRegistration();
         }
         catch (Exception ex)
         {
@@ -645,7 +648,185 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации биографий заявок на регистрацию персонажей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationBiographiesRequestsHeroesRegistration() { }
+    public async Task InitializationBiographiesRequestsHeroesRegistration()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationBiographiesRequestsHeroesRegistrationMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем биографию от -9999 заявки на регистрацию персонажа Амлус
+            BiographyHero? biography = await _applicationContext
+                .BiographiesHeroes
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas" 
+                    && x.Hero.PersonalName == "Алмус" 
+                    && x.CycleBegin == -9999) 
+                ?? throw new InnerException(Errors.EmptyBiography);
+            RequestHeroRegistration? request = await _applicationContext
+                .RequestsHeroesRegistration
+                .Include(x => x.Status)
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas" 
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.Status.Name == "Принята") 
+                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+            if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
+            {
+                //Добавляем биографию от -9999 заявки на регистрацию персонажа Амлус
+                BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
+                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
+                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
+                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
+
+                //Логгируем
+                Console.WriteLine("Алмус/-9999{0}", Informations.BiographiesRequestsHeroesRegistrationAdded);
+            }
+            else Console.WriteLine("Алмус/-9999{0}", Informations.BiographiesRequestsHeroesRegistrationAlreadyAdded);
+            biography = null;
+            request = null;
+
+            //Проверяем биографию от 0 заявки на регистрацию персонажа Амлус
+            biography = await _applicationContext
+                .BiographiesHeroes
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.CycleBegin == 0)
+                ?? throw new InnerException(Errors.EmptyBiography);
+            request = await _applicationContext
+                .RequestsHeroesRegistration
+                .Include(x => x.Status)
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.Status.Name == "Принята")
+                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+            if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
+            {
+                //Добавляем биографию от 0 заявки на регистрацию персонажа Амлус
+                BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
+                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
+                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
+                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
+
+                //Логгируем
+                Console.WriteLine("Алмус/0{0}", Informations.BiographiesRequestsHeroesRegistrationAdded);
+            }
+            else Console.WriteLine("Алмус/0{0}", Informations.BiographiesRequestsHeroesRegistrationAlreadyAdded);
+            biography = null;
+            request = null;
+
+            //Проверяем биографию от 224 заявки на регистрацию персонажа Амлус
+            biography = await _applicationContext
+                .BiographiesHeroes
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.CycleBegin == 224)
+                ?? throw new InnerException(Errors.EmptyBiography);
+            request = await _applicationContext
+                .RequestsHeroesRegistration
+                .Include(x => x.Status)
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.Status.Name == "Принята")
+                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+            if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
+            {
+                //Добавляем биографию от 224 заявки на регистрацию персонажа Амлус
+                BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
+                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
+                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
+                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
+
+                //Логгируем
+                Console.WriteLine("Алмус/224{0}", Informations.BiographiesRequestsHeroesRegistrationAdded);
+            }
+            else Console.WriteLine("Алмус/224{0}", Informations.BiographiesRequestsHeroesRegistrationAlreadyAdded);
+            biography = null;
+            request = null;
+
+            //Проверяем биографию от 643 заявки на регистрацию персонажа Амлус
+            biography = await _applicationContext
+                .BiographiesHeroes
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.CycleBegin == 643)
+                ?? throw new InnerException(Errors.EmptyBiography);
+            request = await _applicationContext
+                .RequestsHeroesRegistration
+                .Include(x => x.Status)
+                .Include(x => x.Hero)
+                .ThenInclude(y => y.Player)
+                .ThenInclude(z => z.User)
+                .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
+                    && x.Hero.PersonalName == "Алмус"
+                    && x.Status.Name == "Принята")
+                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+            if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
+            {
+                //Добавляем биографию от 643 заявки на регистрацию персонажа Амлус
+                BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
+                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
+                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
+                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
+
+                //Логгируем
+                Console.WriteLine("Алмус/643{0}", Informations.BiographiesRequestsHeroesRegistrationAdded);
+            }
+            else Console.WriteLine("Алмус/643{0}", Informations.BiographiesRequestsHeroesRegistrationAlreadyAdded);
+            biography = null;
+            request = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_biographies_requests_heroes_registration_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации персонажей
@@ -717,7 +898,72 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации заявок на регистрацию персонажей
     /// </summary>
     /// <returns></returns>
-    public async Task InitializationRequestsHeroesRegistration() { }
+    public async Task InitializationRequestsHeroesRegistration()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationRequestsHeroesRegistration);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем заявку персонажа Амлус
+            Hero? hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas" && x.PersonalName == "Алмус") ?? throw new InnerException(Errors.EmptyHero);
+            StatusRequestHeroRegistration? status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "Принята") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            Administrator? administrator = await _applicationContext.Administrators.Include(x => x.User).FirstAsync(x => x.User.UserName == "demiurge") ?? throw new InnerException(Errors.EmptyAdministrator);
+            if (!await _applicationContext.RequestsHeroesRegistration.AnyAsync(x => x.Hero == hero && x.Status == status))
+            {
+                //Добавляем заявку персонажа Амлус
+                RequestHeroRegistration request = new(_userCreated, true, hero, status);
+                request.SetAdministrator(administrator);
+                request.SetEyesColor(true, null);
+                request.SetFamilyNameDecision(true, null);
+                request.SetHairColorDescision(true, null);
+                request.SetHeightDecision(true, null);
+                request.SetImageDecision(true, null);
+                request.SetLocationDecision(true, null);
+                request.SetNationDecision(true, null);
+                request.SetPersonalNameDecision(true, null);
+                request.SetRaceDecision(true, null);
+                request.SetTypeBodyDescision(true, null);
+                request.SetTypeFaceDescision(true, null);
+                request.SetWeightDecision(true, null);
+                await _applicationContext.RequestsHeroesRegistration.AddAsync(request);
+
+                //Логгируем
+                Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationsAdded);
+            }
+            else Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationsAlreadyAdded);
+            hero = null;
+            status = null;
+            administrator = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_requests_heroes_registration_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации статусов заявок на регистрацию персонажей
@@ -727,9 +973,6 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     {
         //Логгируем
         Console.WriteLine(Informations.EnteredInitializationStatusesRequestsHeroesRegistrationsMethod);
-
-        //Открываем транзакцию
-        using var transaction = _applicationContext.Database.BeginTransaction();
 
         try
         {
@@ -810,15 +1053,9 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                 //Выполняем скрипт
                 await ExecuteScript(file);
             }
-
-            //Фиксируем транзакцию
-            await transaction.CommitAsync();
         }
         catch (Exception ex)
         {
-            //Откатываем транзакцию
-            await transaction.RollbackAsync();
-
             //Логгируем
             Console.WriteLine("{0} {1}", Errors.Error, ex);
         }

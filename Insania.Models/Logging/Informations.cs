@@ -50,11 +50,17 @@ public static class Informations
 
     public const string BiographyHeroAdded = "-биография персонажа добавлена";
     public const string BiographyHeroAlreadyAdded = "-биография персонажа уже добавлена";
-    public const string EnteredInitializationBiographiesHeroesMethod = "Вошли в метод инициализации биографией персонажей";    
+    public const string BiographiesRequestsHeroesRegistrationAdded = "-биография заявки на регистрацию персонажа добавлена";
+    public const string BiographiesRequestsHeroesRegistrationAlreadyAdded = "-биография заявки на регистрацию персонажа уже добавлена";
+    public const string EnteredInitializationBiographiesHeroesMethod = "Вошли в метод инициализации биографией персонажей";
+    public const string EnteredInitializationBiographiesRequestsHeroesRegistrationMethod = "Вошли в метод инициализации биографией заявок на регистрацию персонажей";
     public const string EnteredInitializationHeroesMethod = "Вошли в метод инициализации персонажей";
+    public const string EnteredInitializationRequestsHeroesRegistration = "Вошли в метод инициализации заявок на регистрацию персонажей";
     public const string EnteredInitializationStatusesRequestsHeroesRegistrationsMethod = "Вошли в метод инициализации статусов заявок регистрации персонажей";
     public const string HeroAdded = "-персонаж добавлен";
     public const string HeroAlreadyAdded = "-персонаж уже добавлен";
+    public const string RequestsHeroesRegistrationsAdded = "-заявка на регистрацию персонажа добавлена";
+    public const string RequestsHeroesRegistrationsAlreadyAdded = "-заявка на регистрацию персонажа добавлена";
     public const string StatusesRequestsHeroesRegistrationsAdded = "-статус заявок на регистрацию персонажей добавлен";
     public const string StatusesRequestsHeroesRegistrationsAlreadyAdded = "-статус заявок на регистрацию персонажей уже добавлен";
 

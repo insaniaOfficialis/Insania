@@ -30,7 +30,7 @@ public class StatusRequestHeroRegistration : Guide
     /// </summary>
     public StatusRequestHeroRegistration() : base()
     {
-        Previous = new();
+
     }
 
     /// <summary>

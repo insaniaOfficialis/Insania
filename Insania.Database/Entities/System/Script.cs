@@ -94,7 +94,7 @@ public class Script : Reestr
     public void SetResult(bool isSuccess, string? resultExecution)
     {
         if (!isSuccess && string.IsNullOrEmpty(resultExecution))
-            throw new InnerException(Errors.EpmtyResultExecution);
+            throw new InnerException(Errors.EmptyResultExecution);
 
         IsSuccess = isSuccess;
         ResultExecution = resultExecution;

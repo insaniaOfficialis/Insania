@@ -51,12 +51,12 @@ public class Ownership : Reestr
     /// </summary>
     [Column("parent_id")]
     [Comment("Ссылка на родителя")]
-    public long ParentId { get; private set; }
+    public long? ParentId { get; private set; }
 
     /// <summary>
     /// Навигационное свойство родителя
     /// </summary>
-    public Ownership Parent { get; private set; }
+    public Ownership? Parent { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности владения
@@ -67,7 +67,6 @@ public class Ownership : Reestr
         NumberOnMap = string.Empty;
         ColorOnMap = string.Empty;
         Organization = new();
-        Parent = new();
     }
 
     /// <summary>

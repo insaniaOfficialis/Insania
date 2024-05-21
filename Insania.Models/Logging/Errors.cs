@@ -19,7 +19,7 @@ public static class Errors
 
     #region Системное
 
-    public const string EpmtyResultExecution = "Пустой результат выполнения";
+    public const string EmptyResultExecution = "Пустой результат выполнения";
     public const string EmptyScriptsPath = "Пустой путь к скриптам";
 
     #endregion
@@ -39,13 +39,16 @@ public static class Errors
 
     #region Персонажи
 
+    public const string EmptyBiography= "Пустая биография";
     public const string EmptyHero= "Пустой персонаж";
+    public const string EmptyRequestsHeroesRegistration = "Пустая заявок на регистрацию персонажей";
     public const string EmptyStatusRequestsHeroesRegistration = "Пустой статус заявок на регистрацию персонажей";
 
     #endregion
 
     #region Администраторы
 
+    public const string EmptyAdministrator = "Пустой администратор";
     public const string EmptyPost = "Пустая должность";
     public const string EmptyRank = "Пустое звание";
 

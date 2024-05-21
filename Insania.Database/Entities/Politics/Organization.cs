@@ -56,7 +56,6 @@ public class Organization : Reestr
     {
         Name = string.Empty;
         Type = new();
-        Parent = new();
     }
 
     /// <summary>
