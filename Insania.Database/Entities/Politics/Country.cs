@@ -47,6 +47,13 @@ public class Country : Reestr
     public Organization Organization { get; private set; }
 
     /// <summary>
+    /// Код
+    /// </summary>
+    [Column("code")]
+    [Comment("Код")]
+    public string Code { get; private set; }
+
+    /// <summary>
     /// Простой конструктор модели сущности страны
     /// </summary>
     public Country() : base()
@@ -54,6 +61,7 @@ public class Country : Reestr
         ColorOnMap = string.Empty;
         LanguageForNames = string.Empty;
         Organization = new();
+        Code = string.Empty;
     }
 
     /// <summary>
@@ -64,15 +72,17 @@ public class Country : Reestr
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="languageForNames">Язык для названий</param>
-    /// <param name="organization">Ссылка на организацию</param>
-    public Country(string user, bool isSystem, int numberOnMap, string colorOnMap, 
-        string languageForNames, Organization organization) : base(user, isSystem)
+    /// <param name="organization">Организация</param>
+    /// <param name="code">Код</param>
+    public Country(string user, bool isSystem, int numberOnMap, string colorOnMap, string languageForNames, 
+        Organization organization, string code) : base(user, isSystem)
     {
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         LanguageForNames = languageForNames;
         OrganizationId = organization.Id;
         Organization = organization;
+        Code = code;
     }
 
     /// <summary>
@@ -85,14 +95,16 @@ public class Country : Reestr
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="languageForNames">Язык для названий</param>
     /// <param name="organization">Ссылка на организацию</param>
-    public Country(long id, string user, bool isSystem, int numberOnMap, string colorOnMap,
-        string languageForNames, Organization organization) : base(id, user, isSystem)
+    /// <param name="code">Код</param>
+    public Country(long id, string user, bool isSystem, int numberOnMap, string colorOnMap, string languageForNames, 
+        Organization organization, string code) : base(id, user, isSystem)
     {
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         LanguageForNames = languageForNames;
         OrganizationId = organization.Id;
         Organization = organization;
+        Code = code;
     }
 
     /// <summary>
@@ -125,10 +137,19 @@ public class Country : Reestr
     /// <summary>
     /// Метод записи организации
     /// </summary>
-    /// <param name="organization">Ссылка на организацию</param>
+    /// <param name="organization">Организация</param>
     public void SetOrganization(Organization organization)
     {
         OrganizationId = organization.Id;
         Organization = organization;
+    }
+
+    /// <summary>
+    /// Метод записи кода
+    /// </summary>
+    /// <param name="code">Код</param>
+    public void SetCode(string code)
+    {
+        Code = code;
     }
 }

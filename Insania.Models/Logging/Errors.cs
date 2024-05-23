@@ -75,9 +75,13 @@ public static class Errors
 
     #region Политика
 
+    public const string EmptyArea = "Пустая область";
     public const string EmptyChapter = "Пустой капитул";
     public const string EmptyCountry = "Пустая страна";
+    public const string EmptyFraction = "Пустая фракция";
     public const string EmptyOrganization = "Пустая организация";
+    public const string EmptyOwnership = "Пустое владение";
+    public const string EmptyRegion = "Пустой регион";
     public const string EmptyTypeOrganization = "Пустой тип организации";
 
     #endregion
@@ -129,6 +133,9 @@ public static class Errors
     #endregion
 
     #region География
+
+    public const string EmptyGeographicalObject = "Пустой географический объект";
+    public const string EmptyTypeGeographicalObjects = "Пустой тип географических объектов";
 
     #endregion
 

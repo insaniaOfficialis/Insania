@@ -15,6 +15,7 @@ using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Chronology;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Files;
+using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
@@ -24,7 +25,6 @@ using Insania.Models.Exceptions;
 using Insania.Models.Logging;
 
 using FileEntity = Insania.Database.Entities.Files.File;
-
 
 namespace Insania.Initializer.Initialization.InitializationDataBase;
 
@@ -90,6 +90,9 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //Логгируем
             Console.WriteLine("{0} {1}", Informations.ScriptsPath, ScriptsPath);
 
+            //ПАРАМЕТРЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationParameters"])) await InitializationParameters();
+
             //РОЛИ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRoles"])) await InitializationRoles();
 
@@ -126,20 +129,11 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //ТИПЫ ЛИЦ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesFaces"])) await InitializationTypesFaces();
 
-            //ПЕРСОНАЖИ
-            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationHeroes"])) await InitializationHeroes();
-
-            //БИОГРАФИИ ПЕРСОНАЖЕЙ
-            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationBiographiesHeroes"])) await InitializationBiographiesHeroes();
-
             //ТИПЫ ФАЙЛОВ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesFiles"])) await InitializationTypesFiles();
 
             //ФАЙЛЫ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFiles"])) await InitializationFiles();
-
-            //ФАЙЛЫ ПЕРСОНАЖЕЙ
-            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFilesHeroes"])) await InitializationFilesHeroes();
 
             //СТАТУСЫ НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationStatusesRequestsHeroesRegistration"])) await InitializationStatusesRequestsHeroesRegistration();
@@ -150,6 +144,12 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //ЗВАНИЯ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRanks"])) await InitializationRanks();
 
+            //ТИПЫ ГЕОГРАФИЧЕСКИХ ОБЪЕКТОВ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesGeographicalObjects"])) await InitializationTypesGeographicalObjects();
+
+            //ГЕОГРАФИЧЕСКИЕ ОБЪЕКТЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationGeographicalObjects"])) await InitializationGeographicalObjects();
+
             //ТИПЫ ОРГАНИЗАЦИЙ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationTypesOrganizations"])) await InitializationTypesOrganizations();
 
@@ -159,17 +159,41 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //СТРАНЫ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationCountries"])) await InitializationCountries();
 
+            //РЕГИОНЫ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRegions"])) await InitializationRegions();
+
+            //ВЛАДЕНИЯ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationOwnerships"])) await InitializationOwnerships();
+
+            //РЕГИОНЫ ВЛАДЕНИЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRegionsOwnerships"])) await InitializationRegionsOwnerships();
+
+            //ФРАКЦИИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFractions"])) await InitializationFractions();
+
+            //ОБЛАСТИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationAreas"])) await InitializationAreas();
+
             //КАПИТУЛЫ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationChapters"])) await InitializationChapters();
 
             //АДМИНИСТРАТОРЫ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationAdministrators"])) await InitializationAdministrators();
 
+            //ПЕРСОНАЖИ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationHeroes"])) await InitializationHeroes();
+
+            //БИОГРАФИИ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationBiographiesHeroes"])) await InitializationBiographiesHeroes();
+
             //ЗАЯВКИ НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationRequestsHeroesRegistration"])) await InitializationRequestsHeroesRegistration();
 
             //БИОГРАФИИ ЗАЯВОК НА РЕГИСТРАЦИЮ ПЕРСОНАЖЕЙ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationBiographiesRequestsHeroesRegistration"])) await InitializationBiographiesRequestsHeroesRegistration();
+
+            //ФАЙЛЫ ПЕРСОНАЖЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFilesHeroes"])) await InitializationFilesHeroes();
         }
         catch (Exception ex)
         {
@@ -181,7 +205,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод выполнения скриптов
     /// </summary>
     /// <param name="filePath">Путь к файлу</param>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task ExecuteScript(string filePath)
     {
         //Логгируем
@@ -228,7 +252,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации пользователей
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationUsers()
     {
         //Логгируем
@@ -292,6 +316,218 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
     #region Системное
 
+    /// <summary>
+    /// Метод инициализации параметров
+    /// </summary>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationParameters()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationParametersMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Глобальная дата";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "1 день месяца золота 1800 цикла");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Ход";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "1");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Размер пикселей";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "1.69");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Шрифт чисел на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "Times New Roman");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Размер чисел стран на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "80");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Размер чисел регионов на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "20");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Размер чисел владений на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "15");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Размер чисел областей на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "10");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Цвет чисел на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "#7E0000");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Цвет границ стран на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "#464646");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Цвет границ регионов на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "#363636");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Цвет границ владений на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "#969696");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Цвет границ областей на карте";
+            if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Parameter parameter = new(_userCreated, value, "#5C5C5C");
+                await _applicationContext.Parameters.AddAsync(parameter);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.ParameterAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.ParameterAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_parameters_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
+
     #endregion
 
     #region Права доступа
@@ -300,7 +536,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// Метод инициализации ролей
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationRoles()
     {
         //Логгируем
@@ -376,7 +612,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации ролей пользователей
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationUsersRoles()
     {
         //Логгируем
@@ -445,7 +681,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации игроков
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationPlayers()
     {
         //Логгируем
@@ -503,7 +739,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации биографий персонажей
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationBiographiesHeroes()
     {
         //Логгируем
@@ -587,7 +823,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                     "болезнь заняла весь основной поток их магических каналов, превратив их в бессмертных, но слабых существ. " +
                     "В этом ратиозавром помогли исследования Алмуса божественной магии. Это позволило им оставаться сильнее " +
                     "большинства других выживших Бессмертных. Но всё же недосаточно, чтобы сопротивляться растущей угрозе " +
-                    "смертных рас. Поэтому Алмус принял решение со свои окружением отправиться на Кораловые острова, где " +
+                    "смертных рас. Поэтому Алмус принял решение со свои окружением отправиться на Коралловые острова, где " +
                     "продолжить искать лекарство от болезни.");
                 await _applicationContext.BiographiesHeroes.AddAsync(biographyHero);
 
@@ -647,7 +883,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации биографий заявок на регистрацию персонажей
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationBiographiesRequestsHeroesRegistration()
     {
         //Логгируем
@@ -831,7 +1067,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации персонажей
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationHeroes()
     {
         //Логгируем
@@ -842,7 +1078,11 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
         try
         {
-            //Проверяем персонажа Амлус пользователя божества
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Алмус";
             Player? player = await _applicationContext.Players.Include(x => x.User).FirstAsync(x => x.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyPlayer);
             Month? month = await _applicationContext.Months.FirstAsync(x => x.Name == "Гроз") ?? throw new InnerException(Errors.EmptyMonth);
             Nation? nation = await _applicationContext.Nations.FirstAsync(x => x.Name == "Древний") ?? throw new InnerException(Errors.EmptyNation);
@@ -850,16 +1090,17 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             EyesColor? eyesColor = await _applicationContext.EyesColors.FirstAsync(x => x.Name == "Зелёные") ?? throw new InnerException(Errors.EmptyEyesColor);
             TypeBody? typeBody = await _applicationContext.TypesBodies.FirstAsync(x => x.Name == "Эктоэндоморф с фигурой-грушей") ?? throw new InnerException(Errors.EmptyTypeBody);
             TypeFace? typeFace = await _applicationContext.TypesFaces.FirstAsync(x => x.Name == "Грушевидное") ?? throw new InnerException(Errors.EmptyTypeFace);
-            if (!await _applicationContext.Heroes.AnyAsync(x => x.Player == player))
+            Area? area = await _applicationContext.Areas.FirstAsync(x => x.Code == "EC_1_1") ?? throw new InnerException(Errors.EmptyArea);
+            if (!await _applicationContext.Heroes.AnyAsync(x => x.Player == player && x.PersonalName == value))
             {
-                //Добавляем персонажа Амлус пользователю божество
-                Hero hero = new(_userCreated, true, player, "Алмус", null, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null);
+                //Добавляем запись
+                Hero hero = new(_userCreated, true, player, value, null, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null, area);
                 await _applicationContext.Heroes.AddAsync(hero);
 
                 //Логгируем
-                Console.WriteLine("Алмус/divinitas{0}", Informations.HeroAdded);
+                Console.WriteLine("{0}{1}", value, Informations.HeroAdded);
             }
-            else Console.WriteLine("Алмус/divinitas{0}", Informations.HeroAlreadyAdded);
+            else Console.WriteLine("{0}{1}", value, Informations.HeroAlreadyAdded);
             player = null;
             month = null;
             nation = null;
@@ -897,7 +1138,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации заявок на регистрацию персонажей
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationRequestsHeroesRegistration()
     {
         //Логгируем
@@ -968,7 +1209,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации статусов заявок на регистрацию персонажей
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationStatusesRequestsHeroesRegistration()
     {
         //Логгируем
@@ -1068,7 +1309,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации администраторов
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationAdministrators()
     {
         //Логгируем
@@ -1128,7 +1369,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации капитулов
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationChapters()
     {
         //Логгируем
@@ -1605,7 +1846,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации должностей
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationPosts()
     {
         //Логгируем
@@ -1849,7 +2090,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации званий
     /// </summary>
-    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationRanks()
     {
         //Логгируем
@@ -1977,7 +2218,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации месяцев
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationMonths()
     {
         //Логгируем
@@ -2185,7 +2426,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации сезонов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationSeasons()
     {
         //Логгируем
@@ -2277,7 +2518,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации цветов глаз
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationEyesColors()
     {
         //Логгируем
@@ -2461,7 +2702,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации цветов волос
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationHairsColors()
     {
         //Логгируем
@@ -2585,7 +2826,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации типов телосложений
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationTypesBodies()
     {
         //Логгируем
@@ -2709,7 +2950,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации типов лиц
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationTypesFaces()
     {
         //Логгируем
@@ -2841,13 +3082,3263 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод иницализации областей
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationAreas() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationAreas()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationAreasMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_1";
+            Region? region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            GeographicalObject? geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Вороний глаз") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            Fraction? fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            Ownership? ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Воронний глаз", 1, "#828CD8", 160, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_2";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Кедровый остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Кедровый берег", 2, "#627FC1", 236, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_3";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Кедровый остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Аустура", 3, "#398E15", 249, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_4";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Дамара") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Клетты", 4, "#599618", 183, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_5";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Дамара") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Годоморхолла", 5, "#796996", 264, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_6";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Цитадель острых шпилей", 6, "#56B0FF", 1007, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_7";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Сегуула", 7, "#E647FF", 1019, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_8";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мыс рабовладельцев", 8, "#5E73FF", 691, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_9";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Содурфага", 9, "#4CFF4C", 515, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_10";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Барамила", 10, "#FF4423", 417, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_11";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Челюсти") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Виика", 11, "#FFF838", 393, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_12";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Восточный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Северный Восточный щит", 12, "#0004FF", 683, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_13";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Восточный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Центральный Восточный щит", 13, "#FFCE7F", 190, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_14";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Восточный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_5/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Южный Восточный щит", 14, "#6B0800", 374, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_15";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Пастбища мамонтов") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Адсофы", 15, "#387734", 230, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_16";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Пастбища мамонтов") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мамонтовы поля", 16, "#445D77", 261, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_17";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Бивень мамонта") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестноси Тааска", 17, "#478E6D", 189, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_18";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Бивень мамонта") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Костяной холм", 18, "#8E618E", 201, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_19";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Мамонтова колыбель") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Мамонтова колыбель", 19, "#8E6822", 182, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_20";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Ягодный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Ягодные холмы", 20, "#00FF6E", 248, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_21";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Ягодный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Форсберра", 21, "#93DEFF", 173, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_22";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Чёрный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Чёрный берег", 22, "#8725C4", 184, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_23";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Чёрный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Берег надежды", 23, "#91C444", 271, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_24";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Тверхедра", 24, "#57CCAB", 722, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_25";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Двухолмье", 25, "#2C3787", 1050, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_26";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Скогарстронда", 26, "#871530", 444, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_27";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Златогорье", 27, "#234177", 1416, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_28";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Золотое ущелье", 28, "#FF0022", 1234, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_29";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Сосновый замок", 29, "#7A871D", 847, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_30";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фалина", 30, "#777338", 615, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_31";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Четырёххолмье", 31, "#77026C", 1291, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_32";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Рыбий берег", 32, "#445277", 1076, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_33";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Блара", 33, "#29AEB5", 759, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_34";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Зелёный берег", 34, "#4EB544", 779, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_35";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Преступность") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестност Глейрхола", 35, "#774210", 535, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_36";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Морозный берег", 36, "#04007F", 1188, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_37";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Морозное побережье", 37, "#7F0015", 843, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_38";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Сосновый берег", 38, "#7F7328", 1435, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_39";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Сволитила", 39, "#007F6A", 749, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_40";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Умкриндура", 40, "#609499", 893, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_41";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Хрингинна", 41, "#99498F", 811, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_42";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Совиные холмы", 42, "#999600", 1268, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_1_43";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Тёмное устье", 43, "#C63585", 736, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_1";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Младший странник") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Младший Странник", 1, "#612A8C", 215, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_2";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Старший странник") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Свартпайка", 2, "#7A8C3F", 167, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_3";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Старший странник") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Рыбные берег", 3, "#00878C", 168, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_4";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Высокий остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Высокий", 4, "#104C00", 229, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_5";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Румера", 5, "#007224", 723, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_6";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Ледура", 6, "#720007", 472, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_7";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Хеедина", 7, "#000F72", 355, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_8";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Левокрылье", 8, "#257260", 1130, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_9";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Скиина", 9, "#726134", 579, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_10";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фарафрама", 10, "#CE301E", 419, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_11";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Костяные холмы", 11, "#FFBB02", 772, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_12";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мыс дальнего рубежа", 12, "#543D82", 597, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_13";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Идна", 13, "#8EFFA1", 508, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_14";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фурутра", 14, "#00CEB3", 350, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_15";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Инры", 15, "#CE6B8C", 540, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_16";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Маркадъюрина", 16, "#36FF32", 354, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_17";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мыс крови", 17, "#C45EFF", 421, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_18";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Залив рабовладельцев", 18, "#3052FF", 498, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_19";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Стронда", 19, "#29827A", 637, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_20";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Тёмные крылья") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Правокрылье", 20, "#7C821A", 1066, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_21";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Южный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фанди", 21, "#A09229", 388, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_22";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Южный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Берег работорговцев", 22, "#24A03B", 478, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_23";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Южный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Охранный залив", 23, "#A02F29", 423, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_24";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Южный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Ферилла", 24, "#3D6A9E", 264, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_25";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Преступность") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Рефура", 25, "#1806D8", 1170, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_26";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Орнугла", 26, "#D8151C", 383, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_27";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Армадиила", 27, "#6BC60F", 849, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_28";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Оскры", 28, "#D3D834", 508, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_29";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мамонтовы холмы", 29, "#C86CD8", 1060, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_30";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Киира", 30, "#45D8CC", 696, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_31";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_9") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фааглина", 31, "#D87649", 708, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_32";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_10") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Дирида", 32, "#9CD82B", 426, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_33";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_10") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Скридира", 33, "#1A99D8", 363, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_34";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_9") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Квикиндида", 34, "#00D890", 619, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_35";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_11") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Гибельный берег", 35, "#D856A6", 401, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_2_36";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_12") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Тёмный берег", 36, "#3200D8", 626, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_1";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Западный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_1/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Запад Западного щита", 1, "#FF8E86", 909, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_2";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Западный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Центр Западного щита", 2, "#C1FFFF", 671, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_3";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Западный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Восток Западного щита", 3, "#560008", 1024, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_4";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Рыбий остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Рыбий", 4, "#2DD1DB", 361, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_5";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Буранов") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Золотые поля", 5, "#89AF00", 244, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_6";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Буранов") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фискиниита", 6, "#C43C2D", 188, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_7";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Железный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Адскилина", 7, "#086357", 275, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_8";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Железный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Железный холм", 8, "#633A3C", 252, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_9";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Мраа") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Мраа", 9, "#009655", 212, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_10";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Клинок") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Северный Клинок", 10, "#FA70FF", 895, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_11";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Клинок") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Центральный Клинок", 11, "#7A1400", 976, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_12";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Клинок") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Южный Клинок", 12, "#469799", 695, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_13";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Рыбный залив", 13, "#077BB5", 660, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_14";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Укмкринга", 14, "#B51E2B", 554, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_15";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Трееда", 15, "#8F2FB5", 917, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_16";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Томта", 16, "#2FA9B5", 680, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_17";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Двугорье", 17, "#B59519", 1207, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_18";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Флаата", 18, "#27B569", 566, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_19";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Дордаана", 19, "#B0B534", 512, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_20";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Медвежий угол", 20, "#58A8B5", 941, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_21";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Миллихада", 21, "#00B238", 845, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_22";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Аинна", 22, "#856BB2", 657, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_23";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Междуречье", 23, "#B56746", 761, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_24";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Скарлатбурга", 24, "#B20020", 786, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_25";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Хунграда", 25, "#437A00", 836, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_26";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Камышовый берег", 26, "#424401", 718, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_27";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Серебрянные источники", 27, "#7A3E68", 1144, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_28";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Беррума", 28, "#30A1A5", 735, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_29";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Литида", 29, "#440019", 413, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_30";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Штормовой мыс", 30, "#3569A5", 1177, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_31";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Флотта", 31, "#A55C2E", 812, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_32";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Сноора", 32, "#31A541", 844, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_33";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Серебрянные ручьи", 33, "#7013A5", 1031, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_34";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Аинмана", 34, "#A57C00", 982, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_35";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Медвежьи холмы", 35, "#00991C", 1383, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_36";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Серебряное устье", 36, "#7F4347", 1173, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_37";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Еловые склоны", 37, "#374C99", 847, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_38";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Холура", 38, "#998010", 802, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_39";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Сандура", 39, "#1B9941", 649, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_40";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Солёный берег", 40, "#35C638", 1332, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_41";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Дадира", 41, "#992E22", 849, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_42";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Карфы", 42, "#4785C6", 481, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_43";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Бриина", 43, "#6B39C6", 471, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_44";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Альга", 44, "#C69125", 631, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_3_45";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Духовенство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Улфура", 45, "#41C6B2", 1034, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_1";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Дальний остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Дальний", 1, "#FF86DC", 436, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_2";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Северо-запад Северного щита", 2, "#540031", 788, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_3";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Хофнина", 3, "#B71705", 784, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_4";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Хъяги", 4, "#00027F", 486, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_5";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности  Афскудура", 5, "#B79F00", 328, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_6";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фъёрута", 6, "#00B7AE", 648, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_7";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Литиина", 7, "#542448", 309, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_8";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Военные") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Южный Северный щит", 8, "#00540B", 743, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_9";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Северный щит") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Знать") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Восток Северного щита", 9, "#896447", 783, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_10";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Мятный остров") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Преступность") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Мятный", 10, "#438765", 172, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_11";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Сосновые холмы", 11, "#FF263B", 768, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_12";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Солёный утёс", 12, "#66FFA0", 1091, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_13";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Турминна", 13, "#FFFF2B", 606, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_14";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Стиркинга", 14, "#FF42F8", 429, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_15";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Дождливый берег", 15, "#4F7BFF", 511, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_16";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Дорпида", 16, "#38FF2D", 590, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_17";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Скалистый залив", 17, "#0083FF", 975, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_18";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мраморный холм", 18, "#D8061B", 1137, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_19";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Мраморные склоны", 19, "#AED815", 823, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_20";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Халла", 20, "#D85B9E", 538, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_21";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Скалистый замок", 21, "#447F47", 656, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_22";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Гратта", 22, "#D86208", 888, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_23";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Миинна", 23, "#3AD864", 1163, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_24";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Скогура", 24, "#873A11", 1047, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_25";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Фъёлотта", 25, "#2B4C87", 1698, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_26";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Серебряные горы", 26, "#870E7D", 3393, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_27";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Окрестности Сердусвидра", 27, "#00CC69", 1334, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "AE_4_28";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Морозный клык") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Маги") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Штормовой берег", 28, "#C1CC4D", 722, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Проверяем наличие записи
+            value = "EC_1_1";
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "EC_1") ?? throw new InnerException(Errors.EmptyRegion);
+            geographicalObject = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Остров Жёлтый") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            fraction = await _applicationContext.Fractions.FirstAsync(x => x.Name == "Правительство") ?? throw new InnerException(Errors.EmptyFraction);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "EC_1_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Areas.AnyAsync(x => x.Code == value))
+            {
+                //Добавляем запись
+                Area area = new(_userCreated, true, "Остров Жёлтый", 1, "#CCC345", 0, region, geographicalObject, fraction, ownership, value);
+                await _applicationContext.Areas.AddAsync(area);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.AreaAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.AreaAlreadyAdded);
+            region = null;
+            geographicalObject = null;
+            fraction = null;
+            ownership = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_areas_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации стран
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationCountries()
     {
         //Логгируем
@@ -2863,7 +6354,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Альвраатская империя
-                Country country = new(_userCreated, true, 1, "#20D1DB", "Исландский", organization);
+                Country country = new(_userCreated, true, 1, "#20D1DB", "Исландский", organization, "AE");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2877,7 +6368,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Княжество Саорса
-                Country country = new(_userCreated, true, 2, "#607F47", "Ирландский", organization);
+                Country country = new(_userCreated, true, 2, "#607F47", "Ирландский", organization, "SaP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2891,7 +6382,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Королевство Берген
-                Country country = new(_userCreated, true, 3, "#00687C", "Шведский", organization);
+                Country country = new(_userCreated, true, 3, "#00687C", "Шведский", organization, "BnK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2905,7 +6396,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Фесгарское княжество
-                Country country = new(_userCreated, true, 4, "#B200FF", "Шотландский", organization);
+                Country country = new(_userCreated, true, 4, "#B200FF", "Шотландский", organization, "FP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2919,7 +6410,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Сверденский каганат
-                Country country = new(_userCreated, true, 5, "#7F3B00", "Норвежский", organization);
+                Country country = new(_userCreated, true, 5, "#7F3B00", "Норвежский", organization, "SK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2933,7 +6424,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Ханство Тавалин
-                Country country = new(_userCreated, true, 6, "#7F006D", "Эстонский", organization);
+                Country country = new(_userCreated, true, 6, "#7F006D", "Эстонский", organization, "TH");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2947,7 +6438,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Княжество Саргиб
-                Country country = new(_userCreated, true, 7, "#007F0E", "Литовский", organization);
+                Country country = new(_userCreated, true, 7, "#007F0E", "Литовский", organization, "SbP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2961,7 +6452,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Царство Банду
-                Country country = new(_userCreated, true, 8, "#47617C", "Хинди", organization);
+                Country country = new(_userCreated, true, 8, "#47617C", "Хинди", organization, "BuK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2975,7 +6466,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Королевство Нордер
-                Country country = new(_userCreated, true, 9, "#D82929", "Немецкий", organization);
+                Country country = new(_userCreated, true, 9, "#D82929", "Немецкий", organization, "NK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -2989,7 +6480,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Альтерское княжество
-                Country country = new(_userCreated, true, 10, "#4ACC39", "Французский", organization);
+                Country country = new(_userCreated, true, 10, "#4ACC39", "Французский", organization, "AP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3003,7 +6494,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Орлиадарская конфедерация
-                Country country = new(_userCreated, true, 11, "#AF9200", "Французский", organization);
+                Country country = new(_userCreated, true, 11, "#AF9200", "Французский", organization, "OK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3017,7 +6508,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Королевство Удстир
-                Country country = new(_userCreated, true, 12, "#8CAF00", "Датский", organization);
+                Country country = new(_userCreated, true, 12, "#8CAF00", "Датский", organization, "UK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3031,7 +6522,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Королевство Вервирунг
-                Country country = new(_userCreated, true, 13, "#7F1700", "Немецкий", organization);
+                Country country = new(_userCreated, true, 13, "#7F1700", "Немецкий", organization, "VgK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3045,7 +6536,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Дестинский орден
-                Country country = new(_userCreated, true, 14, "#2B7C55", "Итальянский", organization);
+                Country country = new(_userCreated, true, 14, "#2B7C55", "Итальянский", organization, "DO");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3059,7 +6550,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Вольный город Лийсет
-                Country country = new(_userCreated, true, 15, "#7B7F00", "Итальянский", organization);
+                Country country = new(_userCreated, true, 15, "#7B7F00", "Итальянский", organization, "LFC");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3073,7 +6564,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Лисцийская империя
-                Country country = new(_userCreated, true, 16, "#7F002E", "Итальянский", organization);
+                Country country = new(_userCreated, true, 16, "#7F002E", "Итальянский", organization, "LE");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3087,7 +6578,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Королевство Вальтир
-                Country country = new(_userCreated, true, 17, "#B05BFF", "Финский", organization);
+                Country country = new(_userCreated, true, 17, "#B05BFF", "Финский", organization, "VrK");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3101,7 +6592,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Вассальное княжество Гратис
-                Country country = new(_userCreated, true, 18, "#005DFF", "Итальянский", organization);
+                Country country = new(_userCreated, true, 18, "#005DFF", "Итальянский", organization, "GVP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3115,7 +6606,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Княжество Ректа
-                Country country = new(_userCreated, true, 19, "#487F00", "Эсперанто", organization);
+                Country country = new(_userCreated, true, 19, "#487F00", "Эсперанто", organization, "RP");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3129,7 +6620,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Волар
-                Country country = new(_userCreated, true, 20, "#32217A", "Испанский", organization);
+                Country country = new(_userCreated, true, 20, "#32217A", "Испанский", organization, "V");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3143,7 +6634,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Союз Иль-Ладро
-                Country country = new(_userCreated, true, 21, "#35513B", "Итальянский", organization);
+                Country country = new(_userCreated, true, 21, "#35513B", "Итальянский", organization, "ILU");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
@@ -3157,13 +6648,27 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
             {
                 //Добавляем страну Мергерская Уния
-                Country country = new(_userCreated, true, 22, "#BC3CB4", "Латынь", organization);
+                Country country = new(_userCreated, true, 22, "#BC3CB4", "Латынь", organization, "MU");
                 await _applicationContext.Countries.AddAsync(country);
 
                 //Логгируем
                 Console.WriteLine("Мергерская Уния{0}", Informations.CountryAdded);
             }
             else Console.WriteLine("Мергерская Уния{0}", Informations.CountryAlreadyAdded);
+            organization = null;
+
+            //Проверяем страну Цивилизация Эмбрии
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Цивилизация Эмбрии") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Countries.AnyAsync(x => x.Organization == organization))
+            {
+                //Добавляем страну Цивилизация Эмбрии
+                Country country = new(_userCreated, true, 99, "#1F3F3D", "Латынь", organization, "EC");
+                await _applicationContext.Countries.AddAsync(country);
+
+                //Логгируем
+                Console.WriteLine("Цивилизация Эмбрии{0}", Informations.CountryAdded);
+            }
+            else Console.WriteLine("Цивилизация Эмбрии{0}", Informations.CountryAlreadyAdded);
             organization = null;
 
             //Сохраняем добавленные данные
@@ -3195,13 +6700,167 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации фракций
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationFractions() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationFractions()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationFractionsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Правительство";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#0004FF", "определение внутренней и внешней политики; управление финансами государства; контроль за исполнением приказов; судебные дела высшего уровня");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Знать";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#00FFFF", "определение внутренней и внешней политики в регионах; управление финансами региона; контроль за исполнением законов; судебные дела среднего и низшего уровня");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Духовенство";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#26FF00", "социальные функции (регистрация рождения, брака, смерти и т.д.); влияние на моральное направление последователей; влияние на внешнюю и внутреннюю политику государства (если большое количество последователей); управление подконтрольными землями (если имеются); распространение веры");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Маги";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#FF0AB9", "бытовая помощь населению; магическая поддержка армии; государственные службы (расследование преступлений, поддержание инфраструктуры населённых пунктов и т.д.); научные изыскания; управление областями (если имеются)");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Военные";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#FF1A0A", "защита государственных границ; поддержание внутреннего порядка при необходимости; поддержка притязаний государства на иные земли");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Купечество";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#F7FF0F", "внутренняя и внешняя торговля; добыча сырья и производство продукции; предоставление услуг");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Преступность";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#9000FF", "ведение незаконной деятельности; расширение влияния; противостояние официальной власти");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Интеллигенция";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#FF7105", "развитие технологий; накопление знаний о мире; распространение знаний другим людям; создание произведений искусства; продажа изобретений и продуктов творческой деятельности");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Проверяем наличие записи
+            value = "Бесфракционники";
+            if (!await _applicationContext.Fractions.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                Fraction fraction = new(_userCreated, value, "#74CE00", "самые разнообразные и определяются игроком или отыгрывающим администратором");
+                await _applicationContext.Fractions.AddAsync(fraction);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.FractionAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.FractionAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_fractions_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации организаций
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationOrganizations()
     {
         //Логгируем
@@ -3214,165 +6873,224 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
         {
             //Проверяем организацию Альвраатская империя
             TypeOrganization? typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            Organization? parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Альвраатская империя"))
             {
                 //Добавляем организацию Альвраатская империя
-                Organization organization = new(_userCreated, true, "Альвраатская империя", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Альвраатская империя", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Альвраатская империя{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Альвраатская империя{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Княжество Саорса
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Саорса"))
             {
                 //Добавляем организацию Княжество Саорса
-                Organization organization = new(_userCreated, true, "Княжество Саорса", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Княжество Саорса", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Княжество Саорса{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Княжество Саорса{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Королевство Берген
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Берген"))
             {
                 //Добавляем организацию Королевство Берген
-                Organization organization = new(_userCreated, true, "Королевство Берген", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Королевство Берген", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Королевство Берген{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Королевство Берген{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Фесгарское княжество
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Фесгарское княжество"))
             {
                 //Добавляем организацию Фесгарское княжество
-                Organization organization = new(_userCreated, true, "Фесгарское княжество", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Фесгарское княжество", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Фесгарское княжество{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Фесгарское княжество{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Сверденский каганат
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Сверденский каганат"))
             {
                 //Добавляем организацию Сверденский каганат
-                Organization organization = new(_userCreated, true, "Сверденский каганат", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Сверденский каганат", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Сверденский каганат{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Сверденский каганат{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Ханство Тавалин
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Ханство Тавалин"))
             {
                 //Добавляем организацию Ханство Тавалин
-                Organization organization = new(_userCreated, true, "Ханство Тавалин", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Ханство Тавалин", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Ханство Тавалин{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Ханство Тавалин{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Княжество Саргиб
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Саргиб"))
             {
                 //Добавляем организацию Княжество Саргиб
-                Organization organization = new(_userCreated, true, "Княжество Саргиб", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Княжество Саргиб", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Княжество Саргиб{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Княжество Саргиб{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Царство Банду
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Царство Банду"))
             {
                 //Добавляем организацию Царство Банду
-                Organization organization = new(_userCreated, true, "Царство Банду", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Царство Банду", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Царство Банду{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Царство Банду{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Королевство Нордер
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Нордер"))
             {
                 //Добавляем организацию Королевство Нордер
-                Organization organization = new(_userCreated, true, "Королевство Нордер", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Королевство Нордер", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Королевство Нордер{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Королевство Нордер{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Альтерское княжество
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Альтерское княжество"))
             {
                 //Добавляем организацию Альтерское княжество
-                Organization organization = new(_userCreated, true, "Альтерское княжество", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Альтерское княжество", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Альтерское княжество{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Альтерское княжество{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Орлиадарская конфедерация
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Орлиадарская конфедерация"))
             {
                 //Добавляем организацию Орлиадарская конфедерация
-                Organization organization = new(_userCreated, true, "Орлиадарская конфедерация", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Орлиадарская конфедерация", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Орлиадарская конфедерация{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Орлиадарская конфедерация{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Королевство Удстир
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Удстир"))
             {
                 //Добавляем организацию Королевство Удстир
-                Organization organization = new(_userCreated, true, "Королевство Удстир", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Королевство Удстир", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Королевство Удстир{0}", Informations.OrganizationAdded);
@@ -3382,146 +7100,915 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
             //Проверяем организацию Королевство Вервирунг
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Вервирунг"))
             {
                 //Добавляем организацию Королевство Вервирунг
-                Organization organization = new(_userCreated, true, "Королевство Вервирунг", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Королевство Вервирунг", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Королевство Вервирунг{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Королевство Вервирунг{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Дестинский орден
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дестинский орден"))
             {
                 //Добавляем организацию Дестинский орден
-                Organization organization = new(_userCreated, true, "Дестинский орден", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Дестинский орден", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Дестинский орден{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Дестинский орден{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Вольный город Лийсет
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Вольный город Лийсет"))
             {
                 //Добавляем организацию Вольный город Лийсет
-                Organization organization = new(_userCreated, true, "Вольный город Лийсет", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Вольный город Лийсет", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Вольный город Лийсет{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Вольный город Лийсет{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Лисцийская империя
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Лисцийская империя"))
             {
                 //Добавляем организацию Лисцийская империя
-                Organization organization = new(_userCreated, true, "Лисцийская империя", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Лисцийская империя", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Лисцийская империя{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Лисцийская империя{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Королевство Вальтир
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Королевство Вальтир"))
             {
                 //Добавляем организацию Королевство Вальтир
-                Organization organization = new(_userCreated, true, "Королевство Вальтир", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Королевство Вальтир", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Королевство Вальтир{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Королевство Вальтир{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Вассальное княжество Гратис
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Вассальное княжество Гратис"))
             {
                 //Добавляем организацию Вассальное княжество Гратис
-                Organization organization = new(_userCreated, true, "Вассальное княжество Гратис", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Вассальное княжество Гратис", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Вассальное княжество Гратис{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Вассальное княжество Гратис{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Княжество Ректа
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Княжество Ректа"))
             {
                 //Добавляем организацию Княжество Ректа
-                Organization organization = new(_userCreated, true, "Княжество Ректа", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Княжество Ректа", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Княжество Ректа{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Княжество Ректа{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Волар
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Волар"))
             {
                 //Добавляем организацию Волар
-                Organization organization = new(_userCreated, true, "Волар", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Волар", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Волар{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Волар{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Союз Иль-Ладро
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Союз Иль-Ладро"))
             {
                 //Добавляем организацию Союз Иль-Ладро
-                Organization organization = new(_userCreated, true, "Союз Иль-Ладро", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Союз Иль-Ладро", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Союз Иль-Ладро{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Союз Иль-Ладро{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
             //Проверяем организацию Мергерская Уния
             typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
             if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Мергерская Уния"))
             {
                 //Добавляем организацию Мергерская Уния
-                Organization organization = new(_userCreated, true, "Мергерская Уния", typeOrganization, null);
+                Organization organization = new(_userCreated, true, "Мергерская Уния", typeOrganization, parent);
                 await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
                 Console.WriteLine("Мергерская Уния{0}", Informations.OrganizationAdded);
             }
             else Console.WriteLine("Мергерская Уния{0}", Informations.OrganizationAlreadyAdded);
             typeOrganization = null;
+            parent = null;
 
-            //Сохраняем добавленные данные
-            await _applicationContext.SaveChangesAsync();
+            //Проверяем организацию Цивилизация Эмбрии
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Государство") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = null;
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Цивилизация Эмбрии"))
+            {
+                //Добавляем организацию Цивилизация Эмбрии
+                Organization organization = new(_userCreated, true, "Цивилизация Эмбрии", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Цивилизация Эмбрии{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Цивилизация Эмбрии{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Брейл
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Брейл"))
+            {
+                //Добавляем организацию Дом Брейл
+                Organization organization = new(_userCreated, true, "Дом Брейл", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Брейл{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Брейл{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Футур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Футур"))
+            {
+                //Добавляем организацию Племя Футур
+                Organization organization = new(_userCreated, true, "Племя Футур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Футур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Футур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Годомор
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Годомор"))
+            {
+                //Добавляем организацию Дом Годомор
+                Organization organization = new(_userCreated, true, "Дом Годомор", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Годомор{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Годомор{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Хагтандер
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Хагтандер"))
+            {
+                //Добавляем организацию Дом Хагтандер
+                Organization organization = new(_userCreated, true, "Дом Хагтандер", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Хагтандер{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Хагтандер{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Сколбарер
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Сколбарер"))
+            {
+                //Добавляем организацию Дом Сколбарер
+                Organization organization = new(_userCreated, true, "Дом Сколбарер", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Сколбарер{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Сколбарер{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Армия Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Военное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Армия Альвраатской империи"))
+            {
+                //Добавляем организацию Армия Альвраатской империи
+                Organization organization = new(_userCreated, true, "Армия Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Армия Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Армия Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Восточная армия Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Военное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Восточная армия Альвраатской империи"))
+            {
+                //Добавляем организацию Восточная армия Альвраатской империи
+                Organization organization = new(_userCreated, true, "Восточная армия Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Восточная армия Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Восточная армия Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Мутур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Мутур"))
+            {
+                //Добавляем организацию Дом Мутур
+                Organization organization = new(_userCreated, true, "Дом Мутур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Мутур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Мутур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Берр
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Берр"))
+            {
+                //Добавляем организацию Племя Берр
+                Organization organization = new(_userCreated, true, "Племя Берр", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Берр{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Берр{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Императрицы Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Правительственное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Императрицы Альвраатской империи"))
+            {
+                //Добавляем организацию Императрицы Альвраатской империи
+                Organization organization = new(_userCreated, true, "Императрицы Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Императрицы Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Императрицы Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Каперы Ланиэль
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Преступное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Каперы Ланиэль"))
+            {
+                //Добавляем организацию Каперы Ланиэль
+                Organization organization = new(_userCreated, true, "Каперы Ланиэль", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Каперы Ланиэль{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Каперы Ланиэль{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Фердмадр
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Фердмадр"))
+            {
+                //Добавляем организацию Дом Фердмадр
+                Organization organization = new(_userCreated, true, "Дом Фердмадр", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Фердмадр{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Фердмадр{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Хаар
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Хаар"))
+            {
+                //Добавляем организацию Племя Хаар
+                Organization organization = new(_userCreated, true, "Племя Хаар", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Хаар{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Хаар{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Вингар
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Вингар"))
+            {
+                //Добавляем организацию Дом Вингар
+                Organization organization = new(_userCreated, true, "Дом Вингар", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Вингар{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Вингар{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Скид
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Скид"))
+            {
+                //Добавляем организацию Дом Скид
+                Organization organization = new(_userCreated, true, "Дом Скид", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Скид{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Скид{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Южная армия Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Военное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Южная армия Альвраатской империи"))
+            {
+                //Добавляем организацию Южная армия Альвраатской империи
+                Organization organization = new(_userCreated, true, "Южная армия Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Южная армия Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Южная армия Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Рефур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Рефур"))
+            {
+                //Добавляем организацию Дом Рефур
+                Organization organization = new(_userCreated, true, "Дом Рефур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Рефур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Рефур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Наёмный отряд "Серебряные стрелы"
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Преступное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Рефур") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Наёмный отряд \"Серебряные стрелы\""))
+            {
+                //Добавляем организацию Наёмный отряд "Серебряные стрелы"
+                Organization organization = new(_userCreated, true, "Наёмный отряд \"Серебряные стрелы\"", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Наёмный отряд \"Серебряные стрелы\"{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Наёмный отряд \"Серебряные стрелы\"{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Гунраад
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Гунраад"))
+            {
+                //Добавляем организацию Дом Гунраад
+                Organization organization = new(_userCreated, true, "Дом Гунраад", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Гунраад{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Гунраад{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Беерун
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Беерун"))
+            {
+                //Добавляем организацию Племя Беерун
+                Organization organization = new(_userCreated, true, "Племя Беерун", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Беерун{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Беерун{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Ул
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Ул"))
+            {
+                //Добавляем организацию Племя Ул
+                Organization organization = new(_userCreated, true, "Племя Ул", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Ул{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Ул{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Сурруун
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Сурруун"))
+            {
+                //Добавляем организацию Племя Сурруун
+                Organization organization = new(_userCreated, true, "Племя Сурруун", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Сурруун{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Сурруун{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Племя Дир
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Племя Дир"))
+            {
+                //Добавляем организацию Племя Дир
+                Organization organization = new(_userCreated, true, "Племя Дир", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Племя Дир{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Племя Дир{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Беерритон
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Беерритон"))
+            {
+                //Добавляем организацию Дом Беерритон
+                Organization organization = new(_userCreated, true, "Дом Беерритон", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Беерритон{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Беерритон{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Миркур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Миркур"))
+            {
+                //Добавляем организацию Дом Миркур
+                Organization organization = new(_userCreated, true, "Дом Миркур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Миркур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Миркур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Сколбур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Сколбур"))
+            {
+                //Добавляем организацию Дом Сколбур
+                Organization organization = new(_userCreated, true, "Дом Сколбур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Сколбур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Сколбур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Западная армия Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Военное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Западная армия Альвраатской империи"))
+            {
+                //Добавляем организацию Западная армия Альвраатской империи
+                Organization organization = new(_userCreated, true, "Западная армия Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Западная армия Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Западная армия Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Фискур
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Фискур"))
+            {
+                //Добавляем организацию Дом Фискур
+                Organization organization = new(_userCreated, true, "Дом Фискур", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Фискур{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Фискур{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Снобгород
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Снобгород"))
+            {
+                //Добавляем организацию Дом Снобгород
+                Organization organization = new(_userCreated, true, "Дом Снобгород", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Снобгород{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Снобгород{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Малмгрит
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Малмгрит"))
+            {
+                //Добавляем организацию Дом Малмгрит
+                Organization organization = new(_userCreated, true, "Дом Малмгрит", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Малмгрит{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Малмгрит{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Культ Мраа
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Религиозное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Культ Мраа"))
+            {
+                //Добавляем организацию Культ Мраа
+                Organization organization = new(_userCreated, true, "Культ Мраа", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Культ Мраа{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Культ Мраа{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Магистериум Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Магическое формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Магистериум Альвраатской империи"))
+            {
+                //Добавляем организацию Магистериум Альвраатской империи
+                Organization organization = new(_userCreated, true, "Магистериум Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Магистериум Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Магистериум Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Форсварер
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Форсварер"))
+            {
+                //Добавляем организацию Дом Форсварер
+                Organization organization = new(_userCreated, true, "Дом Форсварер", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Форсварер{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Форсварер{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Северная армия Альвраатской империи
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Военное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Северная армия Альвраатской империи"))
+            {
+                //Добавляем организацию Северная армия Альвраатской империи
+                Organization organization = new(_userCreated, true, "Северная армия Альвраатской империи", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Северная армия Альвраатской империи{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Северная армия Альвраатской империи{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Дом Эйнтри
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Семья") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Альвраатская империя") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Дом Эйнтри"))
+            {
+                //Добавляем организацию Дом Эйнтри
+                Organization organization = new(_userCreated, true, "Дом Эйнтри", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Дом Эйнтри{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Дом Эйнтри{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию Наркокартель "Мятный"
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Преступное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Рефур") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Наркокартель \"Мятный\""))
+            {
+                //Добавляем организацию Наркокартель "Мятный"
+                Organization organization = new(_userCreated, true, "Наркокартель \"Мятный\"", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Наркокартель \"Мятный\"{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Наркокартель \"Мятный\"{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
+
+            //Проверяем организацию
+            typeOrganization = await _applicationContext.TypiesOrganizations.FirstAsync(x => x.Name == "Правительственное формирование") ?? throw new InnerException(Errors.EmptyTypeOrganization);
+            parent = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Цивилизация Эмбрии") ?? throw new InnerException(Errors.EmptyOrganization);
+            if (!await _applicationContext.Organizations.AnyAsync(x => x.Name == "Круг Древних"))
+            {
+                //Добавляем организацию
+                Organization organization = new(_userCreated, true, "Круг Древних", typeOrganization, parent);
+                await _applicationContext.Organizations.AddAsync(organization);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Круг Древних{0}", Informations.OrganizationAdded);
+            }
+            else Console.WriteLine("Круг Древних{0}", Informations.OrganizationAlreadyAdded);
+            typeOrganization = null;
+            parent = null;
 
             //Создаём шаблон файла скриптов
             string pattern = @"^t_organizations_\d+.sql";
@@ -3549,19 +8036,1536 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации владений
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationOwnerships() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationOwnerships()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationOwnershipsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем владение Земли дома Брейл
+            Organization? organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Брейл") ?? throw new InnerException(Errors.EmptyOrganization);
+            Ownership? parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Брейл"))
+            {
+                //Добавляем владение Земли дома Брейл
+                Ownership ownership = new(_userCreated, true, "Земли дома Брейл", 1, "#544A4A", organization, parent, "AE_1_1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Брейл{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Брейл{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Футур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Футур") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Футур"))
+            {
+                //Добавляем владение Земли племени Футур
+                Ownership ownership = new(_userCreated, true, "Земли племени Футур", 2, "#8E685F", organization, parent, "AE_1_2");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Футур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Футур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Годомор
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Годомор") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Годомор"))
+            {
+                //Добавляем владение Земли дома Годомор
+                Ownership ownership = new(_userCreated, true, "Земли дома Годомор", 3, "#60967F", organization, parent, "AE_1_3");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Годомор{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Годомор{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Хагтандер
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Хагтандер") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Хагтандер"))
+            {
+                //Добавляем владение Земли дома Хагтандер
+                Ownership ownership = new(_userCreated, true, "Земли дома Хагтандер", 4, "#9E9973", organization, parent, "AE_1_4");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Хагтандер{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Хагтандер{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Сколбур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Сколбур") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Сколбур"))
+            {
+                //Добавляем владение Земли дома Сколбур
+                Ownership ownership = new(_userCreated, true, "Земли дома Сколбур", 5, "#6B8599", organization, parent, "AE_1_5");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Сколбур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Сколбур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Заёмные земли восточной армии Альвраатской империи
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Восточная армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = await _applicationContext.Ownerships.FirstAsync(x => x.Name == "Земли дома Сколбур") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Заёмные земли восточной армии Альвраатской империи"))
+            {
+                //Добавляем владение Заёмные земли восточной армии Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Заёмные земли восточной армии Альвраатской империи", 1, "#543131", organization, parent, "AE_1_5/1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Заёмные земли восточной армии Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Заёмные земли восточной армии Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Мутур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Мутур") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Мутур"))
+            {
+                //Добавляем владение Земли дома Мутур
+                Ownership ownership = new(_userCreated, true, "Земли дома Мутур", 6, "#995B43", organization, parent, "AE_1_6");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Мутур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Мутур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Берр
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Берр") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Берр"))
+            {
+                //Добавляем владение Земли племени Берр
+                Ownership ownership = new(_userCreated, true, "Земли племени Берр", 7, "#809975", organization, parent, "AE_1_7");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Берр{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Берр{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли императриц Альвраатской империи
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Императрицы Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли императриц Альвраатской империи"))
+            {
+                //Добавляем владение Земли императриц Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Земли императриц Альвраатской империи", 8, "#75A0C6", organization, parent, "AE_1_8");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли императриц Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли императриц Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли каперов Ланиэль
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Каперы Ланиэль") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = await _applicationContext.Ownerships.FirstAsync(x => x.Name == "Земли императриц Альвраатской империи") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли каперов Ланиэль"))
+            {
+                //Добавляем владение Земли каперов Ланиэль
+                Ownership ownership = new(_userCreated, true, "Земли каперов Ланиэль", 1, "#765B87", organization, parent, "AE_1_8/1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли каперов Ланиэль{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли каперов Ланиэль{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Фердмадр
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Фердмадр") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Фердмадр"))
+            {
+                //Добавляем владение Земли дома Фердмадр
+                Ownership ownership = new(_userCreated, true, "Земли дома Фердмадр", 1, "#6284C4", organization, parent, "AE_2_1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Фердмадр{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Фердмадр{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Хаар
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Хаар") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Хаар"))
+            {
+                //Добавляем владение Земли племени Хаар
+                Ownership ownership = new(_userCreated, true, "Земли племени Хаар", 2, "#965877", organization, parent, "AE_2_2");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Хаар{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Хаар{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Вингар
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Вингар") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Вингар"))
+            {
+                //Добавляем владение Земли дома Вингар
+                Ownership ownership = new(_userCreated, true, "Земли дома Вингар", 3, "#797693", organization, parent, "AE_2_3");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Вингар{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Вингар{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Скид
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Скид") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Скид"))
+            {
+                //Добавляем владение Земли дома Скид
+                Ownership ownership = new(_userCreated, true, "Земли дома Скид", 4, "#915F68", organization, parent, "AE_2_4");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Скид{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Скид{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Заёмные земли южной армии Альвраатской империи
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Южная армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = await _applicationContext.Ownerships.FirstAsync(x => x.Name == "Земли дома Скид") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Заёмные земли южной армии Альвраатской империи"))
+            {
+                //Добавляем владение Заёмные земли южной армии Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Заёмные земли южной армии Альвраатской империи", 1, "#487A44", organization, parent, "AE_2_4/1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Заёмные земли южной армии Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Заёмные земли южной армии Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Рефур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Наёмный отряд \"Серебряные стрелы\"") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Рефур"))
+            {
+                //Добавляем владение Земли дома Рефур
+                Ownership ownership = new(_userCreated, true, "Земли дома Рефур", 5, "#937564", organization, parent, "AE_2_5");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Рефур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Рефур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Гунраад
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Гунраад") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Гунраад"))
+            {
+                //Добавляем владение Земли дома Гунраад
+                Ownership ownership = new(_userCreated, true, "Земли дома Гунраад", 6, "#917879", organization, parent, "AE_2_6");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Гунраад{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Гунраад{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Беерун
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Беерун") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Беерун"))
+            {
+                //Добавляем владение Земли племени Беерун
+                Ownership ownership = new(_userCreated, true, "Земли племени Беерун", 7, "#9178CD", organization, parent, "AE_2_7");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Беерун{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Беерун{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Ул
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Ул") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Ул"))
+            {
+                //Добавляем владение Земли племени Ул
+                Ownership ownership = new(_userCreated, true, "Земли племени Ул", 8, "#8CCCAA", organization, parent, "AE_2_8");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Ул{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Ул{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Сурруун
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Сурруун") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Сурруун"))
+            {
+                //Добавляем владение Земли племени Сурруун
+                Ownership ownership = new(_userCreated, true, "Земли племени Сурруун", 9, "#C9CC88", organization, parent, "AE_2_9");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Сурруун{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Сурруун{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли племени Дир
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Племя Дир") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли племени Дир"))
+            {
+                //Добавляем владение Земли племени Дир
+                Ownership ownership = new(_userCreated, true, "Земли племени Дир", 10, "#579DCC", organization, parent, "AE_2_10");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли племени Дир{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли племени Дир{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Беерритон
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Беерритон") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Беерритон"))
+            {
+                //Добавляем владение Земли дома Беерритон
+                Ownership ownership = new(_userCreated, true, "Земли дома Беерритон", 11, "#CC4F59", organization, parent, "AE_2_11");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Беерритон{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Беерритон{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Миркур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Миркур") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Миркур"))
+            {
+                //Добавляем владение Земли дома Миркур
+                Ownership ownership = new(_userCreated, true, "Земли дома Миркур", 12, "#6CCCBC", organization, parent, "AE_2_12");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Миркур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Миркур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Сколбарер
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Сколбарер") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Сколбарер"))
+            {
+                //Добавляем владение Земли дома Сколбарер
+                Ownership ownership = new(_userCreated, true, "Земли дома Сколбарер", 1, "#B2CC8C", organization, parent, "AE_3_1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Сколбарер{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Сколбарер{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Заёмные земли западной армии Альвраатской империи
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Западная армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = await _applicationContext.Ownerships.FirstAsync(x => x.Name == "Земли дома Сколбур") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Заёмные земли западной армии Альвраатской империи"))
+            {
+                //Добавляем владение Заёмные земли западной армии Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Заёмные земли западной армии Альвраатской империи", 1, "#CC6187", organization, parent, "AE_3_1/1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Заёмные земли западной армии Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Заёмные земли западной армии Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Фискур
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Фискур") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Фискур"))
+            {
+                //Добавляем владение Земли дома Фискур
+                Ownership ownership = new(_userCreated, true, "Земли дома Фискур", 2, "#7EA1B5", organization, parent, "AE_3_2");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Фискур{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Фискур{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Снобгород
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Снобгород") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Снобгород"))
+            {
+                //Добавляем владение Земли дома Снобгород
+                Ownership ownership = new(_userCreated, true, "Земли дома Снобгород", 3, "#A5CEA9", organization, parent, "AE_3_3");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Снобгород{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Снобгород{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Малмгрит
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Малмгрит") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Малмгрит"))
+            {
+                //Добавляем владение Земли дома Малмгрит
+                Ownership ownership = new(_userCreated, true, "Земли дома Малмгрит", 4, "#CC848A", organization, parent, "AE_3_4");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Малмгрит{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Малмгрит{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли культа Мраа
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Малмгрит") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли культа Мраа"))
+            {
+                //Добавляем владение Земли культа Мраа
+                Ownership ownership = new(_userCreated, true, "Земли культа Мраа", 5, "#7D9E7C", organization, parent, "AE_3_5");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли культа Мраа{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли культа Мраа{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли Магистериума Альвраатской империи
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Магистериум Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли Магистериума Альвраатской империи"))
+            {
+                //Добавляем владение Земли Магистериума Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Земли Магистериума Альвраатской империи", 1, "#AD5F8A", organization, parent, "AE_4_1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли Магистериума Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли Магистериума Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение Земли дома Форсварер
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Дом Форсварер") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли дома Форсварер"))
+            {
+                //Добавляем владение Земли дома Форсварер
+                Ownership ownership = new(_userCreated, true, "Земли дома Форсварер", 2, "#7C6849", organization, parent, "AE_4_2");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли дома Форсварер{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли дома Форсварер{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Северная армия Альвраатской империи") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = await _applicationContext.Ownerships.FirstAsync(x => x.Name == "Земли дома Форсварер") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Заёмные земли северной армии Альвраатской империи"))
+            {
+                //Добавляем владение Заёмные земли северной армии Альвраатской империи
+                Ownership ownership = new(_userCreated, true, "Заёмные земли северной армии Альвраатской империи", 1, "#2C6C93", organization, parent, "AE_4_2/1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Заёмные земли северной армии Альвраатской империи{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Заёмные земли северной армии Альвраатской империи{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Наркокартель \"Мятный\"") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли наркокартеля \"Мятный\""))
+            {
+                //Добавляем владение
+                Ownership ownership = new(_userCreated, true, "Земли наркокартеля \"Мятный\"", 3, "#866393", organization, parent, "AE_4_3");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли наркокартеля \"Мятный\"{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли наркокартеля \"Мятный\"{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Проверяем владение
+            organization = await _applicationContext.Organizations.FirstAsync(x => x.Name == "Круг Древних") ?? throw new InnerException(Errors.EmptyOrganization);
+            parent = null;
+            if (!await _applicationContext.Ownerships.AnyAsync(x => x.Name == "Земли круга Древних"))
+            {
+                //Добавляем владение
+                Ownership ownership = new(_userCreated, true, "Земли круга Древних", 1, "#75D69C", organization, parent, "EC_1_1");
+                await _applicationContext.Ownerships.AddAsync(ownership);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("Земли круга Древних{0}", Informations.OwnershipAdded);
+            }
+            else Console.WriteLine("Земли круга Древних{0}", Informations.OwnershipAlreadyAdded);
+            organization = null;
+            parent = null;
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_ownerships_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации регионов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationRegions() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationRegions()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationRegionsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем регион Восточный Зимний архипелаг
+            Country? country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AE") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Восточный Зимний архипелаг"))
+            {
+                //Добавляем регион Восточный Зимний архипелаг
+                Region region = new(_userCreated, true, "Восточный Зимний архипелаг", 1, "#0004FF", country, "AE_1");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Восточный Зимний архипелаг{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Восточный Зимний архипелаг{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Южный Зимний архипелаг
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AE") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Южный Зимний архипелаг"))
+            {
+                //Добавляем регион Южный Зимний архипелаг
+                Region region = new(_userCreated, true, "Южный Зимний архипелаг", 2, "#00FFFF", country, "AE_2");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Южный Зимний архипелаг{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Южный Зимний архипелаг{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Западный Зимний архипелаг
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AE") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Западный Зимний архипелаг"))
+            {
+                //Добавляем регион Западный Зимний архипелаг
+                Region region = new(_userCreated, true, "Западный Зимний архипелаг", 3, "#26FF00", country, "AE_3");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Западный Зимний архипелаг{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Западный Зимний архипелаг{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Северный Зимний архипелаг
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AE") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Северный Зимний архипелаг"))
+            {
+                //Добавляем регион Северный Зимний архипелаг
+                Region region = new(_userCreated, true, "Северный Зимний архипелаг", 4, "#FF0AB9", country, "AE_4");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Северный Зимний архипелаг{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Северный Зимний архипелаг{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Дамхан
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Дамхан"))
+            {
+                //Добавляем регион Земли клана Дамхан
+                Region region = new(_userCreated, true, "Земли клана Дамхан", 1, "#8C0275", country, "FP_1");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Дамхан{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Дамхан{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Анлион
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Анлион"))
+            {
+                //Добавляем регион Земли клана Анлион
+                Region region = new(_userCreated, true, "Земли клана Анлион", 2, "#100089", country, "FP_2");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Анлион{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Анлион{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Маиран
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Маиран"))
+            {
+                //Добавляем регион Земли клана Маиран
+                Region region = new(_userCreated, true, "Земли клана Маиран", 3, "#068700", country, "FP_3");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Маиран{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Маиран{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Алаид
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Алаид"))
+            {
+                //Добавляем регион Земли клана Алаид
+                Region region = new(_userCreated, true, "Земли клана Алаид", 4, "#005684", country, "FP_4");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Алаид{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Алаид{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Сеолт
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Сеолт"))
+            {
+                //Добавляем регион Земли клана Сеолт
+                Region region = new(_userCreated, true, "Земли клана Сеолт", 5, "#658200", country, "FP_5");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Сеолт{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Сеолт{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Гхоул
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Гхоул"))
+            {
+                //Добавляем регион Земли клана Гхоул
+                Region region = new(_userCreated, true, "Земли клана Гхоул", 6, "#007F37", country, "FP_6");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Гхоул{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Гхоул{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Фуил
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Фуил"))
+            {
+                //Добавляем регион Земли клана Фуил
+                Region region = new(_userCreated, true, "Земли клана Фуил", 7, "#7C002F", country, "FP_7");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Фуил{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Фуил{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Ятаг
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Ятаг"))
+            {
+                //Добавляем регион Земли клана Ятаг
+                Region region = new(_userCreated, true, "Земли клана Ятаг", 8, "#7A2400", country, "FP_8");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Ятаг{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Ятаг{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Земли клана Сеар
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "FP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Земли клана Сеар"))
+            {
+                //Добавляем регион Земли клана Сеар
+                Region region = new(_userCreated, true, "Земли клана Сеар", 9, "#BC0000", country, "FP_9");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Земли клана Сеар{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Земли клана Сеар{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Западный зубец
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Западный зубец"))
+            {
+                //Добавляем регион Западный зубец
+                Region region = new(_userCreated, true, "Западный зубец", 1, "#F2DE00", country, "AP_1");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Западный зубец{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Западный зубец{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Светлый берег
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Светлый берег"))
+            {
+                //Добавляем регион Светлый берег
+                Region region = new(_userCreated, true, "Светлый берег", 2, "#28E5EF", country, "AP_2");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Светлый берег{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Светлый берег{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Центральный зубец
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "AP") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Центральный зубец"))
+            {
+                //Добавляем регион Центральный зубец
+                Region region = new(_userCreated, true, "Центральный зубец", 3, "#6568ED", country, "AP_3");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Центральный зубец{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Центральный зубец{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Проверяем регион Коралловые острова
+            country = await _applicationContext.Countries.FirstAsync(x => x.Code == "EC") ?? throw new InnerException(Errors.EmptyCountry);
+            if (!await _applicationContext.Regions.AnyAsync(x => x.Name == "Коралловые острова"))
+            {
+                //Добавляем регион Коралловые острова
+                Region region = new(_userCreated, true, "Коралловые острова", 1, "#B32821", country, "EC_1");
+                await _applicationContext.Regions.AddAsync(region);
+
+                //Логгируем
+                Console.WriteLine("Коралловые острова{0}", Informations.RegionAdded);
+            }
+            else Console.WriteLine("Коралловые острова{0}", Informations.RegionAlreadyAdded);
+            country = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_regions_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
+
+    /// <summary>
+    /// Метод инициализации регионов владений
+    /// </summary>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationRegionsOwnerships()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationRegionsOwnershipsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем регион владения
+            Region? region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            Ownership? ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_2{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_2{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_3{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_3{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_4{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_4{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_5{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_5{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_5/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_5/1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_5/1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_6{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_6{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_7{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_7{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_8{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_8{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_1") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_1_8/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_1/AE_1_8/1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_1/AE_1_8/1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_2{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_2{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_3{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_3{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_4{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_4{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_4/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_4/1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_4/1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_5{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_5{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_6") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_6{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_6{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_7") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_7{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_7{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_8") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_8{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_8{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_9") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_9{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_9{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_10") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_10{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_10{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_11") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_11{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_11{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_2") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_2_12") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_2/AE_2_12{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_2/AE_2_12{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_1/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_1/1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_1/1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_2{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_2{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_3{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_3{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_4") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_4{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_4{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_3") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_3_5") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_3/AE_3_5{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_3/AE_3_5{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_4/AE_4_1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_4/AE_4_1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_4/AE_4_2{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_4/AE_4_2{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_2/1") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_4/AE_4_2/1{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_4/AE_4_2/1{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Проверяем регион владения
+            region = await _applicationContext.Regions.FirstAsync(x => x.Code == "AE_4") ?? throw new InnerException(Errors.EmptyRegion);
+            ownership = await _applicationContext.Ownerships.FirstAsync(x => x.Code == "AE_4_3") ?? throw new InnerException(Errors.EmptyOwnership);
+            if (!await _applicationContext.RegionsOwnership.AnyAsync(x => x.Region == region && x.Ownership == ownership))
+            {
+                //Добавляем регион владения
+                RegionOwnership regionOwnership = new(_userCreated, region, ownership);
+                await _applicationContext.RegionsOwnership.AddAsync(regionOwnership);
+
+                //Логгируем
+                Console.WriteLine("AE_4/AE_4_3{0}", Informations.RegionOwnershipAdded);
+            }
+            else Console.WriteLine("AE_4/AE_4_3{0}", Informations.RegionOwnershipAlreadyAdded);
+            region = null;
+            ownership = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_regions_ownerships_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации типов организаций
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationTypesOrganizations()
     {
         //Логгируем
@@ -3668,6 +9672,18 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             }
             else Console.WriteLine("Культурное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
 
+            //Проверяем тип организации преступное формирование
+            if (!await _applicationContext.TypiesOrganizations.AnyAsync(x => x.Name == "Преступное формирование"))
+            {
+                //Добавляем тип организации преступное формирование
+                TypeOrganization typeOrganization = new(_userCreated, "Преступное формирование");
+                await _applicationContext.TypiesOrganizations.AddAsync(typeOrganization);
+
+                //Логгируем
+                Console.WriteLine("Преступное формирование{0}", Informations.TypeOrganizationAdded);
+            }
+            else Console.WriteLine("Преступное формирование{0}", Informations.TypeOrganizationAlreadyAdded);
+
             //Сохраняем добавленные данные
             await _applicationContext.SaveChangesAsync();
 
@@ -3729,7 +9745,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации наций
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationNations()
     {
         //Логгируем
@@ -4539,7 +10555,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации рас
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationRaces()
     {
         //Логгируем
@@ -4791,7 +10807,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации файлов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationFiles() 
     {
         //Логгируем
@@ -4845,7 +10861,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации файлов персонажей
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationFilesHeroes()
     {
         //Логгируем
@@ -4901,7 +10917,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации типов файлов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
     public async Task InitializationTypesFiles()
     {
         //Логгируем
@@ -4957,14 +10973,1027 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     /// <summary>
     /// Метод инициализации географических объектов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationGeographicalObjects() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationGeographicalObjects()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationGeographicalObjectsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Асфалия";
+            TypeGeographicalObject? type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Материк") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            GeographicalObject? parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#839FD3", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Эмбрия";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Материк") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#A4CC78", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Дитика";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Материк") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#CE3E2B", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Акраия";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Материк") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#26C0CC", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Арборибус";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Материк") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#87D18B", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Безмятежный океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#29587A", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Сияющий океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#1F247F", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Срединный океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#3F876F", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Стылый океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#547B82", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Бесконечный океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#243699", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Южный океан";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Океан") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = null;
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#2D7799", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Зимний архипелаг";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Архипелаг") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Асфалия") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#537684", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Коралловые острова";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Архипелаг") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Эмбрия") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9E6E88", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Вороний глаз";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#7F3623", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Кедровый остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#562B12", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Дамара";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#522654", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Челюсти";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#703836", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Восточный щит";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#30666D", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Пастбища мамонтов";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#BC6D4B", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Бивень мамонта";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9F5233", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Мамонтова колыбель";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9E8458", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Ягодный остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#809B49", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Чёрный остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#60657A", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Морозный клык";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#7DA5C4", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Младший странник";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#C1BC7D", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Старший странник";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9E8B31", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Высокий остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#669899", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Тёмные крылья";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#704353", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Южный щит";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#DBCD4C", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Западный щит";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#4C9E3C", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Рыбий остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#6586D8", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Буранов";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#6673A5", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Железный остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#89A3A1", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Мраа";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#7FA056", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Клинок";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#A05959", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Дальний остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9E4399", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Северный щит";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#9B497B", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Мятный остров";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Зимний архипелаг") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#60996F", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Остров Жёлтый";
+            type = await _applicationContext.TypesGeographicalObjects.FirstAsync(x => x.Name == "Остров") ?? throw new InnerException(Errors.EmptyTypeGeographicalObjects);
+            parent = await _applicationContext.GeographicalObjects.FirstAsync(x => x.Name == "Коралловые острова") ?? throw new InnerException(Errors.EmptyGeographicalObject);
+            if (!await _applicationContext.GeographicalObjects.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                GeographicalObject geographicalObject = new(_userCreated, true, value, "#97992B", type, parent);
+                await _applicationContext.GeographicalObjects.AddAsync(geographicalObject);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.GeographicalObjectAlreadyAdded);
+            type = null;
+            parent = null;
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_geographical_objects_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     /// <summary>
     /// Метод инициализации типов географических объектов
     /// </summary>
-    /// <exception cref="InnerException"></exception>
-    public async Task InitializationTypesGeographicalObjects() { }
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationTypesGeographicalObjects()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationTypesGeographicalObjectsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Океан"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Океан");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Океан{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Океан{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Море"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Море");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Море{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Море{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Залив"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Залив");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Залив{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Залив{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Пролив"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Пролив");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Пролив{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Пролив{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Река"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Река");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Река{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Река{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Озеро"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Озеро");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Озеро{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Озеро{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Материк"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Материк");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Материк{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Материк{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Архипелаг"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Архипелаг");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Архипелаг{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Архипелаг{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Остров"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Остров");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Остров{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Остров{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Полуостров"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Полуостров");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Полуостров{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Полуостров{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Горный хребет"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Горный хребет");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Горный хребет{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Горный хребет{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Равнина"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Равнина");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Равнина{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Равнина{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Лес"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Лес");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Лес{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Лес{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Проверяем тип географических объектов
+            if (!await _applicationContext.TypesGeographicalObjects.AnyAsync(x => x.Name == "Болото"))
+            {
+                //Добавляем тип географических объектов
+                TypeGeographicalObject typeGeographicalObject = new(_userCreated, "Болото");
+                await _applicationContext.TypesGeographicalObjects.AddAsync(typeGeographicalObject);
+
+                //Логгируем
+                Console.WriteLine("Болото{0}", Informations.TypeGeographicalObjectsAdded);
+            }
+            else Console.WriteLine("Болото{0}", Informations.TypeGeographicalObjectsAlreadyAdded);
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_types_geographical_objects_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 

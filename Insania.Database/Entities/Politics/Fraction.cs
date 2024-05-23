@@ -10,17 +10,10 @@ namespace Insania.Database.Entities.Politics;
 /// <summary>
 /// Модель сущности фракции
 /// </summary>
-[Table("re_fractions")]
+[Table("dir_fractions")]
 [Comment("Фракции")]
-public class Fraction : Reestr
+public class Fraction : Guide
 {
-    /// <summary>
-    /// Наименование
-    /// </summary>
-    [Column("name")]
-    [Comment("Наименование")]
-    public string Name { get; private set; }
-
     /// <summary>
     /// Цвет на карте
     /// </summary>
@@ -40,7 +33,6 @@ public class Fraction : Reestr
     /// </summary>
     public Fraction() : base()
     {
-        Name = string.Empty;
         ColorOnMap = string.Empty;
         Functions = string.Empty;
     }
@@ -49,13 +41,11 @@ public class Fraction : Reestr
     /// Конструктор модели сущности фракции без id
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
-    /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="functions">Функции</param>
-    public Fraction(string user, bool isSystem, string name, string colorOnMap, string functions) : base(user, isSystem)
+    public Fraction(string user, string name, string colorOnMap, string functions) : base(user, name)
     {
-        Name = name;
         ColorOnMap = colorOnMap;
         Functions = functions;
     }
@@ -65,25 +55,14 @@ public class Fraction : Reestr
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
-    /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="functions">Функции</param>
-    public Fraction(long id, string user, bool isSystem, string name, string colorOnMap, string functions) : base(id,
-        user, isSystem)
+    public Fraction(long id, string user, string name, string colorOnMap, string functions) : base(id,
+        user, name)
     {
-        Name = name;
         ColorOnMap = colorOnMap;
         Functions = functions;
-    }
-
-    /// <summary>
-    /// Метод записи наименования
-    /// </summary>
-    /// <param name="name">Наименование</param>
-    public void SetName(string name)
-    {
-        Name = name;
     }
 
     /// <summary>

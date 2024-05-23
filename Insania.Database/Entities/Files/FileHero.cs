@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.EntityFrameworkCore;
+
 using Insania.Database.Entities.Heroes;
 
 namespace Insania.Database.Entities.Files;

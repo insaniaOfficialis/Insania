@@ -71,13 +71,13 @@ public class GeographicalObject : Reestr
     /// <param name="type">Ссылка на тип</param>
     /// <param name="parent">Ссылка на родителя</param>
     public GeographicalObject(string user, bool isSystem, string name, string colorOnMap, TypeGeographicalObject type,
-        GeographicalObject parent) : base(user, isSystem)
+        GeographicalObject? parent) : base(user, isSystem)
     {
         Name = name;
         ColorOnMap = colorOnMap;
         TypeId = type.Id;
         Type = type;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
     }
 
@@ -92,13 +92,13 @@ public class GeographicalObject : Reestr
     /// <param name="type">Ссылка на тип</param>
     /// <param name="parent">Ссылка на родителя</param>
     public GeographicalObject(long id, string user, bool isSystem, string name, string colorOnMap, 
-        TypeGeographicalObject type, GeographicalObject parent) : base(id, user, isSystem)
+        TypeGeographicalObject type, GeographicalObject? parent) : base(id, user, isSystem)
     {
         Name = name;
         ColorOnMap = colorOnMap;
         TypeId = type.Id;
         Type = type;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
     }
 

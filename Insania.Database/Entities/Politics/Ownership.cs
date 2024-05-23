@@ -25,7 +25,7 @@ public class Ownership : Reestr
     /// </summary>
     [Column("number_on_map")]
     [Comment("Номер на карте")]
-    public string NumberOnMap { get; private set; }
+    public int NumberOnMap { get; private set; }
 
     /// <summary>
     /// Цвет на карте
@@ -59,14 +59,21 @@ public class Ownership : Reestr
     public Ownership? Parent { get; private set; }
 
     /// <summary>
+    /// Код
+    /// </summary>
+    [Column("code")]
+    [Comment("Код")]
+    public string Code { get; private set; }
+
+    /// <summary>
     /// Простой конструктор модели сущности владения
     /// </summary>
     public Ownership() : base()
     {
         Name = string.Empty;
-        NumberOnMap = string.Empty;
         ColorOnMap = string.Empty;
         Organization = new();
+        Code = string.Empty;
     }
 
     /// <summary>
@@ -79,16 +86,18 @@ public class Ownership : Reestr
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="organization">Ссылка на организацию</param>
     /// <param name="parent">Ссылка на родителя</param>
-    public Ownership(string user, bool isSystem, string name, string numberOnMap, string colorOnMap, 
-        Organization organization, Ownership parent) : base(user, isSystem)
+    /// <param name="code">Код</param>
+    public Ownership(string user, bool isSystem, string name, int numberOnMap, string colorOnMap, 
+        Organization organization, Ownership? parent, string code) : base(user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         OrganizationId = organization.Id;
         Organization = organization;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
+        Code = code;
     }
 
     /// <summary>
@@ -102,16 +111,18 @@ public class Ownership : Reestr
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="organization">Ссылка на организацию</param>
     /// <param name="parent">Ссылка на родителя</param>
-    public Ownership(long id, string user, bool isSystem, string name, string numberOnMap, string colorOnMap,
-        Organization organization, Ownership parent) : base(id, user, isSystem)
+    /// <param name="code">Код</param>
+    public Ownership(long id, string user, bool isSystem, string name, int numberOnMap, string colorOnMap,
+        Organization organization, Ownership? parent, string code) : base(id, user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         OrganizationId = organization.Id;
         Organization = organization;
-        ParentId = parent.Id;
+        ParentId = parent?.Id;
         Parent = parent;
+        Code = code;
     }
 
     /// <summary>
@@ -127,7 +138,7 @@ public class Ownership : Reestr
     /// Метод записи номера на карте
     /// </summary>
     /// <param name="numberOnMap">Номер на карте</param>
-    public void SetNumberOnMap(string numberOnMap)
+    public void SetNumberOnMap(int numberOnMap)
     {
         NumberOnMap = numberOnMap;
     }
@@ -159,5 +170,14 @@ public class Ownership : Reestr
     {
         ParentId = parent.Id;
         Parent = parent;
+    }
+
+    /// <summary>
+    /// Метод записи кода
+    /// </summary>
+    /// <param name="code">Код</param>
+    public void SetCode(string code)
+    {
+        Code = code;
     }
 }

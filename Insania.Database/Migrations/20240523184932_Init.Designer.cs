@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240520192338_Init")]
+    [Migration("20240523184932_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -243,6 +243,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.ToTable("dir_posts", t =>
                         {
                             t.HasComment("Должности");
@@ -305,6 +308,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.ToTable("dir_ranks", t =>
                         {
                             t.HasComment("Звания");
@@ -366,6 +372,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_eyes_colors", t =>
                         {
@@ -430,6 +439,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.ToTable("dir_hairs_colors", t =>
                         {
                             t.HasComment("Цвета волос");
@@ -487,6 +499,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.ToTable("dir_types_bodies", t =>
                         {
                             t.HasComment("Типы телосложений");
@@ -543,6 +558,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_types_faces", t =>
                         {
@@ -612,6 +630,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.HasIndex("RaceId");
 
                     b.ToTable("dir_nations", t =>
@@ -670,6 +691,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_races", t =>
                         {
@@ -738,6 +762,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.HasIndex("SeasonId");
 
                     b.ToTable("dir_months", t =>
@@ -801,6 +828,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_seasons", t =>
                         {
@@ -931,9 +961,10 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId");
-
                     b.HasIndex("HeroId");
+
+                    b.HasIndex("FileId", "HeroId")
+                        .IsUnique();
 
                     b.ToTable("un_files_heroes", t =>
                         {
@@ -997,6 +1028,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_types_files", t =>
                         {
@@ -1070,6 +1104,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
+
                     b.HasIndex("ParentId");
 
                     b.HasIndex("TypeId");
@@ -1130,6 +1167,9 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
 
                     b.ToTable("dir_types_geographical_objects", t =>
                         {
@@ -1353,6 +1393,11 @@ namespace Insania.Database.Migrations
                         .HasColumnName("birth_month_id")
                         .HasComment("Ссылка на месяц рождения");
 
+                    b.Property<long>("CurrentLocationId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("current_location_id")
+                        .HasComment("Ссылка на текущее местоположение");
+
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_create")
@@ -1463,6 +1508,8 @@ namespace Insania.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BirthMonthId");
+
+                    b.HasIndex("CurrentLocationId");
 
                     b.HasIndex("EyesColorId");
 
@@ -1739,6 +1786,9 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.HasIndex("PreviousId");
 
                     b.ToTable("dir_statuses_requests_heroes_registration", t =>
@@ -1820,16 +1870,17 @@ namespace Insania.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code")
+                        .HasComment("Код");
+
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("color_on_map")
                         .HasComment("Цвет на карте");
-
-                    b.Property<long>("CountryId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("country_id")
-                        .HasComment("Ссылка на страну");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone")
@@ -1867,9 +1918,8 @@ namespace Insania.Database.Migrations
                         .HasColumnName("name")
                         .HasComment("Наименование");
 
-                    b.Property<string>("NumberOnMap")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("NumberOnMap")
+                        .HasColumnType("integer")
                         .HasColumnName("number_on_map")
                         .HasComment("Номер на карте");
 
@@ -1902,7 +1952,11 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
 
                     b.HasIndex("FractionId");
 
@@ -1927,6 +1981,12 @@ namespace Insania.Database.Migrations
                         .HasComment("Первичный ключ таблицы");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code")
+                        .HasComment("Код");
 
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
@@ -1984,6 +2044,12 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
+
                     b.HasIndex("OrganizationId")
                         .IsUnique();
 
@@ -2002,6 +2068,12 @@ namespace Insania.Database.Migrations
                         .HasComment("Первичный ключ таблицы");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Английское наименование");
 
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
@@ -2030,11 +2102,6 @@ namespace Insania.Database.Migrations
                         .HasColumnName("functions")
                         .HasComment("Функции");
 
-                    b.Property<bool>("IsSystem")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_system")
-                        .HasComment("Признак системной записи");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2055,7 +2122,13 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("re_fractions", t =>
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
+
+                    b.ToTable("dir_fractions", t =>
                         {
                             t.HasComment("Фракции");
                         });
@@ -2141,6 +2214,12 @@ namespace Insania.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code")
+                        .HasComment("Код");
+
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2173,9 +2252,8 @@ namespace Insania.Database.Migrations
                         .HasColumnName("name")
                         .HasComment("Наименование");
 
-                    b.Property<string>("NumberOnMap")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("NumberOnMap")
+                        .HasColumnType("integer")
                         .HasColumnName("number_on_map")
                         .HasComment("Номер на карте");
 
@@ -2184,7 +2262,7 @@ namespace Insania.Database.Migrations
                         .HasColumnName("organization_id")
                         .HasComment("Ссылка на организацию");
 
-                    b.Property<long>("ParentId")
+                    b.Property<long?>("ParentId")
                         .HasColumnType("bigint")
                         .HasColumnName("parent_id")
                         .HasComment("Ссылка на родителя");
@@ -2202,6 +2280,12 @@ namespace Insania.Database.Migrations
                         .HasComment("Пользователь, обновивший");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
 
                     b.HasIndex("OrganizationId");
 
@@ -2223,11 +2307,22 @@ namespace Insania.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code")
+                        .HasComment("Код");
+
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("color_on_map")
                         .HasComment("Цвет на карте");
+
+                    b.Property<long>("CountryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("country_id")
+                        .HasComment("Ссылка на страну");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone")
@@ -2255,9 +2350,8 @@ namespace Insania.Database.Migrations
                         .HasColumnName("name")
                         .HasComment("Наименование");
 
-                    b.Property<string>("NumberOnMap")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("NumberOnMap")
+                        .HasColumnType("integer")
                         .HasColumnName("number_on_map")
                         .HasComment("Номер на карте");
 
@@ -2275,9 +2369,77 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ColorOnMap")
+                        .IsUnique();
+
+                    b.HasIndex("CountryId");
+
                     b.ToTable("re_regions", t =>
                         {
                             t.HasComment("Регионы");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Politics.RegionOwnership", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<long>("OwnershipId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("ownership_id")
+                        .HasComment("Ссылка на владение");
+
+                    b.Property<long>("RegionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("region_id")
+                        .HasComment("Ссылка на регион");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnershipId");
+
+                    b.HasIndex("RegionId", "OwnershipId")
+                        .IsUnique();
+
+                    b.ToTable("un_regions_ownerships", t =>
+                        {
+                            t.HasComment("Регионы владений");
                         });
                 });
 
@@ -2332,9 +2494,76 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
                     b.ToTable("dir_types_organizations", t =>
                         {
                             t.HasComment("Типы организаций");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.System.Parameter", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Английское наименование");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text")
+                        .HasColumnName("value")
+                        .HasComment("Значение");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("dir_parameters", t =>
+                        {
+                            t.HasComment("Параметры");
                         });
                 });
 
@@ -2398,6 +2627,8 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("re_scripts", t =>
                         {
                             t.HasComment("Скрипты");
@@ -2427,6 +2658,8 @@ namespace Insania.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("sys_roles", (string)null);
 
@@ -2511,6 +2744,8 @@ namespace Insania.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserName");
 
                     b.ToTable("sys_users", (string)null);
 
@@ -2828,6 +3063,12 @@ namespace Insania.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Insania.Database.Entities.Politics.Area", "CurrentLocation")
+                        .WithMany()
+                        .HasForeignKey("CurrentLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Insania.Database.Entities.Appearance.EyesColor", "EyesColor")
                         .WithMany()
                         .HasForeignKey("EyesColorId")
@@ -2863,6 +3104,8 @@ namespace Insania.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("BirthMonth");
+
+                    b.Navigation("CurrentLocation");
 
                     b.Navigation("EyesColor");
 
@@ -2924,12 +3167,6 @@ namespace Insania.Database.Migrations
 
             modelBuilder.Entity("Insania.Database.Entities.Politics.Area", b =>
                 {
-                    b.HasOne("Insania.Database.Entities.Politics.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Insania.Database.Entities.Politics.Fraction", "Fraction")
                         .WithMany()
                         .HasForeignKey("FractionId")
@@ -2953,8 +3190,6 @@ namespace Insania.Database.Migrations
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Country");
 
                     b.Navigation("Fraction");
 
@@ -3003,13 +3238,41 @@ namespace Insania.Database.Migrations
 
                     b.HasOne("Insania.Database.Entities.Politics.Ownership", "Parent")
                         .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParentId");
 
                     b.Navigation("Organization");
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Politics.Region", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Politics.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Politics.RegionOwnership", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Politics.Ownership", "Ownership")
+                        .WithMany()
+                        .HasForeignKey("OwnershipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Insania.Database.Entities.Politics.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ownership");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Politics.Organization", b =>

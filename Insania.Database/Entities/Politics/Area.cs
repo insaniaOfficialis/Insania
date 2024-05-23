@@ -27,7 +27,7 @@ public class Area : Reestr
     /// </summary>
     [Column("number_on_map")]
     [Comment("Номер на карте")]
-    public string NumberOnMap { get; private set; }
+    public int NumberOnMap { get; private set; }
 
     /// <summary>
     /// Цвет на карте
@@ -42,18 +42,6 @@ public class Area : Reestr
     [Column("pixel_size")]
     [Comment("Размер в пикселях")]
     public int PixelSize { get; private set; }
-
-    /// <summary>
-    /// Ссылка на страну
-    /// </summary>
-    [Column("country_id")]
-    [Comment("Ссылка на страну")]
-    public long CountryId { get; private set; }
-
-    /// <summary>
-    /// Навигационное свойство страны
-    /// </summary>
-    public Country Country { get; private set; }
 
     /// <summary>
     /// Ссылка на регион
@@ -104,18 +92,24 @@ public class Area : Reestr
     public Ownership Ownership { get; private set; }
 
     /// <summary>
+    /// Код
+    /// </summary>
+    [Column("code")]
+    [Comment("Код")]
+    public string Code { get; private set; }
+
+    /// <summary>
     /// Простой конструктор модели сущности области
     /// </summary>
     public Area() : base()
     {
         Name = string.Empty;
-        NumberOnMap = string.Empty;
         ColorOnMap = string.Empty;
-        Country = new();
         Region = new();
         GeographicalObject = new();
         Fraction = new();
         Ownership = new();
+        Code = string.Empty;
     }
 
     /// <summary>
@@ -127,21 +121,18 @@ public class Area : Reestr
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="pixelSize">Размер в пикселях</param>
-    /// <param name="country">Ссылка на страну</param>
     /// <param name="region">Ссылка на регион</param>
     /// <param name="geographicalObject">Ссылка на географический объект</param>
     /// <param name="fraction">Ссылка на фракцию</param>
     /// <param name="ownership">Ссылка на владение</param>
-    public Area(string user, bool isSystem, string name, string numberOnMap, string colorOnMap, int pixelSize,
-        Country country, Region region, GeographicalObject geographicalObject, Fraction fraction, Ownership ownership)
-        : base(user, isSystem)
+    /// <param name="code">Код</param>
+    public Area(string user, bool isSystem, string name, int numberOnMap, string colorOnMap, int pixelSize, Region region,
+        GeographicalObject geographicalObject, Fraction fraction, Ownership ownership, string code) : base(user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         PixelSize = pixelSize;
-        CountryId = country.Id;
-        Country = country;
         RegionId = region.Id;
         Region = region;
         GeographicalObjectId = geographicalObject.Id;
@@ -150,6 +141,7 @@ public class Area : Reestr
         Fraction = fraction;
         OwnershipId = ownership.Id;
         Ownership = ownership;
+        Code = code;
     }
 
     /// <summary>
@@ -162,21 +154,19 @@ public class Area : Reestr
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="pixelSize">Размер в пикселях</param>
-    /// <param name="country">Ссылка на страну</param>
     /// <param name="region">Ссылка на регион</param>
     /// <param name="geographicalObject">Ссылка на географический объект</param>
     /// <param name="fraction">Ссылка на фракцию</param>
     /// <param name="ownership">Ссылка на владение</param>
-    public Area(long id, string user, bool isSystem, string name, string numberOnMap, string colorOnMap, int pixelSize,
-        Country country, Region region, GeographicalObject geographicalObject, Fraction fraction, Ownership ownership)
-        : base(id, user, isSystem)
+    /// <param name="code">Код</param>
+    public Area(long id, string user, bool isSystem, string name, int numberOnMap, string colorOnMap, int pixelSize, 
+        Region region, GeographicalObject geographicalObject, Fraction fraction, Ownership ownership, string code) : base(id,
+        user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
         PixelSize = pixelSize;
-        CountryId = country.Id;
-        Country = country;
         RegionId = region.Id;
         Region = region;
         GeographicalObjectId = geographicalObject.Id;
@@ -185,6 +175,7 @@ public class Area : Reestr
         Fraction = fraction;
         OwnershipId = ownership.Id;
         Ownership = ownership;
+        Code = code;
     }
 
     /// <summary>
@@ -200,7 +191,7 @@ public class Area : Reestr
     /// Метод записи номера на карте
     /// </summary>
     /// <param name="numberOnMap">Номер на карте</param>
-    public void SetNumberOnMap(string numberOnMap)
+    public void SetNumberOnMap(int numberOnMap)
     {
         NumberOnMap = numberOnMap;
     }
@@ -221,16 +212,6 @@ public class Area : Reestr
     public void SetPixelSize(int pixelSize)
     {
         PixelSize = pixelSize;
-    }
-
-    /// <summary>
-    /// Метод записи страны
-    /// </summary>
-    /// <param name="country">Ссылка на страну</param>
-    public void SetCountry(Country country)
-    {
-        CountryId = country.Id;
-        Country = country;
     }
 
     /// <summary>
@@ -271,5 +252,14 @@ public class Area : Reestr
     {
         OwnershipId = ownership.Id;
         Ownership = ownership;
+    }
+
+    /// <summary>
+    /// Метод записи кода
+    /// </summary>
+    /// <param name="code">Код</param>
+    public void SetCode(string code)
+    {
+        Code = code;
     }
 }

@@ -34,6 +34,12 @@ public interface IInitializationDataBase
 
     #region Системное
 
+    /// <summary>
+    /// Метод инициализации параметров
+    /// </summary>
+    /// <returns></returns>
+    Task InitializationParameters();
+
     #endregion
 
     #region Права доступа
@@ -210,6 +216,12 @@ public interface IInitializationDataBase
     /// </summary>
     /// <returns></returns>
     Task InitializationRegions();
+
+    /// <summary>
+    /// Метод инициализации регионов владений
+    /// </summary>
+    /// <returns></returns>
+    Task InitializationRegionsOwnerships();
 
     /// <summary>
     /// Метод инициализации типов организаций

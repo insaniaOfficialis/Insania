@@ -247,8 +247,8 @@ public class RequestHeroRegistration : Reestr
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="status">Ссылка на статус</param>
-    public RequestHeroRegistration(string user, bool isSystem, Hero hero,
-        StatusRequestHeroRegistration status) : base(user, isSystem)
+    public RequestHeroRegistration(string user, bool isSystem, Hero hero, StatusRequestHeroRegistration status) : base(user, 
+        isSystem)
     {
         HeroId = hero.Id;
         Hero = hero;
@@ -264,8 +264,8 @@ public class RequestHeroRegistration : Reestr
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="status">Ссылка на статус</param>
-    public RequestHeroRegistration(long id, string user, bool isSystem, Hero hero,
-        StatusRequestHeroRegistration status) : base(id, user, isSystem)
+    public RequestHeroRegistration(long id, string user, bool isSystem, Hero hero, StatusRequestHeroRegistration status) : 
+        base(id, user, isSystem)
     {
         HeroId = hero.Id;
         Hero = hero;

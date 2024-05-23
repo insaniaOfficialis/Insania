@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 using Insania.Database.Entities.Appearance;
-using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
+using Insania.Database.Entities.Players;
+using Insania.Database.Entities.Politics;
 using Insania.Entities.Base;
 
 namespace Insania.Database.Entities.Heroes;
@@ -180,6 +181,19 @@ public class Hero : Reestr
     public DateTime? FreezingTo { get; private set; }
 
     /// <summary>
+    /// Ссылка на текущее местоположение
+    /// </summary>
+    [Column("current_location_id")]
+    [Comment("Ссылка на текущее местоположение")]
+    public long CurrentLocationId { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство текущего местоположения
+    /// </summary>
+    public Area CurrentLocation { get; private set; }
+
+
+    /// <summary>
     /// Простой конструктор модели сущности персонажа
     /// </summary>
     public Hero() : base()
@@ -192,6 +206,7 @@ public class Hero : Reestr
         EyesColor = new();
         TypeBody = new();
         TypeFace = new();
+        CurrentLocation = new();
     }
 
     /// <summary>
@@ -216,11 +231,13 @@ public class Hero : Reestr
     /// <param name="typeFace">Тип лица</param>
     /// <param name="isActive">Признак активности</param>
     /// <param name="isCurrent">Признак текущего</param>
+    /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
-    public Hero(string user, bool isSystem, Player player, string personalName, string? prefixName,
-        string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
-        int weight, HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
-        bool isCurrent, DateTime? freezingTo) : base(user, isSystem)
+    /// <param name="currentLocation">Текущее местоположение</param>
+    public Hero(string user, bool isSystem, Player player, string personalName, string? prefixName, string? familyName, 
+        int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height, int weight, 
+        HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive, bool isCurrent,
+        DateTime? freezingTo, Area currentLocation) : base(user, isSystem)
     {
         PlayerId = player.Id;
         Player = player;
@@ -247,6 +264,8 @@ public class Hero : Reestr
         IsActive = isActive;
         IsCurrent = isCurrent;
         FreezingTo = freezingTo;
+        CurrentLocationId = currentLocation.Id;
+        CurrentLocation = currentLocation;
     }
 
     /// <summary>
@@ -273,10 +292,11 @@ public class Hero : Reestr
     /// <param name="isActive">Признак активности</param>
     /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
-    public Hero(long id, string user, bool isSystem, Player player, string personalName, string? prefixName,
-        string? familyName, int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height,
-        int weight, HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive,
-        bool isCurrent, DateTime? freezingTo) : base(id, user, isSystem)
+    /// <param name="currentLocation">Текущее местоположение</param>
+    public Hero(long id, string user, bool isSystem, Player player, string personalName, string? prefixName, string? familyName, 
+        int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height, int weight, 
+        HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive, bool isCurrent,
+        DateTime? freezingTo, Area currentLocation) : base(id, user, isSystem)
     {
         PlayerId = player.Id;
         Player = player;
@@ -303,6 +323,8 @@ public class Hero : Reestr
         IsActive = isActive;
         IsCurrent = isCurrent;
         FreezingTo = freezingTo;
+        CurrentLocationId = currentLocation.Id;
+        CurrentLocation = currentLocation;
     }
 
     /// <summary>
@@ -472,5 +494,15 @@ public class Hero : Reestr
     public void SetFreezingTo(DateTime freezingTo)
     {
         FreezingTo = freezingTo;
+    }
+
+    /// <summary>
+    /// Метод записи текущего местоположения
+    /// </summary>
+    /// <param name="currentLocation">Текущее местоположение</param>
+    public void SetCurrentLocation(Area currentLocation)
+    {
+        CurrentLocationId = currentLocation.Id;
+        CurrentLocation = currentLocation;
     }
 }

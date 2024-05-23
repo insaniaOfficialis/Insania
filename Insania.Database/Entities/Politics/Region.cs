@@ -25,7 +25,7 @@ public class Region : Reestr
     /// </summary>
     [Column("number_on_map")]
     [Comment("Номер на карте")]
-    public string NumberOnMap { get; private set; }
+    public int NumberOnMap { get; private set; }
 
     /// <summary>
     /// Цвет на карте
@@ -35,13 +35,33 @@ public class Region : Reestr
     public string ColorOnMap { get; private set; }
 
     /// <summary>
+    /// Ссылка на страну
+    /// </summary>
+    [Column("country_id")]
+    [Comment("Ссылка на страну")]
+    public long CountryId { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство страны
+    /// </summary>
+    public Country Country { get; private set; }
+
+    /// <summary>
+    /// Код
+    /// </summary>
+    [Column("code")]
+    [Comment("Код")]
+    public string Code { get; private set; }
+
+    /// <summary>
     /// Простой конструктор модели сущности региона
     /// </summary>
     public Region() : base()
     {
         Name = string.Empty;
-        NumberOnMap = string.Empty;
         ColorOnMap = string.Empty;
+        Country = new();
+        Code = string.Empty;
     }
 
     /// <summary>
@@ -52,12 +72,17 @@ public class Region : Reestr
     /// <param name="name">Наименование</param>
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
-    public Region(string user, bool isSystem, string name, string numberOnMap, string colorOnMap) : base(user,
-        isSystem)
+    /// <param name="country">Ссылка на страну</param>
+    /// <param name="code">Код</param>
+    public Region(string user, bool isSystem, string name, int numberOnMap, string colorOnMap, Country country, string code) :
+        base(user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
+        CountryId = country.Id;
+        Country = country;
+        Code = code;
     }
 
     /// <summary>
@@ -69,12 +94,17 @@ public class Region : Reestr
     /// <param name="name">Наименование</param>
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>
-    public Region(long id, string user, bool isSystem, string name, string numberOnMap, string colorOnMap) : base(id,
-        user, isSystem)
+    /// <param name="country">Ссылка на страну</param>
+    /// <param name="code">Код</param>
+    public Region(long id, string user, bool isSystem, string name, int numberOnMap, string colorOnMap, Country country, 
+        string code) : base(id, user, isSystem)
     {
         Name = name;
         NumberOnMap = numberOnMap;
         ColorOnMap = colorOnMap;
+        CountryId = country.Id;
+        Country = country;
+        Code = code;
     }
 
     /// <summary>
@@ -90,7 +120,7 @@ public class Region : Reestr
     /// Метод записи номера на карте
     /// </summary>
     /// <param name="numberOnMap">Номер на карте</param>
-    public void SetNumberOnMap(string numberOnMap)
+    public void SetNumberOnMap(int numberOnMap)
     {
         NumberOnMap = numberOnMap;
     }
@@ -102,5 +132,24 @@ public class Region : Reestr
     public void SetColorOnMap(string colorOnMap)
     {
         ColorOnMap = colorOnMap;
+    }
+
+    /// <summary>
+    /// Метод записи страны
+    /// </summary>
+    /// <param name="country">Ссылка на страну</param>
+    public void SetCountry(Country country)
+    {
+        CountryId = country.Id;
+        Country = country;
+    }
+
+    /// <summary>
+    /// Метод записи кода
+    /// </summary>
+    /// <param name="code">Код</param>
+    public void SetCode(string code)
+    {
+        Code = code;
     }
 }

@@ -19,9 +19,12 @@ public static class Informations
 
     #region Системное
 
+    public const string EnteredInitializationParametersMethod = "Вошли в метод инициализации параметров";
     public const string ExecuteScript = "Выполняем скрипт:";
     public const string ExecutedScript = "Выполнен скрипт:";
     public const string NotExecutedScript = "Не выполнен скрипт:";
+    public const string ParameterAdded = "-параметр добавлен";
+    public const string ParameterAlreadyAdded = "-параметр уже добавлен";
     public const string ScriptsPath = "Путь к скриптам:";
     public const string ScriptAlreadyExecuted = "-скрипт уже выполнен";
 
@@ -70,7 +73,10 @@ public static class Informations
 
     public const string AdministratorAdded = "-администратор добавлен";
     public const string AdministratorAlreadyAdded = "-администратор уже добавлен";
+    public const string ChapterAdded = "-капитул добавлен";
+    public const string ChapterAlreadyAdded = "-капитул уже добавлен";
     public const string EnteredInitializationAdmistratorsMethod = "Вошли в метод инициализации администраторов";
+    public const string EnteredInitializationChaptersMethod = "Вошли в метод инициализации капитулов";
     public const string EnteredInitializationPostsMethod = "Вошли в метод инициализации должностей";
     public const string EnteredInitializationRanksMethod = "Вошли в метод инициализации званий";
     public const string PostAdded = "-должность добавлена";
@@ -114,16 +120,28 @@ public static class Informations
 
     #region Политика
 
-    public const string ChapterAdded = "-капитул добавлен";
-    public const string ChapterAlreadyAdded = "-капитул уже добавлен";
+    public const string AreaAdded = "-область добавлена";
+    public const string AreaAlreadyAdded = "-область уже добавлена";
     public const string CountryAdded = "-страна добавлена";
     public const string CountryAlreadyAdded = "-страна уже добавлена";
-    public const string EnteredInitializationChaptersMethod = "Вошли в метод инициализации капитулов";
+    public const string EnteredInitializationAreasMethod = "Вошли в метод инициализации областей";
     public const string EnteredInitializationCountriesMethod = "Вошли в метод инициализации стран";
+    public const string EnteredInitializationFractionsMethod = "Вошли в метод инициализации фракций";
     public const string EnteredInitializationOrganizationsMethod = "Вошли в метод инициализации организаций";
+    public const string EnteredInitializationOwnershipsMethod = "Вошли в метод инициализации владений";
+    public const string EnteredInitializationRegionsMethod = "Вошли в метод инициализации регионов";
+    public const string EnteredInitializationRegionsOwnershipsMethod = "Вошли в метод инициализации регионов владений";
     public const string EnteredInitializationTypiesOrganizationsMethod = "Вошли в метод инициализации типов организаций";
     public const string OrganizationAdded = "-организация добавлена";
     public const string OrganizationAlreadyAdded = "-организация уже добавлена";
+    public const string FractionAdded = "-фракция добавлена";
+    public const string FractionAlreadyAdded = "-фракция уже добавлена";
+    public const string OwnershipAdded = "-владение добавлено";
+    public const string OwnershipAlreadyAdded = "-владение уже добавлено";
+    public const string RegionAdded = "-регион добавлен";
+    public const string RegionAlreadyAdded = "-регион уже добавлен";
+    public const string RegionOwnershipAdded = "-регион владения добавлен";
+    public const string RegionOwnershipAlreadyAdded = "-регион владения уже добавлен";
     public const string TypeOrganizationAdded = "-тип организации добавлен";
     public const string TypeOrganizationAlreadyAdded = "-тип организации уже добавлен";
 
@@ -186,6 +204,12 @@ public static class Informations
     #endregion
 
     #region География
+    public const string EnteredInitializationGeographicalObjectsMethod = "Вошли в метод инициализации географических объектов";
+    public const string EnteredInitializationTypesGeographicalObjectsMethod = "Вошли в метод инициализации типов географических объектов";
+    public const string GeographicalObjectAdded = "-географический объект добавлен";
+    public const string GeographicalObjectAlreadyAdded = "-географический объект уже добавлен";
+    public const string TypeGeographicalObjectsAdded = "-тип географических объектов добавлен";
+    public const string TypeGeographicalObjectsAlreadyAdded = "-тип географических объектов уже добавлен";
 
     #endregion
 
