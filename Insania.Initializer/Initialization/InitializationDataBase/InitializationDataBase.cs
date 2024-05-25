@@ -21,10 +21,10 @@ using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.System;
 using Insania.Database.Entities.Users;
-using Insania.Models.Exceptions;
-using Insania.Models.Logging;
 
 using FileEntity = Insania.Database.Entities.Files.File;
+using Insania.Models.OutCategories.Exceptions;
+using Insania.Models.OutCategories.Logging;
 
 namespace Insania.Initializer.Initialization.InitializationDataBase;
 

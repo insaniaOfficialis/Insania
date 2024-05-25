@@ -22,9 +22,8 @@ namespace Insania.Entities.Context;
 /// <summary>
 /// Контекст базы данных приложения
 /// </summary>
-public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, 
-    IdentityUserRole<long>, IdentityUserLogin<long>, IdentityRoleClaim<long>, 
-    IdentityUserToken<long>>
+public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, IdentityUserRole<long>,
+    IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
 {
     #region Вне категорий
 
@@ -35,6 +34,11 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     #endregion
 
     #region Системное
+
+    /// <summary>
+    /// Логи
+    /// </summary>
+    public DbSet<Log> Logs { get; set; }
 
     /// <summary>
     /// Параметры
@@ -312,6 +316,9 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
         #region Системное
 
+        //Логи
+        modelBuilder.Entity<Log>().HasIndex(x => x.Method);
+
         //Параметры
         modelBuilder.Entity<Parameter>().HasIndex(x => x.Name);
 
@@ -514,11 +521,11 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
     }
 
-/// <summary>
-/// Конструктор контекста
-/// </summary>
-/// <param name="options"></param>
-public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    /// <summary>
+    /// Конструктор контекста
+    /// </summary>
+    /// <param name="options"></param>
+    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
         //Создаём базу и накатываем первоначальные таблицы
         Database.Migrate();

@@ -9,9 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-using Insania.Entities.Context;
+using Insania.Api.Middleware;
+using Insania.BusinessLogic.Users.Authentication;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Users;
+using Insania.Entities.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,12 +109,13 @@ services.AddSwaggerGen(options =>
 });
 
 //Внедряем зависимости для сервисов
+services.AddScoped<IAuthentication, Authentication>(); //аутентифкация
 
 //Строим приложение
 var app = builder.Build();
 
 //Добавляем параметры конвеера запросов
-//app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<LoggingMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
@@ -126,5 +129,5 @@ app.UseSwaggerUI(options =>
 
 app.MapGet("/", () => "Hello World!");
 
-//Запускае приложение
+//Запускаем приложение
 app.Run();

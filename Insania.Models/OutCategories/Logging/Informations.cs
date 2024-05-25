@@ -1,4 +1,4 @@
-﻿namespace Insania.Models.Logging;
+﻿namespace Insania.Models.OutCategories.Logging;
 
 public static class Informations
 {

@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using BaseEntity = Insania.Entities.Base.Base;
+using BaseEntity = Insania.Entities.OutCategories.Base;
 
 namespace Insania.Database.Entities.Files;
 

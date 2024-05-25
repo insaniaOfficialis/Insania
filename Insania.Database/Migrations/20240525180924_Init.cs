@@ -308,6 +308,32 @@ namespace Insania.Database.Migrations
                 comment: "Типы организаций");
 
             migrationBuilder.CreateTable(
+                name: "re_logs",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    method = table.Column<string>(type: "text", nullable: false, comment: "Наименование вызываемого метода"),
+                    type = table.Column<string>(type: "text", nullable: false, comment: "Тип вызываемого метода"),
+                    success = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак успешного выполнения"),
+                    date_start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата начала"),
+                    date_end = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата окончания"),
+                    data_in = table.Column<string>(type: "text", nullable: true, comment: "Данные на вход"),
+                    data_out = table.Column<string>(type: "text", nullable: true, comment: "Данные на выход"),
+                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
+                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_re_logs", x => x.id);
+                },
+                comment: "Логи");
+
+            migrationBuilder.CreateTable(
                 name: "re_scripts",
                 columns: table => new
                 {
@@ -1392,6 +1418,11 @@ namespace Insania.Database.Migrations
                 column: "type_face_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_re_logs_method",
+                table: "re_logs",
+                column: "method");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_re_organizations_parent_id",
                 table: "re_organizations",
                 column: "parent_id");
@@ -1479,7 +1510,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_files_heroes_file_id_hero_id",
                 table: "un_files_heroes",
-                columns: new[] { "file_id", "hero_id" },
+                columns: ["file_id", "hero_id"],
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1495,7 +1526,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_regions_ownerships_region_id_ownership_id",
                 table: "un_regions_ownerships",
-                columns: new[] { "region_id", "ownership_id" },
+                columns: ["region_id", "ownership_id"],
                 unique: true);
         }
 
@@ -1507,6 +1538,9 @@ namespace Insania.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "re_biographies_requests_heroes_registration");
+
+            migrationBuilder.DropTable(
+                name: "re_logs");
 
             migrationBuilder.DropTable(
                 name: "re_scripts");

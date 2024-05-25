@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
-using Insania.Models.Exceptions;
-using Insania.Models.Logging;
+using Insania.Entities.OutCategories;
+using Insania.Models.OutCategories.Exceptions;
+using Insania.Models.OutCategories.Logging;
 
 namespace Insania.Database.Entities.System;
 

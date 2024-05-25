@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Insania.Entities.Base;
+namespace Insania.Entities.OutCategories;
 
 /// <summary>
 /// Модель сущности реестра

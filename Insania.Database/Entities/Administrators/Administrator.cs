@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
+using Insania.Entities.OutCategories;
 using Insania.Database.Entities.Users;
 
 namespace Insania.Database.Entities.Administrators;

@@ -1,4 +1,4 @@
-﻿namespace Insania.Models.Logging;
+﻿namespace Insania.Models.OutCategories.Logging;
 
 public static class Errors
 {
@@ -12,8 +12,17 @@ public static class Errors
 
     #region Пользователи
 
+    public const string EmptyAudience = "Пустой получатель";
+    public const string EmptyExpires = "Пустое время жизни токена";
+    public const string EmptyIssuer = "Пустой отправитель";
+    public const string EmptyKeyToken = "Пустой ключ токена";
+
+    public const string EmptyLogin = "Пустой логин";
+    public const string EmptyPassword = "Пустой пароль";
     public const string EmptyUser = "Пустой пользователь";
-    public const string FailedCreateUSer = "Не удалось создать пользователя";
+    public const string FailedCreateUser = "Не удалось создать пользователя";
+    public const string IncorrectPassword = "Некорректный пароль";
+    public const string UserIsBlocked = "Пользвоатель заблокирован";
 
     #endregion
 

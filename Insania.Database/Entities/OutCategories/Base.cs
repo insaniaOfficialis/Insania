@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Insania.Entities.Base;
+namespace Insania.Entities.OutCategories;
 
 /// <summary>
 /// Модель базовой сущности

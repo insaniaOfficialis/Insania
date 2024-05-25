@@ -1,4 +1,4 @@
-﻿namespace Insania.Models.Exceptions;
+﻿namespace Insania.Models.OutCategories.Exceptions;
 
 /// <summary>
 /// Модель обработанного исключения

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Insania.Entities.Supporting.Transliteration;
 
-namespace Insania.Entities.Base;
+namespace Insania.Entities.OutCategories;
 
 /// <summary>
 /// Модель сущности справочника

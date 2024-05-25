@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.EntityFrameworkCore;
-using Insania.Entities.Base;
+using Insania.Entities.OutCategories;
 using Insania.Database.Entities.Administrators;
 
 namespace Insania.Database.Entities.Heroes;

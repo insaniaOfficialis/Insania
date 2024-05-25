@@ -2500,6 +2500,95 @@ namespace Insania.Database.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.System.Log", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DataIn")
+                        .HasColumnType("text")
+                        .HasColumnName("data_in")
+                        .HasComment("Данные на вход");
+
+                    b.Property<string>("DataOut")
+                        .HasColumnType("text")
+                        .HasColumnName("data_out")
+                        .HasComment("Данные на выход");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_end")
+                        .HasComment("Дата окончания");
+
+                    b.Property<DateTime>("DateStart")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_start")
+                        .HasComment("Дата начала");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_system")
+                        .HasComment("Признак системной записи");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("method")
+                        .HasComment("Наименование вызываемого метода");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("boolean")
+                        .HasColumnName("success")
+                        .HasComment("Признак успешного выполнения");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type")
+                        .HasComment("Тип вызываемого метода");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Method");
+
+                    b.ToTable("re_logs", t =>
+                        {
+                            t.HasComment("Логи");
+                        });
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.System.Parameter", b =>
                 {
                     b.Property<long>("Id")

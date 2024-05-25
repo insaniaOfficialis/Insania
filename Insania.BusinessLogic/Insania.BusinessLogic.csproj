@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Insania.Database\Insania.Database.csproj" />
     <ProjectReference Include="..\Insania.Models\Insania.Models.csproj" />
   </ItemGroup>

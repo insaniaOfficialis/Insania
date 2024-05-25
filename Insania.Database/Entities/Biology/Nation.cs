@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
+using Insania.Entities.OutCategories;
 
 namespace Insania.Database.Entities.Biology;
 

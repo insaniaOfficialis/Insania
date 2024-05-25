@@ -5,10 +5,10 @@ using Serilog;
 
 using Insania.Entities.Context;
 using Insania.Initializer.Initialization.InitializationDataBase;
-using Insania.Models.Exceptions;
+using Insania.Models.OutCategories.Exceptions;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Users;
-using Insania.Models.Logging;
+using Insania.Models.OutCategories.Logging;
 
 namespace Insania.Initializer;
 

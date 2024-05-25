@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Insania.Entities.Base;
+using Insania.Entities.OutCategories;
 using Insania.Database.Entities.Chronology;
 
 namespace Insania.Database.Entities.Heroes;
