@@ -4,8 +4,17 @@ public static class Errors
 {
     #region Вне категорий
 
+    public const string EmptyResponse = "Пустой ответ";
+    public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
     public const string EmptyServiceInitializtionDataBase = "Пустой сервис инициализации базы данных";
+    public const string EmptyToken = "Пустой токен";
+    public const string EmptyUrl = "Пустая ссылка";
+    public const string EmptyUrlCheckConnection = "Пустая ссылка проверки соединения";
+    public const string EmptyVersion = "Пустая версия api";
     public const string Error = "Ошибка:";
+    public const string IncorrectToken = "Некорректный токен";
+    public const string NoConnection = "Нет соединения";
+    public const string ServerError = "Ошибка сервера";
     public const string Unknown = "Неопознанная ошибка";
 
     #endregion
@@ -16,12 +25,14 @@ public static class Errors
     public const string EmptyExpires = "Пустое время жизни токена";
     public const string EmptyIssuer = "Пустой отправитель";
     public const string EmptyKeyToken = "Пустой ключ токена";
-
     public const string EmptyLogin = "Пустой логин";
     public const string EmptyPassword = "Пустой пароль";
+    public const string EmptyServiceAuthentication = "Пустой сервис аутентификации";
     public const string EmptyUser = "Пустой пользователь";
+    public const string EmptyUrlAuthentication = "Пустая ссылка аутентификации";
     public const string FailedCreateUser = "Не удалось создать пользователя";
     public const string IncorrectPassword = "Некорректный пароль";
+    public const string NotExistsUser = "Не найден пользователь";
     public const string UserIsBlocked = "Пользвоатель заблокирован";
 
     #endregion

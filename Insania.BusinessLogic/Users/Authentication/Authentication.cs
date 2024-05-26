@@ -42,13 +42,13 @@ public class Authentication(UserManager<User> userManager, IConfiguration config
         try
         {
             //Проверяем, что передали логин
-            if (string.IsNullOrEmpty(login)) throw new InnerException(Errors.EmptyLogin);
+            if (string.IsNullOrWhiteSpace(login)) throw new InnerException(Errors.EmptyLogin);
 
             //Проверяем, что передали пароль
-            if (String.IsNullOrEmpty(password)) throw new InnerException(Errors.EmptyPassword);
+            if (String.IsNullOrWhiteSpace(password)) throw new InnerException(Errors.EmptyPassword);
 
             //Проверяем наличие пользователя
-            var user = await _userManager.FindByNameAsync(login) ?? throw new InnerException(Errors.EmptyUser);
+            var user = await _userManager.FindByNameAsync(login) ?? throw new InnerException(Errors.NotExistsUser);
 
             //Проверяем, что пользователь не заблокирован
             if (user.IsBlocked) throw new InnerException(Errors.UserIsBlocked);
@@ -86,7 +86,7 @@ public class Authentication(UserManager<User> userManager, IConfiguration config
     public string CreateToken(string login)
     {
         //Проверяем, что передали логин
-        if (string.IsNullOrEmpty(login)) throw new InnerException(Errors.EmptyLogin);
+        if (string.IsNullOrWhiteSpace(login)) throw new InnerException(Errors.EmptyLogin);
 
         //Получаем параметры генерации токена
         var claims = new List<Claim> { new (ClaimTypes.Name, login) };

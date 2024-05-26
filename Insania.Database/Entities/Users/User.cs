@@ -63,8 +63,8 @@ public class User : IdentityUser<long>
     [NotMapped]
     public string? FullName
     {
-        get => (!string.IsNullOrEmpty(FirstName) ? (FirstName + " ") : string.Empty) +
-            (!string.IsNullOrEmpty(Patronymic) ? (Patronymic + " ") : string.Empty) +
+        get => (!string.IsNullOrWhiteSpace(FirstName) ? (FirstName + " ") : string.Empty) +
+            (!string.IsNullOrWhiteSpace(Patronymic) ? (Patronymic + " ") : string.Empty) +
             LastName;
     }
 
@@ -74,8 +74,8 @@ public class User : IdentityUser<long>
     [NotMapped]
     public string? Initials 
     { 
-        get => (!string.IsNullOrEmpty(FirstName) ? (FirstName[0] + ". ") : string.Empty) + 
-            (!string.IsNullOrEmpty(Patronymic) ? (Patronymic[0] + ". ") : string.Empty) + 
+        get => (!string.IsNullOrWhiteSpace(FirstName) ? (FirstName[0] + ". ") : string.Empty) + 
+            (!string.IsNullOrWhiteSpace(Patronymic) ? (Patronymic[0] + ". ") : string.Empty) + 
             LastName; 
     }
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Insania.App.Pages.General.Users.Authentication"
+             Title="Authorization"
+             Background="{StaticResource MainBackground}"
+             Loaded="ContentPage_Loaded">
+    <Grid x:Name="ContentGrid"
+          RowDefinitions="*, Auto">
+        <StackLayout x:Name="ContentStackLayout"
+                     VerticalOptions="Center">
+            <StackLayout x:Name="AuthenticationStackLayout"
+                         Margin="0,100,0,0"
+                         Orientation="Vertical">
+                <Label x:Name="TitleLabel"
+                       Text="Авторизация"
+                       HorizontalOptions="Center"
+                       Style="{StaticResource TitlePrimary}"/>
+                <StackLayout>
+                    <Entry x:Name="LoginEntry"
+                           Margin="0,50,0,0"
+                           WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                           Background="Transparent"
+                           BackgroundColor="Transparent"
+                           Placeholder="Логин"
+                           Style="{StaticResource EntryPrimary}"/>
+                    <BoxView x:Name="LoginBoxView"
+                             WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                             HeightRequest="1"
+                             Color="{StaticResource PrimaryText}"/>
+                </StackLayout>
+                <StackLayout>
+                    <Entry x:Name="PasswordEntry"
+                           Margin="0,15,0,0"
+                           WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                           Placeholder="Пароль"
+                           IsPassword="True"
+                           Style="{StaticResource EntryPrimary}"/>
+                    <BoxView x:Name="PasswordBoxView"
+                             WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                             HeightRequest="1"
+                             Color="{StaticResource PrimaryText}"/>
+                </StackLayout>
+                <Button x:Name="AuthorizeButton"
+                        Margin="0,50,0,0"
+                        WidthRequest="{OnIdiom Desktop=160, Phone=120}"
+                        Text="Войти"
+                        Style="{StaticResource ButtonPrimary}"
+                        Clicked="Authorize_Clicked"/>
+                <StackLayout x:Name="RestorePasswordStackLayout"
+                             Margin="0,25,0,0">
+                    <Label x:Name="RestorePasswordLabel"
+                           Text="Забыли пароль?"
+                           HorizontalOptions="Center"
+                           Style="{StaticResource TitleFourth}"/>
+                    <BoxView x:Name="RestorePasswordBoxView"
+                             WidthRequest="{OnIdiom Desktop=125, Phone=75}"
+                             HeightRequest="1"
+                             Color="{StaticResource PrimaryText}"/>
+                </StackLayout>
+                <StackLayout x:Name="RegistrationStackLayout"
+                             Margin="0,15,0,0">
+                    <Label x:Name="RegistrationLabel"
+                           Text="Зарегистрироваться"
+                           HorizontalOptions="Center"
+                           Style="{StaticResource TitleFourth}"/>
+                    <BoxView x:Name="RegistrationBoxView"
+                             WidthRequest="{OnIdiom Desktop=150, Phone=100}"
+                             HeightRequest="1"
+                             Color="{StaticResource PrimaryText}"/>
+                </StackLayout>
+                <Label x:Name="ErrorLabel"
+                       Margin="0,25,0,0"
+                       HorizontalOptions="Center"
+                       Style="{StaticResource ErrorPrimary}"/>
+            </StackLayout>
+            <ActivityIndicator x:Name="LoadActivityIndicator"
+                               IsRunning="False"
+                               Color="{StaticResource PrimaryText}"/>
+        </StackLayout>
+        <Button x:Name="FeedbackButton"
+                ImageSource="feedback.png"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                WidthRequest="{OnIdiom Desktop=125, Phone=100}"
+                HeightRequest="{OnIdiom Desktop=125, Phone=100}"
+                Margin="0,0,25,25"
+                Style="{StaticResource ButtonSecondary}"
+                Clicked="Feedback_Clicked"/>
+    </Grid>
+</ContentPage>

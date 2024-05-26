@@ -93,7 +93,7 @@ public class Script : Reestr
     /// <param name="resultExecution">Результат выполнения</param>
     public void SetResult(bool isSuccess, string? resultExecution)
     {
-        if (!isSuccess && string.IsNullOrEmpty(resultExecution))
+        if (!isSuccess && string.IsNullOrWhiteSpace(resultExecution))
             throw new InnerException(Errors.EmptyResultExecution);
 
         IsSuccess = isSuccess;

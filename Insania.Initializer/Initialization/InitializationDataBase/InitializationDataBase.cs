@@ -85,7 +85,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             ScriptsPath = _configuration["ScriptsPath"]?.ToString();
 
             //Проверяем наличие пути к скриптам
-            if (string.IsNullOrEmpty(ScriptsPath)) throw new InnerException(Errors.EmptyScriptsPath);
+            if (string.IsNullOrWhiteSpace(ScriptsPath)) throw new InnerException(Errors.EmptyScriptsPath);
 
             //Логгируем
             Console.WriteLine("{0} {1}", Informations.ScriptsPath, ScriptsPath);

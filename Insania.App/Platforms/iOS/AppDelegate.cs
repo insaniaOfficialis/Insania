@@ -1,10 +1,13 @@
 ﻿using Foundation;
 
-namespace Insania.App
+namespace Insania.App;
+
+[Register("AppDelegate")]
+public class AppDelegate : MauiUIApplicationDelegate
 {
-    [Register("AppDelegate")]
-    public class AppDelegate : MauiUIApplicationDelegate
-    {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+    /// <summary>
+    /// Метод создания приложения
+    /// </summary>
+    /// <returns></returns>
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp()!;
 }

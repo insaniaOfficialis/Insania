@@ -13,7 +13,15 @@ public class AuthenticationResponse : BaseResponse
     public string? Token { get; set; }
 
     /// <summary>
-    /// Конструктор ответа модели аутентификации с ошибкой
+    /// Простой конструктор модели ответа аутентификации
+    /// </summary>
+    public AuthenticationResponse() : base()
+    {
+        
+    }
+
+    /// <summary>
+    /// Конструктор модели ответа аутентификации с ошибкой
     /// </summary>
     /// <param name="success">Признак успешности</param>
     /// <param name="error">Ошибка</param>
@@ -23,7 +31,7 @@ public class AuthenticationResponse : BaseResponse
     }
 
     /// <summary>
-    /// Конструктор ответа модели аутентификации с токеном доступа
+    /// Конструктор модели ответа аутентификации с токеном доступа
     /// </summary>
     /// <param name="success">Признак успешности</param>
     /// <param name="error">Ошибка</param>

@@ -1,16 +1,19 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Insania.App
-{
-    [Application]
-    public class MainApplication : MauiApplication
-    {
-        public MainApplication(IntPtr handle, JniHandleOwnership ownership)
-            : base(handle, ownership)
-        {
-        }
+namespace Insania.App;
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+/// <summary>
+/// Основной класс приложения
+/// </summary>
+/// <param name="handle">Обработчик</param>
+/// <param name="ownership">Владедель</param>
+[Application]
+public class MainApplication(IntPtr handle, JniHandleOwnership ownership) : MauiApplication(handle, ownership)
+{
+    /// <summary>
+    /// Метод создания приложения
+    /// </summary>
+    /// <returns></returns>
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp()!;
 }

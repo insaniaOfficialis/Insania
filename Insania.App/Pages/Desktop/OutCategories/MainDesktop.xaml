@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Insania.App.Pages.Desktop.OutCategories.MainDesktop"
+             Title="Main"
+             Background="{StaticResource MainBackground}">
+    <Grid x:Name="GridContent"
+          RowDefinitions="Auto, *, Auto">
+        <HorizontalStackLayout>
+
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

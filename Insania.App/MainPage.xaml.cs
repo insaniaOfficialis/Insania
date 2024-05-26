@@ -1,25 +1,32 @@
-﻿namespace Insania.App
+﻿using Insania.App.Pages.General.Users;
+
+namespace Insania.App;
+
+/// <summary>
+/// Класс основной страницы приложения
+/// </summary>
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    /// <summary>
+    /// Конструктор класса основой страницы приложения
+    /// </summary>
+    public MainPage()
     {
-        int count = 0;
+        //Инициализируем компоненты
+        InitializeComponent();
 
-        public MainPage()
-        {
-            InitializeComponent();
-        }
-
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+        //Переходим к странице аутентификации
+        ToAuthentication(null, null);
     }
 
+    /// <summary>
+    /// Метод перехода на страницу авторизации
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void ToAuthentication(object? sender, EventArgs? e)
+    {
+        //Переходим на новую страницу
+        await Navigation.PushModalAsync(new Authentication());
+    }
 }

@@ -1,16 +1,19 @@
-﻿using ObjCRuntime;
-using UIKit;
+﻿using UIKit;
 
-namespace Insania.App
+namespace Insania.App;
+
+/// <summary>
+/// Основной класс приложения
+/// </summary>
+public class Program
 {
-    public class Program
+    /// <summary>
+    /// Главный метод
+    /// </summary>
+    /// <param name="args">Параметры</param>
+    static void Main(string[] args)
     {
-        // This is the main entry point of the application.
-        static void Main(string[] args)
-        {
-            // if you want to use a different Application Delegate class from "AppDelegate"
-            // you can specify it here.
-            UIApplication.Main(args, null, typeof(AppDelegate));
-        }
+        //Запуска приложение
+        UIApplication.Main(args, null, typeof(AppDelegate));
     }
 }

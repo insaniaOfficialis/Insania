@@ -6,10 +6,11 @@ using Insania.BusinessLogic.Users.Authentication;
 namespace Insania.Api.Controllers.Users;
 
 /// <summary>
-/// Контроль аутентифкации
+/// Контроль аутентификации
 /// </summary>
 /// <param name="logger">Интерфейс записи логов</param>
 /// <param name="authentication">Интерфейцс атуентифкации</param>
+[Route("api/v1/authentication")]
 public class AuthenticationController(ILogger<AuthenticationController> logger, IAuthentication authentication) : 
     BaseController(logger)
 {
@@ -19,7 +20,7 @@ public class AuthenticationController(ILogger<AuthenticationController> logger, 
     private readonly IAuthentication _authentication = authentication;
 
     /// <summary>
-    /// Метод аутентифкации по логину и паролю
+    /// Метод аутентификации по логину и паролю
     /// </summary>
     /// <param name="login">Логин</param>
     /// <param name="password">Пароль</param>
