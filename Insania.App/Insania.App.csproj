@@ -60,6 +60,7 @@
 	  <None Remove="appsettings.json" />
 	  <None Remove="Resources\Fonts\Georgia.ttf" />
 	  <None Remove="Resources\Fonts\Ofont_ru_Optimus.ttf" />
+	  <None Remove="Resources\Images\back.png" />
 	  <None Remove="Resources\Images\feedback.png" />
 	</ItemGroup>
 
@@ -90,10 +91,19 @@
 	  <MauiXaml Update="Pages\General\Users\Authentication.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\General\Users\RegistrationUser.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Borders.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Buttons.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\DatePickers.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\CheckBoxes.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Entries.xaml">

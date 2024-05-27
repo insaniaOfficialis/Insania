@@ -4,6 +4,7 @@ public static class Errors
 {
     #region Вне категорий
 
+    public const string EmptyRequest = "Пустой запрос";
     public const string EmptyResponse = "Пустой ответ";
     public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
     public const string EmptyServiceInitializtionDataBase = "Пустой сервис инициализации базы данных";
@@ -22,11 +23,17 @@ public static class Errors
     #region Пользователи
 
     public const string EmptyAudience = "Пустой получатель";
+    public const string EmptyBirthDate = "Пустая дата рождения";
+    public const string EmptyFirstName = "Пустое имя";
     public const string EmptyExpires = "Пустое время жизни токена";
+    public const string EmptyGender = "Пустой пол";
     public const string EmptyIssuer = "Пустой отправитель";
     public const string EmptyKeyToken = "Пустой ключ токена";
+    public const string EmptyLastName = "Пустая фамилия";
     public const string EmptyLogin = "Пустой логин";
     public const string EmptyPassword = "Пустой пароль";
+    public const string EmptyPatronymic = "Пустое отчество";
+    public const string EmptyPhoneNumberEmailLinkVK = "Пустой номер телефона и почта, и ссылка на вк";
     public const string EmptyServiceAuthentication = "Пустой сервис аутентификации";
     public const string EmptyUser = "Пустой пользователь";
     public const string EmptyUrlAuthentication = "Пустая ссылка аутентификации";

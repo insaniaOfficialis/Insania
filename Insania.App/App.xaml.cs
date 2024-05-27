@@ -35,7 +35,7 @@ public partial class App : Application
             Services = services;
 
             //Устанавливаем основную страницу
-            MainPage = new AppShell();
+            MainPage = new NavigationPage(new MainPage());
         }
         catch (Exception ex)
         {

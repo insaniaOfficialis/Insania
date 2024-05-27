@@ -142,13 +142,34 @@ public partial class Authentication : ContentPage
     }
 
     /// <summary>
+    /// Событие нажатия на кнопку восстановления пароля
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void RestorePassword_Clicked(object sender, EventArgs e)
+    {
+        await Task.Delay(500);
+    }
+
+    /// <summary>
+    /// Событие нажатия на кнопку регистрации
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private void Registration_Clicked(object sender, EventArgs e)
+    {
+        //Переходи на страницу регистрации
+        ToRegistration(null, null);
+    }
+
+    /// <summary>
     /// Событие нажатия на кнопку обратной связи
     /// </summary>
     /// <param name="sender">Отправитель</param>
     /// <param name="e">Событие</param>
     private async void Feedback_Clicked(object sender, EventArgs e)
     {
-
+        await Task.Delay(500);
     }
 
     /// <summary>
@@ -159,6 +180,17 @@ public partial class Authentication : ContentPage
     private async void ToMain(object? sender, EventArgs? e)
     {
         if (DeviceInfo.Idiom == DeviceIdiom.Desktop) await Navigation.PushModalAsync(new MainDesktop());
+    }
+
+    /// <summary>
+    /// Метод перехода на страницу регистрации
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void ToRegistration(object? sender, EventArgs? e)
+    {
+        //Переходим на новую страницу
+        await Navigation.PushAsync(new RegistrationUser());
     }
 
     /// <summary>

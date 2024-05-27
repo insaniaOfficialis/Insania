@@ -7,7 +7,7 @@ namespace Insania.BusinessLogic.Users.Authentication;
 /// <summary>
 /// Интерфейс сервиса атуентифкации
 /// </summary>
-public interface IAuthentication
+public interface IAuthenticationService
 {
     /// <summary>
     /// Метод аутентификации по логину и паролю

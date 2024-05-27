@@ -11,6 +11,7 @@ using Serilog;
 
 using Insania.Api.Middleware;
 using Insania.BusinessLogic.Users.Authentication;
+using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Users;
 using Insania.Entities.Context;
@@ -39,6 +40,9 @@ services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddControllersWithViews();
+
+//Устанавливаем игнорирование типов даты и времени
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 //Добавляем параметры авторизации
 builder.Services.AddAuthorizationBuilder()
@@ -109,7 +113,8 @@ services.AddSwaggerGen(options =>
 });
 
 //Внедряем зависимости для сервисов
-services.AddScoped<IAuthentication, Authentication>(); //аутентифкация
+services.AddScoped<IAuthenticationService, AuthenticationService>(); //аутентифкация
+services.AddScoped<IUsersService, UsersService>(); //сервис работы с пользователями
 
 //Строим приложение
 var app = builder.Build();

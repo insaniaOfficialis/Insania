@@ -11,6 +11,7 @@ public static class Informations
 
     #region Пользователи
 
+    public const string EnteredAddUserMethod = "Вошли в метод добавления пользователя";
     public const string EnteredInitializationUsersMethod = "Вошли в метод инициализации пользователей";
     public const string UserAdded = "-пользователь добавлен";
     public const string UserAlreadyAdded = "-пользователь уже добавлен";

@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="Resources/Styles/Entries.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Borders.xaml" />
+                <ResourceDictionary Source="Resources/Styles/DatePickers.xaml" />
+                <ResourceDictionary Source="Resources/Styles/CheckBoxes.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

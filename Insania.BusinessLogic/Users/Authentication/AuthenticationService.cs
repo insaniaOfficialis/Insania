@@ -19,7 +19,7 @@ namespace Insania.BusinessLogic.Users.Authentication;
 /// </summary>
 /// <param name="userManager">Менеджер пользователей</param>
 /// <param name="userManager">Интерфейс конфигурации</param>
-public class Authentication(UserManager<User> userManager, IConfiguration configuration) : IAuthentication
+public class AuthenticationService(UserManager<User> userManager, IConfiguration configuration) : IAuthenticationService
 {
     /// <summary>
     /// Менеджер пользователей

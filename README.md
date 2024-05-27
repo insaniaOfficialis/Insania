@@ -5,7 +5,7 @@
 
 ### Наименование таблиц
 
-- **Cтиль** - используется camelCase для наименований таблиц и полей
+- **Cтиль** - используется snake_case для наименований таблиц и полей
 - **Префиксы**
   - *re* - реестр, основной рабочий инструмент с частоизменяемыми данными
   - *dir* - справочник, хранит редко изменяемые данные, служащие для краткого информационного обозначения
@@ -17,10 +17,12 @@
   * x:Name/x:Uid
   * Grid.Row/Column
   * IsVisible
+  * IsRunning
 
   * Horizontal/Vertical Options
   * Margin/Padding
   * Widght/Height
+  * Spacing
 
   * Row/Column Definitions
   * Orientations
@@ -34,8 +36,12 @@
   * FontFamily
   * FontSize
   * TextColor
+  * Color
 
-  * Image/Text
+  * Image/Text/Placeholder
+  * IsPassword
+  * IsToggled
+  * Keyboard
   * Style
 
   * Loaded    

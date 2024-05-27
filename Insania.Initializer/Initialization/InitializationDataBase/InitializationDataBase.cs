@@ -268,7 +268,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем пользователя демиург
                 User user = new("demiurge", "insania_officialis@vk.com", "+79996370439", "https://vk.com/khachko09", false, true, "Хачко", "Иван", "Валерьевич", DateTime.SpecifyKind(DateTime.ParseExact("31.03.1999", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
-                var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptySeason);
+                var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptyUser);
 
                 //Если не успешно, выдаём ошибку
                 if (!result.Succeeded) throw new InnerException(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
@@ -281,7 +281,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем пользователя божество
                 User user = new("divinitas", "poetrevolution_09@outlook.com", "+79996370439", "https://vk.com/allenobrien", false, true, "Брайен", "Аллен", "O'", DateTime.SpecifyKind(DateTime.ParseExact("09.08.1996", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
-                var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptySeason);
+                var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptyUser);
 
                 //Если не успешно, выдаём ошибку
                 if (!result.Succeeded) throw new InnerException(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
@@ -628,7 +628,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.UserRoles.AnyAsync(x => x.RoleId == 3 && x.UserId == user.Id))
             {
                 //Добавляем роль админ пользователю демиург                
-                var result = await _userManager.AddToRoleAsync(user, "admin") ?? throw new InnerException(Errors.EmptySeason);
+                var result = await _userManager.AddToRoleAsync(user, "admin") ?? throw new InnerException(Errors.FailedAddUserRole);
 
                 //Если не успешно, выдаём ошибку
                 if (!result.Succeeded) throw new InnerException(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);

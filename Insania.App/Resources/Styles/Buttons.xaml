@@ -19,8 +19,8 @@
         <Setter Property="CornerRadius" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontFamily" Value="Georgia"/>
-        <Setter Property="FontSize" Value="{OnIdiom Desktop=20, Phone=15}"/>
-        <Setter Property="TextColor" Value="{StaticResource SecondaryButton}"/>
+        <Setter Property="FontSize" Value="{OnIdiom Desktop=15, Phone=10}"/>
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
     </Style>
 
     <Style x:Key="ButtonThird" TargetType="Button">

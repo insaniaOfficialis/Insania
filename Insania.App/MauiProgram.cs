@@ -30,6 +30,21 @@ public static class MauiProgram
                     handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList
                         .ValueOf(Android.Graphics.Color.Transparent);
 #elif WINDOWS
+                    handler.PlatformView.BorderBrush = null;
+                    handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+
+            //Убираем подчёркивания у полей ввода даты
+            Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if ANDROID
+                    handler.PlatformView.Background = null;
+                    handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                    handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList
+                        .ValueOf(Android.Graphics.Color.Transparent);
+#elif WINDOWS
+                    handler.PlatformView.BorderBrush = null;
                     handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
 #endif
             });

@@ -27,6 +27,10 @@ public partial class MainPage : ContentPage
     private async void ToAuthentication(object? sender, EventArgs? e)
     {
         //Переходим на новую страницу
-        await Navigation.PushModalAsync(new Authentication());
+        await Navigation.PushModalAsync(new NavigationPage(new Authentication())
+        {
+            BarBackgroundColor = Color.FromArgb("#FF272727"),
+            BarTextColor = Colors.Transparent
+        });
     }
 }
