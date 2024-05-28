@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Insania.App.Pages.General.Heroes.RegistrationHero"
+             Background="{StaticResource MainBackground}"
+             Loaded="ContentPage_Loaded">
+    <ScrollView>
+        <Grid x:Name="ContentGrid"
+              RowDefinitions="Auto, *">
+            <StackLayout Grid.Row="0"
+                         HorizontalOptions="Start"
+                         VerticalOptions="Start"
+                         Margin="25,0,0,0"
+                         Orientation="Horizontal">
+                <Button x:Name="BackButton"
+                        WidthRequest="{OnIdiom Desktop=50, Phone=50}"
+                        HeightRequest="{OnIdiom Desktop=50, Phone=50}"
+                        ImageSource="back.png"
+                        Style="{StaticResource ButtonSecondary}"
+                        Clicked="Back_Clicked"/>
+                <Label VerticalOptions="Center"
+                       Text="Регистрация героя"
+                       Style="{StaticResource TitleSecondary}"/>
+            </StackLayout>
+            <StackLayout x:Name="ContentStackLayout"
+                         Grid.Row="1"
+                         VerticalOptions="Center">
+                <StackLayout x:Name="RegistrationHeroStackLayout"
+                             Orientation="Vertical"
+                             Margin="0,100,0,0"
+                             WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                             Spacing="50">
+                    <StackLayout>
+                        <Label HorizontalOptions="Start"
+                               Text="Личное имя*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="PersonalNameEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите личное имя"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label HorizontalOptions="Start"
+                               Text="Имя семьи*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="FamilyNameEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите имя семьи"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label HorizontalOptions="Start"
+                               Text="Пол*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="GenderCheckBox"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="Gender_CheckedChanged"/>
+                            <Label x:Name="GenderLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Мужской"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label HorizontalOptions="Start"
+                               Text="Раса*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="RacePicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                BindingContext="{Binding Races}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Race_SelectedIndexChanged"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label HorizontalOptions="Start"
+                               Text="Нация*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="NationPicker"
+                                IsEnabled="False"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                BindingContext="{Binding Nations}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>                    
+                    <Button x:Name="SaveButton"
+                            Margin="0,50,0,0"
+                            WidthRequest="{OnIdiom Desktop=160, Phone=120}"
+                            Text="Далее"
+                            Style="{StaticResource ButtonPrimary}"
+                            Clicked="Save_Clicked"/>
+                    <Label x:Name="ErrorLabel"
+                           HorizontalOptions="Center"
+                           Margin="0,50,0,0"
+                           Style="{StaticResource ErrorPrimary}"/>
+                </StackLayout>
+                <ActivityIndicator x:Name="LoadActivityIndicator"
+                                   IsRunning="False"
+                                   Color="{StaticResource PrimaryText}"/>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

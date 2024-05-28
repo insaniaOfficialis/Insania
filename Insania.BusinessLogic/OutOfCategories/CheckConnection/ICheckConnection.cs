@@ -1,7 +1,7 @@
-﻿namespace Insania.App.Logic.OutCategories.CheckConnection;
+﻿namespace Insania.BusinessLogic.OutOfCategories.CheckConnection;
 
 /// <summary>
-/// Интерфейс сервиса проверки соединения
+/// Интерфейс проверки соединения
 /// </summary>
 public interface ICheckConnection
 {

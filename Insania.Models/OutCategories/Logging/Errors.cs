@@ -145,6 +145,8 @@ public static class Errors
 
     public const string EmptyNation = "Пустая нация";
     public const string EmptyRace = "Пустая раса";
+    public const string EmptyServiceRaces = "Пустой сервис работы с расами";
+    public const string EmptyUrlRaces = "Пустая ссылка работы с расами";
 
     #endregion
 

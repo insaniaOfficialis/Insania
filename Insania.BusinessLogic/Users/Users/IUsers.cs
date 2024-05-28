@@ -4,9 +4,9 @@ using Insania.Models.Users.Users;
 namespace Insania.BusinessLogic.Users.Users;
 
 /// <summary>
-/// Интерфейс сервиса работы с пользователем
+/// Интерфейс работы с пользователями
 /// </summary>
-public interface IUsersService
+public interface IUsers
 {
     /// <summary>
     /// Метод добавления пользователя

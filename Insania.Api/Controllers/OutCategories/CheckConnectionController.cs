@@ -6,7 +6,7 @@ namespace Insania.Api.Controllers.OutCategories;
 /// <summary>
 /// Контроллер проверки соединения
 /// </summary>
-/// <param name="logger">Интерфейс записи логов</param>
+/// <param name="logger">Интерфейс сервиса записи логов</param>
 [Authorize]
 [Route("api/v1/check")]
 public class CheckConnectionController(ILogger<CheckConnectionController> logger) : BaseController(logger)

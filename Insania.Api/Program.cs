@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using Insania.Api.Middleware;
+using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.OutOfCategories;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
@@ -34,7 +36,7 @@ services.AddDbContext<ApplicationContext>(options =>
 });
 
 //Добавляем параметры маппера моделей
-//builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 //Добавляем параметры идентификации
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -113,8 +115,9 @@ services.AddSwaggerGen(options =>
 });
 
 //Внедряем зависимости для сервисов
-services.AddScoped<IAuthenticationService, AuthenticationService>(); //аутентифкация
-services.AddScoped<IUsersService, UsersService>(); //сервис работы с пользователями
+services.AddScoped<IAuthentication, AuthenticationService>(); //аутентифкация
+services.AddScoped<IUsers, UsersService>(); //сервис работы с пользователями
+services.AddScoped<IRaces, RacesService>(); //сервис работы с расами
 
 //Строим приложение
 var app = builder.Build();

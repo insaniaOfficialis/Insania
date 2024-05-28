@@ -3,17 +3,18 @@ using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
 
+using Insania.BusinessLogic.Users.Authentication;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Authentication;
 
-namespace Insania.App.Logic.Users.Authentication;
+namespace Insania.App.Logic.Users;
 
 /// <summary>
-/// Сервис аутентификации
+/// Запросы аутентификации
 /// </summary>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class Authentication(IConfiguration configuration) : IAuthentication
+public class AuthenticationRequests(IConfiguration configuration) : IAuthentication
 {
     /// <summary>
     /// Интерфейс конфигурации
@@ -33,7 +34,7 @@ public class Authentication(IConfiguration configuration) : IAuthentication
     /// <returns></returns>
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
-    public async Task<AuthenticationResponse> Login(string login, string password)
+    public async Task<AuthenticationResponse> Login(string? login, string? password)
     {
         try
         {

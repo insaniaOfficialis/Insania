@@ -22,10 +22,10 @@
                        Text="Авторизация"
                        Style="{StaticResource TitleSecondary}"/>
             </StackLayout>
-            <StackLayout x:Name="RegistrationUserStackLayout"
+            <StackLayout x:Name="ContentStackLayout"
                          Grid.Row="1"
                          VerticalOptions="Center">
-                <StackLayout x:Name="AuthenticationStackLayout"
+                <StackLayout x:Name="RegistrationUserStackLayout"
                              Orientation="Vertical"
                              Margin="0,100,0,0"
                              WidthRequest="{OnIdiom Desktop=400, Phone=280}"

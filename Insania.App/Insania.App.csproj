@@ -81,11 +81,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Insania.BusinessLogic\Insania.BusinessLogic.csproj" />
 	  <ProjectReference Include="..\Insania.Models\Insania.Models.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\General\Heroes\RegistrationHero.xaml.cs">
+	    <DependentUpon>RegistrationHero.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\Desktop\OutCategories\MainDesktop.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\General\Heroes\RegistrationHero.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\General\Users\Authentication.xaml">
@@ -98,6 +108,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Buttons.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\Pickers.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\DatePickers.xaml">

@@ -2,17 +2,17 @@
 using System.Net.Http.Headers;
 
 using Microsoft.Extensions.Configuration;
-
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
+using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 
-namespace Insania.App.Logic.OutCategories.CheckConnection;
+namespace Insania.App.Logic.OutCategories;
 
 /// <summary>
-/// Сервис проверки соединения
+/// Запросы проверки соединения
 /// </summary>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class CheckConnection(IConfiguration configuration) : ICheckConnection
+public class CheckConnectionRequests(IConfiguration configuration) : ICheckConnection
 {
     /// <summary>
     /// Интерфейс конфигурации
@@ -115,7 +115,7 @@ public class CheckConnection(IConfiguration configuration) : ICheckConnection
         {
             throw;
         }
-        catch(Exception)
+        catch (Exception)
         {
             //Возвращаем общее исключение
             throw new Exception(Errors.NoConnection);

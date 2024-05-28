@@ -178,6 +178,7 @@ public static class Informations
 
     #region Биология
 
+    public const string EnteredGetRacesListMethod = "Вошли в метод получения списка рас";
     public const string EnteredInitializationNationsMethod = "Вошли в метод инициализации наций";
     public const string EnteredInitializationRacesMethod = "Вошли в метод инициализации рас";
     public const string NationAdded = "-нация добавлена";

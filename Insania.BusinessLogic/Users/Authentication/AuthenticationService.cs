@@ -19,7 +19,7 @@ namespace Insania.BusinessLogic.Users.Authentication;
 /// </summary>
 /// <param name="userManager">Менеджер пользователей</param>
 /// <param name="userManager">Интерфейс конфигурации</param>
-public class AuthenticationService(UserManager<User> userManager, IConfiguration configuration) : IAuthenticationService
+public class AuthenticationService(UserManager<User> userManager, IConfiguration configuration) : IAuthentication
 {
     /// <summary>
     /// Менеджер пользователей
@@ -112,5 +112,5 @@ public class AuthenticationService(UserManager<User> userManager, IConfiguration
     /// </summary>
     /// <param name="key">Ключ</param>
     /// <returns></returns>
-    public SymmetricSecurityKey GetSymmetricSecurityKey(string key) => new(Encoding.ASCII.GetBytes(key));
+    public static SymmetricSecurityKey GetSymmetricSecurityKey(string key) => new(Encoding.ASCII.GetBytes(key));
 }

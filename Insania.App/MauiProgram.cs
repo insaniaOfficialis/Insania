@@ -3,8 +3,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using Insania.App.Logic.OutCategories.CheckConnection;
-using Insania.App.Logic.Users.Authentication;
+using Insania.App.Logic.Biology;
+using Insania.App.Logic.OutCategories;
+using Insania.App.Logic.Users;
+using Insania.BusinessLogic.OutOfCategories.CheckConnection;
+using Insania.BusinessLogic.Users.Authentication;
+using Insania.BusinessLogic.Biology.Races;
 
 namespace Insania.App;
 
@@ -49,6 +53,20 @@ public static class MauiProgram
 #endif
             });
 
+            //Убираем подчёркивания у полей ввода даты
+            Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if ANDROID
+                    handler.PlatformView.Background = null;
+                    handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                    handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList
+                        .ValueOf(Android.Graphics.Color.Transparent);
+#elif WINDOWS
+                    handler.PlatformView.BorderBrush = null;
+                    handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+
             //Формируем приложение
             var builder = MauiApp.CreateBuilder();
 
@@ -72,8 +90,9 @@ public static class MauiProgram
             builder.Logging.AddDebug();
 #endif
             //Добавляем сервисы
-            builder.Services.AddScoped<ICheckConnection, CheckConnection>(); //проверка соединения
-            builder.Services.AddScoped<IAuthentication, Authentication>(); //аутентифкация
+            builder.Services.AddScoped<ICheckConnection, CheckConnectionRequests>(); //проверка соединения
+            builder.Services.AddScoped<IAuthentication, AuthenticationRequests>(); //аутентифкация
+            builder.Services.AddScoped<IRaces, RacesRequests>(); //работа с расами
 
             //Возвращаем построенное приложение
             return builder.Build();

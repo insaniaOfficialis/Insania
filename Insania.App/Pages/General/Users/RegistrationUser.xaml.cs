@@ -1,23 +1,23 @@
-using Insania.App.Logic.OutCategories.CheckConnection;
+using Insania.App.Pages.General.Heroes;
+using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
-using Insania.Models.Users.Authentication;
 using Insania.Models.Users.Users;
 
 namespace Insania.App.Pages.General.Users;
 
 /// <summary>
-/// Класс страницы регистрации пользователей
+/// Класс страницы регистрации пользователя
 /// </summary>
 public partial class RegistrationUser : ContentPage
 {
     /// <summary>
-    /// Интерфейс сервиса проверки соединения
+    /// Интерфейс проверки соединения
     /// </summary>
     private readonly ICheckConnection? _checkConnection;
 
     /// <summary>
-    /// Конструктор класса страницы регистрации пользователей
+    /// Конструктор класса страницы регистрации пользователя
     /// </summary>
 	public RegistrationUser()
     {
@@ -121,6 +121,9 @@ public partial class RegistrationUser : ContentPage
             AddUserRequest addUserRequest = new(LoginEntry.Text, PasswordEntry.Text, LastNameEntry.Text, FirstNameEntry.Text,
                 PatronymicEntry.Text, GenderCheckBox.IsChecked, BirthDateDatePicker.Date, PhoneNumberEntry.Text, EmailEntry.Text,
                 LinkVKEntry.Text);
+
+            //Переходим на страницу регистрации героя
+            ToRegistrationHero(addUserRequest);
         }
         catch (InnerException ex)
         {
@@ -164,6 +167,16 @@ public partial class RegistrationUser : ContentPage
     {
         //Переходим на старую страницу
         await Navigation.PopAsync();
+    }
+
+    /// <summary>
+    /// Метод перехода на страницу регистрации героя
+    /// </summary>
+    /// <param name="addUserRequest">Модель добавления пользователя</param>
+    private async void ToRegistrationHero(AddUserRequest addUserRequest)
+    {
+        //Переходим на старую страницу
+        await Navigation.PushAsync(new RegistrationHero(addUserRequest));
     }
 
     /// <summary>

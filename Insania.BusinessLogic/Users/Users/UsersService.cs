@@ -15,9 +15,9 @@ namespace Insania.BusinessLogic.Users.Users;
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
 /// <param name="userManager">Менеджер пользователей</param>
-/// <param name="logger">Сервис записи логов</param>
+/// <param name="logger">Интерфейс сервиса записи логов</param>
 public class UsersService(ApplicationContext applicationContext, UserManager<User> userManager, ILogger<UsersService> logger) : 
-    IUsersService
+    IUsers
 {
     /// <summary>
     /// Контекст базы данных
@@ -30,7 +30,7 @@ public class UsersService(ApplicationContext applicationContext, UserManager<Use
     private readonly UserManager<User> _userManager = userManager;
 
     /// <summary>
-    /// Сервис записи логов
+    /// Интерфейс сервиса записи логов
     /// </summary>
     private readonly ILogger<UsersService> _logger = logger;
 

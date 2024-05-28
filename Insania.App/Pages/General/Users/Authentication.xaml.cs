@@ -1,6 +1,6 @@
-using Insania.App.Logic.OutCategories.CheckConnection;
-using Insania.App.Logic.Users.Authentication;
 using Insania.App.Pages.Desktop.OutCategories;
+using Insania.BusinessLogic.OutOfCategories.CheckConnection;
+using Insania.BusinessLogic.Users.Authentication;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Authentication;
@@ -13,7 +13,7 @@ namespace Insania.App.Pages.General.Users;
 public partial class Authentication : ContentPage
 {
     /// <summary>
-    /// Интерфейс сервиса проверки соединения
+    /// Интерфейс проверки соединения
     /// </summary>
     private readonly ICheckConnection? _checkConnection;
 

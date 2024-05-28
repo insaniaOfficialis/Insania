@@ -7,18 +7,18 @@ using Insania.Models.Users.Users;
 namespace Insania.Api.Controllers.Users;
 
 /// <summary>
-/// Контроль аутентификации
+/// Контроллер аутентификации
 /// </summary>
-/// <param name="logger">Интерфейс записи логов</param>
-/// <param name="users">Интерфейс сервиса работы с пользователями</param>
+/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="users">Интерфейс работы с пользователями</param>
 [Route("api/v1/registration")]
-public class RegistrationController(ILogger<RegistrationController> logger, IUsersService users) :
+public class RegistrationController(ILogger<RegistrationController> logger, IUsers users) :
     BaseController(logger)
 {
     /// <summary>
-    /// Интерфейс сервиса работы с пользователями
+    /// Интерфейс работы с пользователями
     /// </summary>
-    private readonly IUsersService _users = users;
+    private readonly IUsers _users = users;
 
     /// <summary>
     /// Метод добавления пользователя

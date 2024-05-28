@@ -25,6 +25,12 @@ public class BaseResponse
     public BaseError? Error { get; set; }
 
     /// <summary>
+    /// Значение
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Value { get; set; }
+
+    /// <summary>
     /// Простой конструктор базовой модели ответа
     /// </summary>
     public BaseResponse()
@@ -59,5 +65,16 @@ public class BaseResponse
     public BaseResponse(bool success, BaseError? error): this(success)
     {
         Error = error;
+    }
+
+    /// <summary>
+    /// Конструктор базовой модели ответа с id и значением
+    /// </summary>
+    /// <param name="success">Признак успешности</param>
+    /// <param name="id">Id записи</param>
+    /// <param name="value">Значение</param>
+    public BaseResponse(bool success, long id, string? value) : this(success, id)
+    {
+        Value = value;
     }
 }

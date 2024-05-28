@@ -1,9 +1,9 @@
 ﻿using Insania.Models.Users.Authentication;
 
-namespace Insania.App.Logic.Users.Authentication;
+namespace Insania.BusinessLogic.Users.Authentication;
 
 /// <summary>
-/// Интерфейс сервиса аутентификации
+/// Интерфейс атуентифкации
 /// </summary>
 public interface IAuthentication
 {
@@ -13,5 +13,5 @@ public interface IAuthentication
     /// <param name="login">Логин</param>
     /// <param name="password">Пароль</param>
     /// <returns></returns>
-    Task<AuthenticationResponse> Login(string login, string password);
+    Task<AuthenticationResponse> Login(string? login, string? password);
 }

@@ -17,6 +17,7 @@
   * x:Name/x:Uid
   * Grid.Row/Column
   * IsVisible
+  * IsEnabled
   * IsRunning
 
   * Horizontal/Vertical Options
@@ -38,14 +39,16 @@
   * TextColor
   * Color
 
-  * Image/Text/Placeholder
+  * Image/Text/Placeholder/ItemsSource
+  * ItemDisplayBinding
   * IsPassword
   * IsToggled
   * Keyboard
   * Style
 
   * Loaded    
-  * Clicked 
+  * Clicked
+  * SelectedIndexChanged
 
 ### CS
 * Атрибуты
@@ -57,5 +60,5 @@
 ## Развёртывание
 
 ### Создание новой базы
-  - Делаем миграцию *add-migration Init-2 -context ApplicationContext*
+  - Делаем миграцию *add-migration Init -context ApplicationContext*
   - Обновляем базу *update-database -context ApplicationContext*
