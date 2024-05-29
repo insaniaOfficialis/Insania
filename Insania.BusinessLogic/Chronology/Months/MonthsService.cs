@@ -2,22 +2,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-using Insania.Database.Entities.Biology;
+using Insania.Database.Entities.Chronology;
 using Insania.Entities.Context;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.BusinessLogic.Biology.Races;
+namespace Insania.BusinessLogic.Chronology.Months;
 
 /// <summary>
-/// Сервис работы с расами
+/// Сервис работы с месяцами
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
 /// <param name="logger">Интерфейс сервиса записи логов</param>
 /// <param name="mapper">Интерфейс сервиса преобразования моделей</param>
-public class RacesService(ApplicationContext applicationContext, ILogger<RacesService> logger, IMapper mapper) :
-    IRaces
+public class MonthsService(ApplicationContext applicationContext, ILogger<MonthsService> logger, IMapper mapper) :
+    IMonths
 {
     /// <summary>
     /// Контекст базы данных
@@ -27,7 +27,7 @@ public class RacesService(ApplicationContext applicationContext, ILogger<RacesSe
     /// <summary>
     /// Интерфейс сервиса записи логов
     /// </summary>
-    private readonly ILogger<RacesService> _logger = logger;
+    private readonly ILogger<MonthsService> _logger = logger;
 
     /// <summary>
     /// Интерфейс сервиса преобразования моделей
@@ -35,21 +35,21 @@ public class RacesService(ApplicationContext applicationContext, ILogger<RacesSe
     private readonly IMapper _mapper = mapper;
 
     /// <summary>
-    /// Метод получения списка рас
+    /// Метод получения списка месяцев
     /// </summary>
     /// <returns></returns>
-    public async Task<BaseResponseList> GetRacesList()
+    public async Task<BaseResponseList> GetMonthsList()
     {
         //Логгируем
-        _logger.LogInformation(Informations.EnteredGetRacesListMethod);
+        _logger.LogInformation(Informations.EnteredGetMonthsListMethod);
 
         try
         {
             //Получаем данные с базы
-            List<Race> races = await _applicationContext.Races.Where(x => x.DateDeleted == null).AsNoTracking().ToListAsync();
+            List<Month> months = await _applicationContext.Months.Where(x => x.DateDeleted == null).AsNoTracking().ToListAsync();
 
             //Конвертируем ответ
-            List<BaseResponseListItem> result = races.Select(_mapper.Map<BaseResponseListItem>).ToList();
+            List<BaseResponseListItem> result = months.Select(_mapper.Map<BaseResponseListItem>).ToList();
 
             //Логгируем
             _logger.LogInformation(Informations.Success);

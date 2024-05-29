@@ -89,6 +89,7 @@ public static class Informations
 
     #region Летоисчисление
 
+    public const string EnteredGetMonthsListMethod = "Вошли в метод получения списка месяцев";
     public const string EnteredInitializationMonthsMethod = "Вошли в метод инициализации месяцев";
     public const string EnteredInitializationSeasonsMethod = "Вошли в метод инициализации сезонов";
     public const string MonthAdded = "-месяц добавлен";
@@ -125,6 +126,9 @@ public static class Informations
     public const string AreaAlreadyAdded = "-область уже добавлена";
     public const string CountryAdded = "-страна добавлена";
     public const string CountryAlreadyAdded = "-страна уже добавлена";
+    public const string EnteredGetAreasListMethod = "Вошли в метод получения списка областей";
+    public const string EnteredGetCountriesListMethod = "Вошли в метод получения списка стран";
+    public const string EnteredGetRegionsListMethod = "Вошли в метод получения списка регионов";
     public const string EnteredInitializationAreasMethod = "Вошли в метод инициализации областей";
     public const string EnteredInitializationCountriesMethod = "Вошли в метод инициализации стран";
     public const string EnteredInitializationFractionsMethod = "Вошли в метод инициализации фракций";
@@ -178,6 +182,7 @@ public static class Informations
 
     #region Биология
 
+    public const string EnteredGetNationsListMethod = "Вошли в метод получения списка наций";
     public const string EnteredGetRacesListMethod = "Вошли в метод получения списка рас";
     public const string EnteredInitializationNationsMethod = "Вошли в метод инициализации наций";
     public const string EnteredInitializationRacesMethod = "Вошли в метод инициализации рас";

@@ -19,7 +19,7 @@
                         Style="{StaticResource ButtonSecondary}"
                         Clicked="Back_Clicked"/>
                 <Label VerticalOptions="Center"
-                       Text="Авторизация"
+                       Text="Регистрация пользователя"
                        Style="{StaticResource TitleSecondary}"/>
             </StackLayout>
             <StackLayout x:Name="ContentStackLayout"

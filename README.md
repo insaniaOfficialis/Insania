@@ -19,6 +19,7 @@
   * IsVisible
   * IsEnabled
   * IsRunning
+  * IsChecked
 
   * Horizontal/Vertical Options
   * Margin/Padding
@@ -30,19 +31,27 @@
   * Wrap
   * JustifyContent
   * CornerRadius
+  * StrokeThickness
+  * StrokeShape
   * SelectionMode
   * SelectionChanged
 
-  * Backgrounds
+  * Background
   * FontFamily
   * FontSize
   * TextColor
+  * TitleColor
+  * PlaceholderColor
   * Color
 
-  * Image/Text/Placeholder/ItemsSource
+  * Image/Text/Placeholder/ItemsSource/Value
   * ItemDisplayBinding
+  * Title
   * IsPassword
   * IsToggled
+  * ClearButtonVisibility
+  * Format
+  * Minimum/Maximum
   * Keyboard
   * Style
 

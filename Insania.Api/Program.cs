@@ -10,8 +10,13 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using Insania.Api.Middleware;
+using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.OutOfCategories;
+using Insania.BusinessLogic.Politics.Areas;
+using Insania.BusinessLogic.Politics.Countries;
+using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
@@ -118,6 +123,11 @@ services.AddSwaggerGen(options =>
 services.AddScoped<IAuthentication, AuthenticationService>(); //аутентифкация
 services.AddScoped<IUsers, UsersService>(); //сервис работы с пользователями
 services.AddScoped<IRaces, RacesService>(); //сервис работы с расами
+services.AddScoped<INations, NationsService>(); //сервис работы с нациями
+services.AddScoped<IMonths, MonthsService>(); //сервис работы с месяцами
+services.AddScoped<ICountries, CountriesService>(); //сервис работы со странами
+services.AddScoped<IRegions, RegionsService>(); //сервис работы с регионами
+services.AddScoped<IAreas, AreasService>(); //сервис работы с областями
 
 //Строим приложение
 var app = builder.Build();

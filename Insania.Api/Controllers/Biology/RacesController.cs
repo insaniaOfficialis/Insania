@@ -11,8 +11,7 @@ namespace Insania.Api.Controllers.Biology;
 /// <param name="logger">Интерфейс сервиса записи логов</param>
 /// <param name="races">Интерфейс работы с расами</param>
 [Route("api/v1/races")]
-public class RacesController(ILogger<RacesController> logger, IRaces races) :
-    BaseController(logger)
+public class RacesController(ILogger<RacesController> logger, IRaces races) : BaseController(logger)
 {
     /// <summary>
     /// Интерфейс работы с расами
@@ -25,6 +24,6 @@ public class RacesController(ILogger<RacesController> logger, IRaces races) :
     /// <returns></returns>
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> AddUser() =>
+    public async Task<IActionResult> GetRacesList() =>
         await GetAnswerAsync(async () => { return await _races.GetRacesList(); });
 }

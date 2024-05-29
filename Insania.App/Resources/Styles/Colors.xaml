@@ -47,6 +47,7 @@
     <Color x:Key="SecondaryButton">#FF888888</Color>
     <Color x:Key="ThirdButton">#32D9D9D9</Color>
     <Color x:Key="PrimaryTextDisable">#77D9D9D9</Color>
+    <Color x:Key="SecondaryButtonPressed">#77888888</Color>
 
     <SolidColorBrush x:Key="MainBackground" Color="{StaticResource PrimaryBackground}"/>
     <SolidColorBrush x:Key="MenuBackground" Color="{StaticResource SecondaryBackground}"/>

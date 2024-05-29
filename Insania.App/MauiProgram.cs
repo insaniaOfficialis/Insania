@@ -4,11 +4,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using Insania.App.Logic.Biology;
+using Insania.App.Logic.Chronology;
 using Insania.App.Logic.OutCategories;
+using Insania.App.Logic.Polititcs;
 using Insania.App.Logic.Users;
-using Insania.BusinessLogic.OutOfCategories.CheckConnection;
-using Insania.BusinessLogic.Users.Authentication;
+using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.Chronology.Months;
+using Insania.BusinessLogic.OutOfCategories.CheckConnection;
+using Insania.BusinessLogic.Politics.Areas;
+using Insania.BusinessLogic.Politics.Countries;
+using Insania.BusinessLogic.Politics.Regions;
+using Insania.BusinessLogic.Users.Authentication;
 
 namespace Insania.App;
 
@@ -53,7 +60,7 @@ public static class MauiProgram
 #endif
             });
 
-            //Убираем подчёркивания у полей ввода даты
+            //Убираем подчёркивания у выпадающих списков
             Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
             {
 #if ANDROID
@@ -64,6 +71,17 @@ public static class MauiProgram
 #elif WINDOWS
                     handler.PlatformView.BorderBrush = null;
                     handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+            
+            //Убираем лишний эффект мигания для кнопок на android
+            Microsoft.Maui.Handlers.ButtonHandler.Mapper.AppendToMapping("MyRippleCustomization", (handler, view) =>
+            {
+#if ANDROID
+                if (handler.PlatformView.Background is Android.Graphics.Drawables.RippleDrawable ripple)
+                {
+                    ripple.SetColor(Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent));
+                };
 #endif
             });
 
@@ -93,6 +111,11 @@ public static class MauiProgram
             builder.Services.AddScoped<ICheckConnection, CheckConnectionRequests>(); //проверка соединения
             builder.Services.AddScoped<IAuthentication, AuthenticationRequests>(); //аутентифкация
             builder.Services.AddScoped<IRaces, RacesRequests>(); //работа с расами
+            builder.Services.AddScoped<INations, NationsRequests>(); //работа с нациями
+            builder.Services.AddScoped<IMonths, MonthsRequests>(); //работа с месяцами
+            builder.Services.AddScoped<ICountries, CountriesRequests>(); //работа со странами
+            builder.Services.AddScoped<IRegions, RegionsRequests>(); //работа с регионами
+            builder.Services.AddScoped<IAreas, AreasRequests>(); //работа с областями
 
             //Возвращаем построенное приложение
             return builder.Build();

@@ -85,6 +85,8 @@ public static class Errors
 
     public const string EmptyMonth = "Пустой месяц";
     public const string EmptySeason = "Пустой сезон";
+    public const string EmptyServiceMonths = "Пустой сервис работы с месяцами";
+    public const string EmptyUrlMonths = "Пустая ссылка работы с месяцами";
 
     #endregion
 
@@ -109,7 +111,13 @@ public static class Errors
     public const string EmptyOrganization = "Пустая организация";
     public const string EmptyOwnership = "Пустое владение";
     public const string EmptyRegion = "Пустой регион";
+    public const string EmptyServiceAreas = "Пустой сервис работы с областями";
+    public const string EmptyServiceСountries = "Пустой сервис работы со странами";
+    public const string EmptyServiceRegions = "Пустой сервис работы с регионами";
     public const string EmptyTypeOrganization = "Пустой тип организации";
+    public const string EmptyUrlAreas = "Пустая ссылка работы с областями";
+    public const string EmptyUrlCountries = "Пустая ссылка работы со странами";
+    public const string EmptyUrlRegions = "Пустая ссылка работы с регионами";
 
     #endregion
 
@@ -145,7 +153,9 @@ public static class Errors
 
     public const string EmptyNation = "Пустая нация";
     public const string EmptyRace = "Пустая раса";
+    public const string EmptyServiceNations = "Пустой сервис работы с нациями";
     public const string EmptyServiceRaces = "Пустой сервис работы с расами";
+    public const string EmptyUrlNations = "Пустая ссылка работы с нациями";
     public const string EmptyUrlRaces = "Пустая ссылка работы с расами";
 
     #endregion

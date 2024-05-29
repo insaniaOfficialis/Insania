@@ -19,7 +19,7 @@
                         Style="{StaticResource ButtonSecondary}"
                         Clicked="Back_Clicked"/>
                 <Label VerticalOptions="Center"
-                       Text="Регистрация героя"
+                       Text="Регистрация персонажа"
                        Style="{StaticResource TitleSecondary}"/>
             </StackLayout>
             <StackLayout x:Name="ContentStackLayout"
@@ -30,6 +30,9 @@
                              Margin="0,100,0,0"
                              WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                              Spacing="50">
+                    <Label HorizontalOptions="Center"
+                           Text="ОБЩЕЕ"
+                           Style="{StaticResource TitleSecondary}"/>
                     <StackLayout>
                         <Label HorizontalOptions="Start"
                                Text="Личное имя*:"
@@ -79,33 +82,147 @@
                         <Picker x:Name="RacePicker"
                                 Margin="0,25,0,0"
                                 WidthRequest="{OnIdiom Desktop=400, Phone=280}"
-                                BindingContext="{Binding Races}"
+                                ItemsSource="{Binding Races}"
                                 ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите расу'}"
                                 Style="{StaticResource PickerPrimary}"
                                 SelectedIndexChanged="Race_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout x:Name="NationStackLayout"
+                                 IsVisible="False">
                         <Label HorizontalOptions="Start"
                                Text="Нация*:"
                                Style="{StaticResource TitleSecondary}"/>
                         <Picker x:Name="NationPicker"
-                                IsEnabled="False"
                                 Margin="0,25,0,0"
                                 WidthRequest="{OnIdiom Desktop=400, Phone=280}"
-                                BindingContext="{Binding Nations}"
+                                ItemsSource="{Binding Nations}"
                                 ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите нацию'}"
                                 Style="{StaticResource PickerPrimary}"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
-                    </StackLayout>                    
+                    </StackLayout>
+                    <ActivityIndicator x:Name="NationLoadActivityIndicator"
+                                       IsVisible="False"
+                                       IsRunning="False"
+                                       Color="{StaticResource PrimaryText}"/>
+                    <Label HorizontalOptions="Center"
+                           Margin="0,25,0,0"
+                           Text="ДАТА РОЖДЕНИЯ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="День рождения*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="DayBirthEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите день рождения"
+                               Keyboard="Numeric"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Месяц рождения*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="BirtMonthPicker"
+                                Margin="0,15,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Months}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите месяц рождения'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Цикл рождения*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CycleBirthEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите цикл рождения"
+                               Keyboard="Numeric"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <Label HorizontalOptions="Center"
+                           Margin="0,25,0,0"
+                           Text="МЕСТОПОЛОЖЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Страна*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="CountryPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Countries}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите страну'}"
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Country_SelectedIndexChanged"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <ActivityIndicator x:Name="RegionLoadActivityIndicator"
+                                       IsVisible="False"
+                                       IsRunning="False"
+                                       Color="{StaticResource PrimaryText}"/>
+                    <StackLayout x:Name="RegionStackLayout"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Регион*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="RegionPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Regions}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите регион'}"
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Region_SelectedIndexChanged"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <ActivityIndicator x:Name="AreaLoadActivityIndicator"
+                                       IsVisible="False"
+                                       IsRunning="False"
+                                       Color="{StaticResource PrimaryText}"/>
+                    <StackLayout x:Name="AreaStackLayout"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Область*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="AreaPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Areas}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите нацию'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
                     <Button x:Name="SaveButton"
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"
-                            Text="Далее"
+                            Text="Сохранить"
                             Style="{StaticResource ButtonPrimary}"
                             Clicked="Save_Clicked"/>
                     <Label x:Name="ErrorLabel"

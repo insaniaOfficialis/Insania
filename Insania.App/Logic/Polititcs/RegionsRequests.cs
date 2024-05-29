@@ -3,18 +3,18 @@ using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
 
-using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.Politics.Regions;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.App.Logic.Biology;
+namespace Insania.App.Logic.Polititcs;
 
 /// <summary>
-/// Запросы работы с расами
+/// Запросы работы с регионами
 /// </summary>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class RacesRequests(IConfiguration configuration) : IRaces
+public class RegionsRequests(IConfiguration configuration) : IRegions
 {
     /// <summary>
     /// Интерфейс конфигурации
@@ -27,22 +27,24 @@ public class RacesRequests(IConfiguration configuration) : IRaces
     private readonly JsonSerializerOptions _settings = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>
-    /// Метод получения списка рас
+    /// Метод получения списка регионов
     /// </summary>
+    /// <param name="countryId">Страна</param>
     /// <returns></returns>
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
-    public async Task<BaseResponseList> GetRacesList()
+    public async Task<BaseResponseList> GetRegionsList(long? countryId)
     {
         try
         {
             //Проверяем данные из файла конфигурации
             if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
             if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
-            if (string.IsNullOrWhiteSpace(_configuration["Api:Races"])) throw new InnerException(Errors.EmptyUrlRaces);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Regions"])) throw new InnerException(Errors.EmptyUrlRegions);
 
             //Формируем ссылку запроса
-            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Races"] + "list";
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Regions"] + "list" +
+                (countryId != null ? $"?countryId={countryId}" : "");
 
             //Формируем клиента
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };

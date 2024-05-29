@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Insania.Models\Insania.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Biology\Nations\" />
-  </ItemGroup>
-
 </Project>

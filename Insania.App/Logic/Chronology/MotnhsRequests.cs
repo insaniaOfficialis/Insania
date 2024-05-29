@@ -3,18 +3,18 @@ using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
 
-using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.Chronology.Months;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.App.Logic.Biology;
+namespace Insania.App.Logic.Chronology;
 
 /// <summary>
-/// Запросы работы с расами
+/// Запросы работы с месяцами
 /// </summary>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class RacesRequests(IConfiguration configuration) : IRaces
+public class MonthsRequests(IConfiguration configuration) : IMonths
 {
     /// <summary>
     /// Интерфейс конфигурации
@@ -27,22 +27,22 @@ public class RacesRequests(IConfiguration configuration) : IRaces
     private readonly JsonSerializerOptions _settings = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>
-    /// Метод получения списка рас
+    /// Метод получения списка месяцев
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
-    public async Task<BaseResponseList> GetRacesList()
+    public async Task<BaseResponseList> GetMonthsList()
     {
         try
         {
             //Проверяем данные из файла конфигурации
             if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
             if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
-            if (string.IsNullOrWhiteSpace(_configuration["Api:Races"])) throw new InnerException(Errors.EmptyUrlRaces);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Months"])) throw new InnerException(Errors.EmptyUrlMonths);
 
             //Формируем ссылку запроса
-            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Races"] + "list";
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Months"] + "list";
 
             //Формируем клиента
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };

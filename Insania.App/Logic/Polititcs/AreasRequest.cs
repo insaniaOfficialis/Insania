@@ -1,20 +1,21 @@
-﻿using System.Net;
+﻿using System.Collections.Specialized;
+using System.Net;
 using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
 
-using Insania.BusinessLogic.Biology.Races;
+using Insania.BusinessLogic.Politics.Areas;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.App.Logic.Biology;
+namespace Insania.App.Logic.Polititcs;
 
 /// <summary>
-/// Запросы работы с расами
+/// Запросы работы с областями
 /// </summary>
 /// <param name="configuration">Интерфейс конфигурации</param>
-public class RacesRequests(IConfiguration configuration) : IRaces
+public class AreasRequests(IConfiguration configuration) : IAreas
 {
     /// <summary>
     /// Интерфейс конфигурации
@@ -27,22 +28,29 @@ public class RacesRequests(IConfiguration configuration) : IRaces
     private readonly JsonSerializerOptions _settings = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>
-    /// Метод получения списка рас
+    /// Метод получения списка областей
     /// </summary>
+    /// <param name="regionId">Регион</param>
+    /// <param name="ownershipId">Владение</param>
     /// <returns></returns>
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
-    public async Task<BaseResponseList> GetRacesList()
+    public async Task<BaseResponseList> GetAreasList(long? regionId, long? ownershipId)
     {
         try
         {
             //Проверяем данные из файла конфигурации
             if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
             if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
-            if (string.IsNullOrWhiteSpace(_configuration["Api:Races"])) throw new InnerException(Errors.EmptyUrlRaces);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Areas"])) throw new InnerException(Errors.EmptyUrlAreas);
 
             //Формируем ссылку запроса
-            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Races"] + "list";
+            NameValueCollection queryParam = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            if (regionId != null) queryParam.Add("regionId", regionId.ToString());
+            if (ownershipId != null) queryParam.Add("ownershipId", ownershipId.ToString());
+            string? param = queryParam?.ToString();
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Areas"] + "list" +
+                (!string.IsNullOrWhiteSpace(param) ? $"?{param}" : "");
 
             //Формируем клиента
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };

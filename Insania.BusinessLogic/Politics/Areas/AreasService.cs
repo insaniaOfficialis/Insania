@@ -2,22 +2,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-using Insania.Database.Entities.Biology;
+using Insania.Database.Entities.Politics;
 using Insania.Entities.Context;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.BusinessLogic.Biology.Races;
+namespace Insania.BusinessLogic.Politics.Areas;
 
 /// <summary>
-/// Сервис работы с расами
+/// Сервис работы с областями
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
 /// <param name="logger">Интерфейс сервиса записи логов</param>
 /// <param name="mapper">Интерфейс сервиса преобразования моделей</param>
-public class RacesService(ApplicationContext applicationContext, ILogger<RacesService> logger, IMapper mapper) :
-    IRaces
+public class AreasService(ApplicationContext applicationContext, ILogger<AreasService> logger, IMapper mapper) :
+    IAreas
 {
     /// <summary>
     /// Контекст базы данных
@@ -27,7 +27,7 @@ public class RacesService(ApplicationContext applicationContext, ILogger<RacesSe
     /// <summary>
     /// Интерфейс сервиса записи логов
     /// </summary>
-    private readonly ILogger<RacesService> _logger = logger;
+    private readonly ILogger<AreasService> _logger = logger;
 
     /// <summary>
     /// Интерфейс сервиса преобразования моделей
@@ -35,21 +35,29 @@ public class RacesService(ApplicationContext applicationContext, ILogger<RacesSe
     private readonly IMapper _mapper = mapper;
 
     /// <summary>
-    /// Метод получения списка рас
+    /// Метод получения списка областей
     /// </summary>
+    /// <param name="regionId">Регион</param>
+    /// <param name="ownershipId">Владение</param>
     /// <returns></returns>
-    public async Task<BaseResponseList> GetRacesList()
+    public async Task<BaseResponseList> GetAreasList(long? regionId, long? ownershipId)
     {
         //Логгируем
-        _logger.LogInformation(Informations.EnteredGetRacesListMethod);
+        _logger.LogInformation(Informations.EnteredGetAreasListMethod);
 
         try
         {
             //Получаем данные с базы
-            List<Race> races = await _applicationContext.Races.Where(x => x.DateDeleted == null).AsNoTracking().ToListAsync();
+            List<Area> areas = await _applicationContext
+                .Areas
+                .Where(x => x.DateDeleted == null 
+                    && (regionId == null || x.RegionId == regionId) 
+                    && (ownershipId == null || x.OwnershipId == ownershipId))
+                .AsNoTracking()
+                .ToListAsync();
 
             //Конвертируем ответ
-            List<BaseResponseListItem> result = races.Select(_mapper.Map<BaseResponseListItem>).ToList();
+            List<BaseResponseListItem> result = areas.Select(_mapper.Map<BaseResponseListItem>).ToList();
 
             //Логгируем
             _logger.LogInformation(Informations.Success);
