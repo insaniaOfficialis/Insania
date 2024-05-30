@@ -24,6 +24,5 @@ public class CountriesController(ILogger<CountriesController> logger, ICountries
     /// <returns></returns>
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> GetCountriesList() =>
-        await GetAnswerAsync(async () => { return await _countries.GetCountriesList(); });
+    public async Task<IActionResult> GetCountriesList() => await GetAnswerAsync(_countries.GetCountriesList);
 }

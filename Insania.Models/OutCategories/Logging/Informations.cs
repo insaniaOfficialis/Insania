@@ -12,6 +12,7 @@ public static class Informations
     #region Пользователи
 
     public const string EnteredAddUserMethod = "Вошли в метод добавления пользователя";
+    public const string EnteredCheckLoginMethod = "Вошли в метод проверки доступности логина";
     public const string EnteredInitializationUsersMethod = "Вошли в метод инициализации пользователей";
     public const string UserAdded = "-пользователь добавлен";
     public const string UserAlreadyAdded = "-пользователь уже добавлен";
@@ -101,6 +102,10 @@ public static class Informations
 
     #region Внешность
 
+    public const string EnteredGetEyesColorsListMethod = "Вошли в метод получения списка цветов глаз";
+    public const string EnteredGetHairsColorsListMethod = "Вошли в метод получения списка цветов волос";
+    public const string EnteredGetTypesBodiesListMethod = "Вошли в метод получения списка типов телосложений";
+    public const string EnteredGetTypesFacesListMethod = "Вошли в метод получения списка типов лиц";
     public const string EnteredInitializationEyesColorsMethod = "Вошли в метод инициализации цветов глаз";
     public const string EnteredInitializationHairsColorsMethod = "Вошли в метод инициализации цветов волос";
     public const string EnteredInitializationTypesBodiesMethod = "Вошли в метод инициализации типов телосложений";
@@ -194,6 +199,13 @@ public static class Informations
     #endregion
 
     #region Социология
+
+    public const string EnteredInitializationPrefixesNamesMethod = "Вошли в метод инициализации префиксов имён";
+    public const string EnteredInitializationPrefixesNamesNationsMethod = "Вошли в метод инициализации префиксов имён наций";
+    public const string PrefixNameAdded = "-префикс имени добавлен";
+    public const string PrefixNameAlreadyAdded = "-префикс имени уже добавлен";
+    public const string PrefixNameNationAdded = "-префикс имени нации добавлен";
+    public const string PrefixNameNationAlreadyAdded = "-префикс имени нации уже добавлен";
 
     #endregion
 

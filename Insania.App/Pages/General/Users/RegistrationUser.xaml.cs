@@ -1,5 +1,6 @@
 using Insania.App.Pages.General.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
+using Insania.BusinessLogic.Users.Users;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Users;
@@ -17,19 +18,24 @@ public partial class RegistrationUser : ContentPage
     private readonly ICheckConnection? _checkConnection;
 
     /// <summary>
+    /// Интерфейс работы с пользователями
+    /// </summary>
+    private readonly IUsers? _users;
+
+    /// <summary>
     /// Конструктор класса страницы регистрации пользователя
     /// </summary>
 	public RegistrationUser()
     {
-        try
-        {
-            //Инициализируем компоненты
-            InitializeComponent();
+        //Инициализируем компоненты
+        InitializeComponent();
 
-            //Получаем сервисы
-            _checkConnection = App.Services?.GetService<ICheckConnection>();
-        }
-        catch { }
+        //Получаем сервисы
+        _checkConnection = App.Services?.GetService<ICheckConnection>();
+        _users = App.Services?.GetService<IUsers>();
+
+        //Устанавливаем значения по умолчанию
+        BirthDateDatePicker.Date = DateTime.Now.AddYears(-16).AddDays(1);
     }
 
     /// <summary>
@@ -86,7 +92,7 @@ public partial class RegistrationUser : ContentPage
     /// </summary>
     /// <param name="sender">Отправитель</param>
     /// <param name="e">Событие</param>
-    private void Next_Clicked(object sender, EventArgs e)
+    private async void Next_Clicked(object sender, EventArgs e)
     {
         //Запускаем колесо загрузки
         LoadActivityIndicator.IsRunning = true;
@@ -121,6 +127,10 @@ public partial class RegistrationUser : ContentPage
             AddUserRequest addUserRequest = new(LoginEntry.Text, PasswordEntry.Text, LastNameEntry.Text, FirstNameEntry.Text,
                 PatronymicEntry.Text, GenderCheckBox.IsChecked, BirthDateDatePicker.Date, PhoneNumberEntry.Text, EmailEntry.Text,
                 LinkVKEntry.Text);
+
+            //Проверяем доступность логина
+            if (_users == null) throw new InnerException(Errors.EmptyServiceUsers);
+            if(!(await _users.CheckLogin(addUserRequest.Login)).Success) throw new InnerException(Errors.LoginAlreadyExists);
 
             //Переходим на страницу регистрации героя
             ToRegistrationHero(addUserRequest);
@@ -177,16 +187,5 @@ public partial class RegistrationUser : ContentPage
     {
         //Переходим на старую страницу
         await Navigation.PushAsync(new RegistrationHero(addUserRequest));
-    }
-
-    /// <summary>
-    /// Метод возврата на предыдущую страницу
-    /// </summary>
-    /// <param name="sender">Отправитель</param>
-    /// <param name="e">Событие</param>
-    private async void ToRegistrationPlayer(object? sender, EventArgs? e)
-    {
-        //Переходим на старую страницу
-        await Navigation.PopAsync();
     }
 }

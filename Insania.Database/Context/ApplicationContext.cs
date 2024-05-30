@@ -12,6 +12,7 @@ using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
+using Insania.Database.Entities.Sociology;
 using Insania.Database.Entities.System;
 using Insania.Database.Entities.Users;
 
@@ -248,6 +249,16 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
     #region Социология
 
+    /// <summary>
+    /// Префиксы имён
+    /// </summary>
+    public DbSet<PrefixName> PrefixesNames { get; set; }
+
+    /// <summary>
+    /// Префиксы имён наций
+    /// </summary>
+    public DbSet<PrefixNameNation> PrefixesNamesNations { get; set; }
+
     #endregion
 
     #region Файлы
@@ -481,6 +492,12 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
         #endregion
 
         #region Социология
+
+        //Префиксы имён
+        modelBuilder.Entity<PrefixName>().HasIndex(x => x.Alias).IsUnique();
+
+        //Префиксы имён наций
+        modelBuilder.Entity<PrefixNameNation>().HasIndex(x => new { x.PrefixNameId, x.NationId }).IsUnique();
 
         #endregion
 

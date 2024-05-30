@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240525180924_Init")]
+    [Migration("20240530183108_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Insania.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -41,17 +41,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Ссылка на капитул");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -132,17 +132,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Ссылка на страну");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -203,17 +203,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -274,17 +274,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Коэффициент начисления баллов почёта");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -334,17 +334,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -399,17 +399,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -465,17 +465,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -525,17 +525,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -585,17 +585,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -658,17 +658,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -718,17 +718,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -790,17 +790,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -849,17 +849,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -918,17 +918,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -989,17 +989,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1055,17 +1055,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цвет на карте");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1134,17 +1134,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1198,17 +1198,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цикл окончания");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1310,12 +1310,12 @@ namespace Insania.Database.Migrations
                         .HasComment("Решение по дате начала");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
@@ -1325,7 +1325,7 @@ namespace Insania.Database.Migrations
                         .HasComment("Решение по дате окончания");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1399,17 +1399,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Ссылка на текущее местоположение");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1424,7 +1424,7 @@ namespace Insania.Database.Migrations
                         .HasComment("Имя семьи");
 
                     b.Property<DateTime?>("FreezingTo")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("freezing_to")
                         .HasComment("Заморозка да");
 
@@ -1473,10 +1473,10 @@ namespace Insania.Database.Migrations
                         .HasColumnName("player_id")
                         .HasComment("Ссылка на игрока");
 
-                    b.Property<string>("PrefixName")
-                        .HasColumnType("text")
-                        .HasColumnName("prefix_name")
-                        .HasComment("Префикс имени");
+                    b.Property<long?>("PrefixNameId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("prefix_name_id")
+                        .HasComment("Ссылка на префикс имени");
 
                     b.Property<long>("TypeBodyId")
                         .HasColumnType("bigint")
@@ -1518,6 +1518,8 @@ namespace Insania.Database.Migrations
                     b.HasIndex("NationId");
 
                     b.HasIndex("PlayerId");
+
+                    b.HasIndex("PrefixNameId");
 
                     b.HasIndex("TypeBodyId");
 
@@ -1615,17 +1617,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Комментарий к весу");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1747,17 +1749,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1808,17 +1810,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1883,17 +1885,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цвет на карте");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -1995,17 +1997,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цвет на карте");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2082,17 +2084,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цвет на карте");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2145,17 +2147,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2227,17 +2229,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Цвет на карте");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2325,17 +2327,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Ссылка на страну");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2394,17 +2396,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2460,17 +2462,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2503,6 +2505,126 @@ namespace Insania.Database.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.Sociology.PrefixName", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Английское наименование");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
+                    b.ToTable("dir_prefixes_names", t =>
+                        {
+                            t.HasComment("Префиксы имён");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Sociology.PrefixNameNation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<long>("NationId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("nation_id")
+                        .HasComment("Ссылка на нацию");
+
+                    b.Property<long>("PrefixNameId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("prefix_name_id")
+                        .HasComment("Ссылка на префикс имени");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NationId");
+
+                    b.HasIndex("PrefixNameId", "NationId")
+                        .IsUnique();
+
+                    b.ToTable("un_prefixes_names_nations", t =>
+                        {
+                            t.HasComment("Префиксы имён");
+                        });
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.System.Log", b =>
                 {
                     b.Property<long>("Id")
@@ -2524,27 +2646,27 @@ namespace Insania.Database.Migrations
                         .HasComment("Данные на выход");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime?>("DateEnd")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_end")
                         .HasComment("Дата окончания");
 
                     b.Property<DateTime>("DateStart")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_start")
                         .HasComment("Дата начала");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2609,17 +2731,17 @@ namespace Insania.Database.Migrations
                         .HasComment("Английское наименование");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2667,17 +2789,17 @@ namespace Insania.Database.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_create")
                         .HasComment("Дата создания");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
                     b.Property<DateTime>("DateUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
@@ -2937,7 +3059,7 @@ namespace Insania.Database.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser<long>");
 
                     b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasComment("Дата рождения");
 
                     b.Property<string>("FirstName")
@@ -3180,6 +3302,10 @@ namespace Insania.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Insania.Database.Entities.Sociology.PrefixName", "PrefixName")
+                        .WithMany()
+                        .HasForeignKey("PrefixNameId");
+
                     b.HasOne("Insania.Database.Entities.Appearance.TypeBody", "TypeBody")
                         .WithMany()
                         .HasForeignKey("TypeBodyId")
@@ -3203,6 +3329,8 @@ namespace Insania.Database.Migrations
                     b.Navigation("Nation");
 
                     b.Navigation("Player");
+
+                    b.Navigation("PrefixName");
 
                     b.Navigation("TypeBody");
 
@@ -3362,6 +3490,25 @@ namespace Insania.Database.Migrations
                     b.Navigation("Ownership");
 
                     b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Sociology.PrefixNameNation", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Biology.Nation", "Nation")
+                        .WithMany()
+                        .HasForeignKey("NationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Insania.Database.Entities.Sociology.PrefixName", "PrefixName")
+                        .WithMany()
+                        .HasForeignKey("PrefixNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Nation");
+
+                    b.Navigation("PrefixName");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Politics.Organization", b =>

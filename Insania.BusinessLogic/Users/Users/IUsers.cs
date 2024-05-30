@@ -14,4 +14,11 @@ public interface IUsers
     /// <param name="request">Запрос</param>
     /// <returns></returns>
     Task<BaseResponse> AddUser(AddUserRequest? request);
+
+    /// <summary>
+    /// Метод проверки доступности логина
+    /// </summary>
+    /// <param name="login">Логин</param>
+    /// <returns></returns>
+    Task<BaseResponse> CheckLogin(string? login);
 }

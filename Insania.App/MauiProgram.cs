@@ -3,11 +3,16 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using Insania.App.Logic.Appearance;
 using Insania.App.Logic.Biology;
 using Insania.App.Logic.Chronology;
 using Insania.App.Logic.OutCategories;
 using Insania.App.Logic.Polititcs;
 using Insania.App.Logic.Users;
+using Insania.BusinessLogic.Appearance.EyesColors;
+using Insania.BusinessLogic.Appearance.HairsColors;
+using Insania.BusinessLogic.Appearance.TypesBodies;
+using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
@@ -16,6 +21,7 @@ using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Users.Authentication;
+using Insania.BusinessLogic.Users.Users;
 
 namespace Insania.App;
 
@@ -110,12 +116,17 @@ public static class MauiProgram
             //Добавляем сервисы
             builder.Services.AddScoped<ICheckConnection, CheckConnectionRequests>(); //проверка соединения
             builder.Services.AddScoped<IAuthentication, AuthenticationRequests>(); //аутентифкация
+            builder.Services.AddScoped<IUsers, UsersRequests>(); //работа с пользователями
             builder.Services.AddScoped<IRaces, RacesRequests>(); //работа с расами
             builder.Services.AddScoped<INations, NationsRequests>(); //работа с нациями
             builder.Services.AddScoped<IMonths, MonthsRequests>(); //работа с месяцами
             builder.Services.AddScoped<ICountries, CountriesRequests>(); //работа со странами
             builder.Services.AddScoped<IRegions, RegionsRequests>(); //работа с регионами
             builder.Services.AddScoped<IAreas, AreasRequests>(); //работа с областями
+            builder.Services.AddScoped<ITypesBodies, TypesBodiesRequests>(); //работа с типами телосложений
+            builder.Services.AddScoped<ITypesFaces, TypesFacesRequests>(); //работа с типами лиц
+            builder.Services.AddScoped<IHairsColors, HairsColorsRequests>(); //работа с цветами волос
+            builder.Services.AddScoped<IEyesColors, EyesColorsRequests>(); //работа с цветами глаз
 
             //Возвращаем построенное приложение
             return builder.Build();

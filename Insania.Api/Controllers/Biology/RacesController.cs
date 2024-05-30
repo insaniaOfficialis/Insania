@@ -24,6 +24,5 @@ public class RacesController(ILogger<RacesController> logger, IRaces races) : Ba
     /// <returns></returns>
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> GetRacesList() =>
-        await GetAnswerAsync(async () => { return await _races.GetRacesList(); });
+    public async Task<IActionResult> GetRacesList() => await GetAnswerAsync(_races.GetRacesList);
 }

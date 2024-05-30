@@ -53,6 +53,8 @@
   * Format
   * Minimum/Maximum
   * Keyboard
+  * Aspect
+  * AutoSize
   * Style
 
   * Loaded    

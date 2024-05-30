@@ -65,6 +65,9 @@ public class UsersService(ApplicationContext applicationContext, UserManager<Use
             //Сохраняем результат
             await _applicationContext.SaveChangesAsync();
 
+            //Фиксируем транзакцию
+            transaction.Commit();
+
             //Логгируем
             _logger.LogInformation(Informations.UserAdded);
 
@@ -93,10 +96,53 @@ public class UsersService(ApplicationContext applicationContext, UserManager<Use
             //Прокидываем ошибку
             throw;
         }
-        finally 
+    }
+
+    /// <summary>
+    /// Метод проверки доступности логина
+    /// </summary>
+    /// <param name="login">Логин</param>
+    /// <returns></returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    public async Task<BaseResponse> CheckLogin(string? login)
+    {
+        //Логгируем
+        _logger.LogInformation(Informations.EnteredAddUserMethod);
+
+        //Проверяем наличие запроса
+        if (login == null) throw new InnerException(Errors.EmptyLogin);
+
+        try
         {
-            //Фиксируем транзакцию
-            transaction.Commit();
+            //Ищем логин
+            bool success = (await _userManager.FindByNameAsync(login)) == null;
+
+            //Если нашли возвращаем ошибку
+            if (!success) throw new InnerException(Errors.LoginAlreadyExists);
+
+            //Логгируем
+            _logger.LogInformation(Informations.Success);
+
+            //Возвращаем ответ
+            return new BaseResponse(success);
+        }
+        catch (InnerException ex)
+        {
+
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
         }
     }
 }

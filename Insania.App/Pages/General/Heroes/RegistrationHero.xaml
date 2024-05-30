@@ -30,6 +30,7 @@
                              Margin="0,100,0,0"
                              WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                              Spacing="50">
+                    
                     <Label HorizontalOptions="Center"
                            Text="ОБЩЕЕ"
                            Style="{StaticResource TitleSecondary}"/>
@@ -111,6 +112,7 @@
                                        IsVisible="False"
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
+                    
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="ДАТА РОЖДЕНИЯ"
@@ -133,7 +135,7 @@
                         <Label HorizontalOptions="Start"
                                Text="Месяц рождения*:"
                                Style="{StaticResource TitleSecondary}"/>
-                        <Picker x:Name="BirtMonthPicker"
+                        <Picker x:Name="MonthBirtPicker"
                                 Margin="0,15,0,0"
                                 WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                 ItemsSource="{Binding Months}"
@@ -158,6 +160,7 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
+                    
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="МЕСТОПОЛОЖЕНИЕ"
@@ -219,6 +222,102 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
+                    
+                    <Label HorizontalOptions="Center"
+                           Margin="0,25,0,0"
+                           Text="ВНЕШНОСТЬ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Тип телосложения*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="TypeBodyPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding TypesBodies}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите тип телосложения'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Тип лица*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="TypeFacePicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding TypesFaces}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите тип лица'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Цвет волос*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="HairsColorPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding HairsColorFaces}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите цвет волос'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Цвет глаз*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="EyesColorPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding EyesColorFaces}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите цвет глаз'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Изображение персонажа*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Image x:Name="HeroImage"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               HeightRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Background="{StaticResource SecondaryButtonPressed}"
+                               Aspect="AspectFill"/>
+                        <Button x:Name="DownloadButton"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=160, Phone=120}"
+                                Text="Загрузить"
+                                Style="{StaticResource ButtonPrimary}"
+                                Clicked="Download_Clicked"/>
+                    </StackLayout>
+
+                    <Label HorizontalOptions="Center"
+                           Margin="0,25,0,0"
+                           Text="БИОГРАФИЯ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="BiographyStackLayout"
+                                 Spacing="50"/>
+                    <Button x:Name="AddBiorgaphyButton"
+                            Margin="0,50,0,0"
+                            WidthRequest="{OnIdiom Desktop=160, Phone=120}"
+                            Text="Добавить"
+                            Style="{StaticResource ButtonPrimary}"
+                            Clicked="AddBiorgaphy_Clicked"/>
+
                     <Button x:Name="SaveButton"
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"

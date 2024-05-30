@@ -74,4 +74,24 @@ public class RegionOwnership : BaseEntity
         OwnershipId = ownership.Id;
         Ownership = ownership;
     }
+
+    /// <summary>
+    /// Метод записи региона
+    /// </summary>
+    /// <param name="region">Регион</param>
+    public void SetRegion(Region region)
+    {
+        RegionId = region.Id;
+        Region = region;
+    }
+
+    /// <summary>
+    /// Метод записи владения
+    /// </summary>
+    /// <param name="ownership">Владение</param>
+    public void SetOwnership(Ownership ownership)
+    {
+        Ownership = ownership;
+        OwnershipId = ownership.Id;
+    }
 }

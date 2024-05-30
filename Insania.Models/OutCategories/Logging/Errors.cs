@@ -35,10 +35,17 @@ public static class Errors
     public const string EmptyPatronymic = "Пустое отчество";
     public const string EmptyPhoneNumberEmailLinkVK = "Пустой номер телефона и почта, и ссылка на вк";
     public const string EmptyServiceAuthentication = "Пустой сервис аутентификации";
+    public const string EmptyServiceUsers = "Пустой сервис работы с пользователями";
     public const string EmptyUser = "Пустой пользователь";
     public const string EmptyUrlAuthentication = "Пустая ссылка аутентификации";
+    public const string EmptyUrlUsers = "Пустая ссылка работы с пользователями";
     public const string FailedCreateUser = "Не удалось создать пользователя";
+    public const string IncorrectBirthDate = "Некорректная дата рождение. Минимально допустимая:";
+    public const string IncorrectEmail = "Некорректная почта";
+    public const string IncorrectLinkVK = "Некорректная ссылка в вк";
     public const string IncorrectPassword = "Некорректный пароль";
+    public const string IncorrectPhoneNumber = "Некорректный номер телефона";
+    public const string LoginAlreadyExists = "Логин уже существует";
     public const string NotExistsUser = "Не найден пользователь";
     public const string UserIsBlocked = "Пользвоатель заблокирован";
 
@@ -95,6 +102,14 @@ public static class Errors
     public const string EmptyEyesColor = "Пустой цвет глаз";
     public const string EmptyTypeBody = "Пустой тип телосложения";
     public const string EmptyTypeFace = "Пустой тип лица";
+    public const string EmptyServiceEyesColors = "Пустой сервис работы с цветами глаз";
+    public const string EmptyServiceHairsColors = "Пустой сервис работы с цветами волос";
+    public const string EmptyServiceTypesBodies = "Пустой сервис работы с типами телосложений";
+    public const string EmptyServiceTypesFaces = "Пустой сервис работы с типами лиц";
+    public const string EmptyUrlEyesColors = "Пустая ссылка работы с цветами глаз";
+    public const string EmptyUrlHairsColors = "Пустая ссылка работы с цветами волос";
+    public const string EmptyUrlTypesBodies = "Пустая ссылка работы с типами телосложений";
+    public const string EmptyUrlTypesFaces = "Пустая ссылка работы с типами лиц";
 
     #endregion
 
@@ -161,6 +176,8 @@ public static class Errors
     #endregion
 
     #region Социология
+
+    public const string EmptyPrefixName = "Пустой префикс имени";
 
     #endregion
 

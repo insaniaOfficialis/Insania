@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using Insania.Models.OutCategories.Base;
+using Insania.Models.OutCategories.Exceptions;
 
 namespace Insania.Api.Controllers.OutCategories;
 
@@ -63,6 +64,11 @@ public class BaseController(ILogger<BaseController> logger) : Controller
                 BaseResponse response = new(false, new BaseError(500, "Нестандартная модель ответа"));
                 return StatusCode(500, response);
             }
+        }
+        catch (InnerException ex)
+        {
+            _logger.LogError("{method}. Обработанная ошибка: {error}", action.Method.Name, ex);
+            return StatusCode(400, new BaseResponse(false, new BaseError(400, ex.Message)));
         }
         catch (Exception ex)
         {

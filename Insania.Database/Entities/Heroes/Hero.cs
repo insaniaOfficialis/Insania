@@ -9,6 +9,7 @@ using Insania.Database.Entities.Chronology;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
 using Insania.Entities.OutCategories;
+using Insania.Database.Entities.Sociology;
 
 namespace Insania.Database.Entities.Heroes;
 
@@ -39,11 +40,16 @@ public class Hero : Reestr
     public string PersonalName { get; private set; }
 
     /// <summary>
-    /// Префикс имени
+    /// Ссылка на префикс имени
     /// </summary>
-    [Column("prefix_name")]
-    [Comment("Префикс имени")]
-    public string? PrefixName { get; private set; }
+    [Column("prefix_name_id")]
+    [Comment("Ссылка на префикс имени")]
+    public long? PrefixNameId { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство префикса имени
+    /// </summary>
+    public PrefixName? PrefixName { get; private set; }
 
     /// <summary>
     /// Имя семьи
@@ -192,7 +198,6 @@ public class Hero : Reestr
     /// </summary>
     public Area CurrentLocation { get; private set; }
 
-
     /// <summary>
     /// Простой конструктор модели сущности персонажа
     /// </summary>
@@ -234,7 +239,7 @@ public class Hero : Reestr
     /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
     /// <param name="currentLocation">Текущее местоположение</param>
-    public Hero(string user, bool isSystem, Player player, string personalName, string? prefixName, string? familyName, 
+    public Hero(string user, bool isSystem, Player player, string personalName, PrefixName? prefixName, string? familyName, 
         int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height, int weight, 
         HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive, bool isCurrent,
         DateTime? freezingTo, Area currentLocation) : base(user, isSystem)
@@ -242,6 +247,7 @@ public class Hero : Reestr
         PlayerId = player.Id;
         Player = player;
         PersonalName = personalName;
+        PrefixNameId = prefixName?.Id;
         PrefixName = prefixName;
         FamilyName = familyName;
         BirthDay = birthDay;
@@ -293,7 +299,7 @@ public class Hero : Reestr
     /// <param name="isCurrent">Признак текущего</param>
     /// <param name="freezingTo">Заморозка до</param>
     /// <param name="currentLocation">Текущее местоположение</param>
-    public Hero(long id, string user, bool isSystem, Player player, string personalName, string? prefixName, string? familyName, 
+    public Hero(long id, string user, bool isSystem, Player player, string personalName, PrefixName? prefixName, string? familyName, 
         int birthDay, Month birthMonth, int birthCycle, Nation nation, bool gender, int height, int weight, 
         HairsColor? hairsColor, EyesColor eyesColor, TypeBody typeBody, TypeFace typeFace, bool isActive, bool isCurrent,
         DateTime? freezingTo, Area currentLocation) : base(id, user, isSystem)
@@ -301,6 +307,7 @@ public class Hero : Reestr
         PlayerId = player.Id;
         Player = player;
         PersonalName = personalName;
+        PrefixNameId = prefixName?.Id;
         PrefixName = prefixName;
         FamilyName = familyName;
         BirthDay = birthDay;
@@ -350,8 +357,9 @@ public class Hero : Reestr
     /// Метод записи префикса имени
     /// </summary>
     /// <param name="prefixName">Префикс имени</param>
-    public void SetPrefixName(string prefixName)
+    public void SetPrefixName(PrefixName prefixName)
     {
+        PrefixNameId = prefixName.Id;
         PrefixName = prefixName;
     }
 

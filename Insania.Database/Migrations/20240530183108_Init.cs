@@ -19,11 +19,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     rgb = table.Column<string>(type: "text", nullable: true, comment: "Rgb-модель цвета"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -41,11 +41,11 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     color_on_map = table.Column<string>(type: "text", nullable: false, comment: "Цвет на карте"),
                     functions = table.Column<string>(type: "text", nullable: false, comment: "Функции"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -62,11 +62,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     rgb = table.Column<string>(type: "text", nullable: false, comment: "Rgb-модель цвета"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -83,11 +83,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     value = table.Column<string>(type: "text", nullable: true, comment: "Значение"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -104,11 +104,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     scope_activity = table.Column<string>(type: "text", nullable: false, comment: "Сфера деятельности"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -119,16 +119,36 @@ namespace Insania.Database.Migrations
                 comment: "Должности");
 
             migrationBuilder.CreateTable(
+                name: "dir_prefixes_names",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
+                    user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
+                    user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
+                    name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_dir_prefixes_names", x => x.id);
+                },
+                comment: "Префиксы имён");
+
+            migrationBuilder.CreateTable(
                 name: "dir_races",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -145,11 +165,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     coefficient_accrual_honor_points = table.Column<double>(type: "double precision", nullable: false, comment: "Коэффициент начисления баллов почёта"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -166,11 +186,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     sequence_number = table.Column<int>(type: "integer", nullable: false, comment: "Порядковый номер"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -187,11 +207,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     previous_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на предыдущий статус"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -212,11 +232,11 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -232,11 +252,11 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -253,11 +273,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     path = table.Column<string>(type: "text", nullable: false, comment: "Путь"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -273,11 +293,11 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -293,11 +313,11 @@ namespace Insania.Database.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -316,15 +336,15 @@ namespace Insania.Database.Migrations
                     method = table.Column<string>(type: "text", nullable: false, comment: "Наименование вызываемого метода"),
                     type = table.Column<string>(type: "text", nullable: false, comment: "Тип вызываемого метода"),
                     success = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак успешного выполнения"),
-                    date_start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата начала"),
-                    date_end = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата окончания"),
+                    date_start = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата начала"),
+                    date_end = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата окончания"),
                     data_in = table.Column<string>(type: "text", nullable: true, comment: "Данные на вход"),
                     data_out = table.Column<string>(type: "text", nullable: true, comment: "Данные на выход"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -342,11 +362,11 @@ namespace Insania.Database.Migrations
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     is_success = table.Column<bool>(type: "boolean", nullable: true, comment: "Успешность"),
                     result_execution = table.Column<string>(type: "text", nullable: true, comment: "Результат выполнения"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -399,7 +419,7 @@ namespace Insania.Database.Migrations
                     Patronymic = table.Column<string>(type: "text", nullable: true, comment: "Отчество"),
                     IsBlocked = table.Column<bool>(type: "boolean", nullable: true, comment: "Признак заблокированного пользователя"),
                     Gender = table.Column<bool>(type: "boolean", nullable: true, comment: "Пол (истина - мужской/ложь - женский)"),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата рождения")
+                    BirthDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата рождения")
                 },
                 constraints: table =>
                 {
@@ -427,11 +447,11 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     race_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на расу"),
                     language_for_personal_names = table.Column<string>(type: "text", nullable: false, comment: "Язык для имён"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -455,11 +475,11 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     season_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на сезон"),
                     sequence_number = table.Column<int>(type: "integer", nullable: false, comment: "Порядковый номер"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
                 },
@@ -484,11 +504,11 @@ namespace Insania.Database.Migrations
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     extention = table.Column<string>(type: "text", nullable: false, comment: "Расширение"),
                     type_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -513,11 +533,11 @@ namespace Insania.Database.Migrations
                     color_on_map = table.Column<string>(type: "text", nullable: false, comment: "Цвет на карте"),
                     type_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип"),
                     parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -546,11 +566,11 @@ namespace Insania.Database.Migrations
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     type_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип"),
                     parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -578,11 +598,11 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на пользователя"),
                     loyalty_points = table.Column<int>(type: "integer", nullable: false, comment: "Баллы верности"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -598,6 +618,38 @@ namespace Insania.Database.Migrations
                 comment: "Игроки");
 
             migrationBuilder.CreateTable(
+                name: "un_prefixes_names_nations",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    prefix_name_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на префикс имени"),
+                    nation_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на нацию"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
+                    user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
+                    user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_un_prefixes_names_nations", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_un_prefixes_names_nations_dir_nations_nation_id",
+                        column: x => x.nation_id,
+                        principalTable: "dir_nations",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_un_prefixes_names_nations_dir_prefixes_names_prefix_name_id",
+                        column: x => x.prefix_name_id,
+                        principalTable: "dir_prefixes_names",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Префиксы имён");
+
+            migrationBuilder.CreateTable(
                 name: "re_countries",
                 columns: table => new
                 {
@@ -608,11 +660,11 @@ namespace Insania.Database.Migrations
                     language_for_personal_names = table.Column<string>(type: "text", nullable: false, comment: "Язык для названий"),
                     organization_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на организацию"),
                     code = table.Column<string>(type: "text", nullable: false, comment: "Код"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -639,11 +691,11 @@ namespace Insania.Database.Migrations
                     organization_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на организацию"),
                     parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
                     code = table.Column<string>(type: "text", nullable: false, comment: "Код"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -672,11 +724,11 @@ namespace Insania.Database.Migrations
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
                     country_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на страну"),
                     parent_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на родителя"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -706,11 +758,11 @@ namespace Insania.Database.Migrations
                     color_on_map = table.Column<string>(type: "text", nullable: false, comment: "Цвет на карте"),
                     country_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на страну"),
                     code = table.Column<string>(type: "text", nullable: false, comment: "Код"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -737,11 +789,11 @@ namespace Insania.Database.Migrations
                     chapter_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на капитул"),
                     honor_points = table.Column<int>(type: "integer", nullable: false, comment: "Баллы почёта"),
                     mentor_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на наставника"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -794,11 +846,11 @@ namespace Insania.Database.Migrations
                     fraction_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на фракцию"),
                     ownership_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на владение"),
                     code = table.Column<string>(type: "text", nullable: false, comment: "Код"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -839,11 +891,11 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     region_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на регион"),
                     ownership_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на владение"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления")
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления")
                 },
                 constraints: table =>
                 {
@@ -871,7 +923,7 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     player_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на игрока"),
                     personal_name = table.Column<string>(type: "text", nullable: false, comment: "Личное имя"),
-                    prefix_name = table.Column<string>(type: "text", nullable: true, comment: "Префикс имени"),
+                    prefix_name_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на префикс имени"),
                     family_name = table.Column<string>(type: "text", nullable: true, comment: "Имя семьи"),
                     birth_day = table.Column<int>(type: "integer", nullable: false, comment: "День рождения"),
                     birth_month_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на месяц рождения"),
@@ -886,13 +938,13 @@ namespace Insania.Database.Migrations
                     type_face_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на тип лица"),
                     is_active = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак активности"),
                     is_current = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак текущего"),
-                    freezing_to = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Заморозка да"),
+                    freezing_to = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Заморозка да"),
                     current_location_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на текущее местоположение"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -921,6 +973,11 @@ namespace Insania.Database.Migrations
                         principalTable: "dir_nations",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_re_heroes_dir_prefixes_names_prefix_name_id",
+                        column: x => x.prefix_name_id,
+                        principalTable: "dir_prefixes_names",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_re_heroes_dir_types_bodies_type_body_id",
                         column: x => x.type_body_id,
@@ -962,11 +1019,11 @@ namespace Insania.Database.Migrations
                     month_end_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на месяц окончания"),
                     cycle_end = table.Column<int>(type: "integer", nullable: true, comment: "Цикл окончания"),
                     text = table.Column<string>(type: "text", nullable: false, comment: "Текст"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -1027,11 +1084,11 @@ namespace Insania.Database.Migrations
                     comment_on_eye_color = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к цвету глаз"),
                     image_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по изображению"),
                     comment_on_image = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к изображению"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -1064,11 +1121,11 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     hero_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на персонажа"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     file_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на файл"),
                     sequence_number = table.Column<int>(type: "integer", nullable: true, comment: "Порядковый номер")
                 },
@@ -1104,11 +1161,11 @@ namespace Insania.Database.Migrations
                     comment_on_date_end = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к дате окончания"),
                     text_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по тексту"),
                     comment_on_text = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к тексту"),
-                    date_create = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата создания"),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
-                    date_update = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, comment: "Дата обновления"),
+                    date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
-                    date_deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true, comment: "Дата удаления"),
+                    date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     is_system = table.Column<bool>(type: "boolean", nullable: false, comment: "Признак системной записи")
                 },
                 constraints: table =>
@@ -1183,6 +1240,12 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_dir_posts_alias",
                 table: "dir_posts",
+                column: "alias",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_dir_prefixes_names_alias",
+                table: "dir_prefixes_names",
                 column: "alias",
                 unique: true);
 
@@ -1408,6 +1471,11 @@ namespace Insania.Database.Migrations
                 column: "player_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_re_heroes_prefix_name_id",
+                table: "re_heroes",
+                column: "prefix_name_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_re_heroes_type_body_id",
                 table: "re_heroes",
                 column: "type_body_id");
@@ -1519,6 +1587,17 @@ namespace Insania.Database.Migrations
                 column: "hero_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_un_prefixes_names_nations_nation_id",
+                table: "un_prefixes_names_nations",
+                column: "nation_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_un_prefixes_names_nations_prefix_name_id_nation_id",
+                table: "un_prefixes_names_nations",
+                columns: ["prefix_name_id", "nation_id"],
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_un_regions_ownerships_ownership_id",
                 table: "un_regions_ownerships",
                 column: "ownership_id");
@@ -1553,6 +1632,9 @@ namespace Insania.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "un_files_heroes");
+
+            migrationBuilder.DropTable(
+                name: "un_prefixes_names_nations");
 
             migrationBuilder.DropTable(
                 name: "un_regions_ownerships");
@@ -1598,6 +1680,9 @@ namespace Insania.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "dir_nations");
+
+            migrationBuilder.DropTable(
+                name: "dir_prefixes_names");
 
             migrationBuilder.DropTable(
                 name: "dir_types_bodies");

@@ -24,6 +24,5 @@ public class MonthsController(ILogger<MonthsController> logger, IMonths months) 
     /// <returns></returns>
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> GetMonthsList() =>
-        await GetAnswerAsync(async () => { return await _months.GetMonthsList(); });
+    public async Task<IActionResult> GetMonthsList() => await GetAnswerAsync(_months.GetMonthsList);
 }

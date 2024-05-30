@@ -25,6 +25,7 @@ using Insania.Database.Entities.Users;
 using FileEntity = Insania.Database.Entities.Files.File;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
+using Insania.Database.Entities.Sociology;
 
 namespace Insania.Initializer.Initialization.InitializationDataBase;
 
@@ -179,6 +180,12 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
             //АДМИНИСТРАТОРЫ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationAdministrators"])) await InitializationAdministrators();
+
+            //ПРЕФИКСЫ ИМЁН
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationPrefixesNames"])) await InitializationPrefixesNames();
+
+            //ПРЕФИКСЫ ИМЁН НАЦИЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationPrefixesNamesNations"])) await InitializationPrefixesNamesNations();
 
             //ПЕРСОНАЖИ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationHeroes"])) await InitializationHeroes();
@@ -1084,6 +1091,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //Проверяем наличие записи
             value = "Алмус";
             Player? player = await _applicationContext.Players.Include(x => x.User).FirstAsync(x => x.User.UserName == "divinitas") ?? throw new InnerException(Errors.EmptyPlayer);
+            PrefixName? prefixName = null;
             Month? month = await _applicationContext.Months.FirstAsync(x => x.Name == "Гроз") ?? throw new InnerException(Errors.EmptyMonth);
             Nation? nation = await _applicationContext.Nations.FirstAsync(x => x.Name == "Древний") ?? throw new InnerException(Errors.EmptyNation);
             HairsColor? hairsColor = null;
@@ -1094,7 +1102,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Heroes.AnyAsync(x => x.Player == player && x.PersonalName == value))
             {
                 //Добавляем запись
-                Hero hero = new(_userCreated, true, player, value, null, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null, area);
+                Hero hero = new(_userCreated, true, player, value, prefixName, null, 1, month, -9999, nation, true, 354, 201, hairsColor, eyesColor, typeBody, typeFace, true, true, null, area);
                 await _applicationContext.Heroes.AddAsync(hero);
 
                 //Логгируем
@@ -1102,6 +1110,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             }
             else Console.WriteLine("{0}{1}", value, Informations.HeroAlreadyAdded);
             player = null;
+            prefixName = null;
             month = null;
             nation = null;
             hairsColor = null;
@@ -10288,6 +10297,20 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             else Console.WriteLine("Монт{0}", Informations.NationAlreadyAdded);
             race = null;
 
+            //Проверяем нацию огров
+            race = await _applicationContext.Races.FirstAsync(x => x.Name == "Огр") ?? throw new InnerException(Errors.EmptyRace);
+            if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Огр"))
+            {
+                //Добавляем нацию огров
+                Nation nation = new(_userCreated, "Огр", race, "Датский");
+                await _applicationContext.Nations.AddAsync(nation);
+
+                //Логгируем
+                Console.WriteLine("Огр{0}", Informations.NationAdded);
+            }
+            else Console.WriteLine("Огр{0}", Informations.NationAlreadyAdded);
+            race = null;
+
             //Проверяем нацию волчьих метаморфов
             race = await _applicationContext.Races.FirstAsync(x => x.Name == "Метаморф") ?? throw new InnerException(Errors.EmptyRace);
             if (!await _applicationContext.Nations.AnyAsync(x => x.Race == race && x.Name == "Волчий метаморф"))
@@ -10799,6 +10822,147 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     #endregion
 
     #region Социология
+
+    /// <summary>
+    /// Метод инициализации префиксов имён
+    /// </summary>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationPrefixesNames()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationPrefixesNamesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "из дома";
+            if (!await _applicationContext.PrefixesNames.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                PrefixName prefixName = new(_userCreated, value);
+                await _applicationContext.PrefixesNames.AddAsync(prefixName);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.PrefixNameAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.PrefixNameAlreadyAdded);
+            value = null;
+
+            //Проверяем наличие записи
+            value = "из клана";
+            if (!await _applicationContext.PrefixesNames.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                PrefixName prefixName = new(_userCreated, value);
+                await _applicationContext.PrefixesNames.AddAsync(prefixName);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.PrefixNameAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.PrefixNameAlreadyAdded);
+            value = null;
+
+            //Проверяем наличие записи
+            value = "из рода";
+            if (!await _applicationContext.PrefixesNames.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                PrefixName prefixName = new(_userCreated, value);
+                await _applicationContext.PrefixesNames.AddAsync(prefixName);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.PrefixNameAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.PrefixNameAlreadyAdded);
+            value = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_prefixes_names_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
+
+    /// <summary>
+    /// Метод инициализации префиксов имён наций
+    /// </summary>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationPrefixesNamesNations()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationPrefixesNamesNationsMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Проверяем наличие записи
+            PrefixName? prefixName = await _applicationContext.PrefixesNames.FirstAsync(x => x.Name == "из дома") ?? throw new InnerException(Errors.EmptyPrefixName);
+            Nation? nation = await _applicationContext.Nations.FirstAsync(x => x.Name == "Альв") ?? throw new InnerException(Errors.EmptyNation);
+            if (!await _applicationContext.PrefixesNamesNations.Include(x => x.PrefixName).Include(x => x.Nation).AnyAsync(x => x.PrefixName == prefixName && x.Nation == nation))
+            {
+                //Добавляем запись
+                PrefixNameNation prefixNameNation = new(_userCreated, prefixName, nation);
+                await _applicationContext.PrefixesNamesNations.AddAsync(prefixNameNation);
+
+                //Логгируем
+                Console.WriteLine("из дома/альв{0}", Informations.PrefixNameNationAdded);
+            }
+            else Console.WriteLine("из дома/альв{0}", Informations.PrefixNameNationAlreadyAdded);
+            prefixName = null;
+            nation = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_prefixes_names_nations_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 
