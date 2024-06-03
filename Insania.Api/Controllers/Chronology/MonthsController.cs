@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Chronology;
 /// <summary>
 /// Контроллер месяцев
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="months">Интерфейс работы с месяцами</param>
 [Route("api/v1/months")]
 public class MonthsController(ILogger<MonthsController> logger, IMonths months) : BaseController(logger)

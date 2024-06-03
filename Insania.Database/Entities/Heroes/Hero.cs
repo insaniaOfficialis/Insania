@@ -8,8 +8,8 @@ using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
-using Insania.Entities.OutCategories;
 using Insania.Database.Entities.Sociology;
+using Insania.Entities.OutCategories;
 
 namespace Insania.Database.Entities.Heroes;
 

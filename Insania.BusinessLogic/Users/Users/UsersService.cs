@@ -15,7 +15,7 @@ namespace Insania.BusinessLogic.Users.Users;
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
 /// <param name="userManager">Менеджер пользователей</param>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 public class UsersService(ApplicationContext applicationContext, UserManager<User> userManager, ILogger<UsersService> logger) : 
     IUsers
 {
@@ -30,7 +30,7 @@ public class UsersService(ApplicationContext applicationContext, UserManager<Use
     private readonly UserManager<User> _userManager = userManager;
 
     /// <summary>
-    /// Интерфейс сервиса записи логов
+    /// Интерфейс записи логов
     /// </summary>
     private readonly ILogger<UsersService> _logger = logger;
 
@@ -57,7 +57,8 @@ public class UsersService(ApplicationContext applicationContext, UserManager<Use
             User user = new(request.Login!, request.Password, request.PhoneNumber, request.LinkVK, false, (request.Gender ?? true),
                 request.LastName!, request.FirstName!, request.Patronymic!, request.BirthDate);
 
-            var result = await _userManager.CreateAsync(user, request.Password!) ?? throw new InnerException(Errors.EmptySeason);
+            //Добавляем пользователя
+            var result = await _userManager.CreateAsync(user, request.Password!) ?? throw new InnerException(Errors.EmptyUser);
 
             //Если не успешно, выдаём ошибку
             if (!result.Succeeded) throw new InnerException(result?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);

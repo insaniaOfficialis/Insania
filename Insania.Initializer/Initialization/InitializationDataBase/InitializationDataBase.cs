@@ -19,13 +19,13 @@ using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
+using Insania.Database.Entities.Sociology;
 using Insania.Database.Entities.System;
 using Insania.Database.Entities.Users;
-
-using FileEntity = Insania.Database.Entities.Files.File;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
-using Insania.Database.Entities.Sociology;
+
+using FileEntity = Insania.Database.Entities.Files.File;
 
 namespace Insania.Initializer.Initialization.InitializationDataBase;
 
@@ -345,7 +345,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (!await _applicationContext.Parameters.AnyAsync(x => x.Name == value))
             {
                 //Добавляем запись
-                Parameter parameter = new(_userCreated, value, "1 день месяца золота 1800 цикла");
+                Parameter parameter = new(_userCreated, value, "1|Zolota|1800");
                 await _applicationContext.Parameters.AddAsync(parameter);
 
                 //Логгируем

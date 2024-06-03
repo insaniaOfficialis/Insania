@@ -14,8 +14,8 @@ namespace Insania.BusinessLogic.Politics.Countries;
 /// Сервис работы со странами
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
-/// <param name="mapper">Интерфейс сервиса преобразования моделей</param>
+/// <param name="logger">Интерфейс записи логов</param>
+/// <param name="mapper">Интерфейс преобразования моделей</param>
 public class CountriesService(ApplicationContext applicationContext, ILogger<CountriesService> logger, IMapper mapper) :
     ICountries
 {
@@ -25,12 +25,12 @@ public class CountriesService(ApplicationContext applicationContext, ILogger<Cou
     public ApplicationContext _applicationContext = applicationContext;
 
     /// <summary>
-    /// Интерфейс сервиса записи логов
+    /// Интерфейс записи логов
     /// </summary>
     private readonly ILogger<CountriesService> _logger = logger;
 
     /// <summary>
-    /// Интерфейс сервиса преобразования моделей
+    /// Интерфейс преобразования моделей
     /// </summary>
     private readonly IMapper _mapper = mapper;
 

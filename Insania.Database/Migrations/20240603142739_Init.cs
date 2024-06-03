@@ -25,7 +25,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -89,7 +89,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -110,7 +110,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -130,7 +130,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -150,7 +150,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -171,7 +171,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -192,7 +192,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -213,7 +213,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -238,7 +238,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -258,7 +258,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -279,7 +279,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -299,7 +299,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -319,7 +319,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -453,7 +453,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -481,7 +481,7 @@ namespace Insania.Database.Migrations
                     user_update = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, обновивший"),
                     date_deleted = table.Column<DateTime>(type: "timestamp without time zone", nullable: true, comment: "Дата удаления"),
                     name = table.Column<string>(type: "text", nullable: false, comment: "Наименование"),
-                    alias = table.Column<string>(type: "text", nullable: false, comment: "Английское наименование")
+                    alias = table.Column<string>(type: "text", nullable: false, comment: "Псевдоним")
                 },
                 constraints: table =>
                 {
@@ -1578,7 +1578,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_files_heroes_file_id_hero_id",
                 table: "un_files_heroes",
-                columns: ["file_id", "hero_id"],
+                columns: new[] { "file_id", "hero_id" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1594,7 +1594,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_prefixes_names_nations_prefix_name_id_nation_id",
                 table: "un_prefixes_names_nations",
-                columns: ["prefix_name_id", "nation_id"],
+                columns: new[] { "prefix_name_id", "nation_id" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1605,7 +1605,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_regions_ownerships_region_id_ownership_id",
                 table: "un_regions_ownerships",
-                columns: ["region_id", "ownership_id"],
+                columns: new[] { "region_id", "ownership_id" },
                 unique: true);
         }
 

@@ -121,6 +121,7 @@ public partial class AddUserRequest
         if (!string.IsNullOrWhiteSpace(linkVK) && !CheckingLinkVK(linkVK!)) throw new InnerException(Errors.IncorrectLinkVK);
         if (birthDate > DateTime.Now.AddYears(-16).AddDays(1)) throw new InnerException(string.Format("{0} {1}", Errors.IncorrectBirthDate, DateTime.Now.AddYears(-16).AddDays(1).ToString("dd.MM.yyyy")));
 
+        //Заполняем модель
         Gender = gender ?? throw new InnerException(Errors.EmptyGender);
         BirthDate = birthDate ?? throw new InnerException(Errors.EmptyBirthDate);
         Login = login;

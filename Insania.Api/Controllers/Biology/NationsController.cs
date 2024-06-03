@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Biology;
 /// <summary>
 /// Контроллер наций
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="nations">Интерфейс работы с нациями</param>
 [Route("api/v1/nations")]
 public class NationsController(ILogger<NationsController> logger, INations nations) : BaseController(logger)

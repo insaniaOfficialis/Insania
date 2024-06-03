@@ -1,4 +1,7 @@
-﻿namespace Insania.Models.Heroes.BiographiesHeroes;
+﻿using Insania.Models.OutCategories.Exceptions;
+using Insania.Models.OutCategories.Logging;
+
+namespace Insania.Models.Heroes.BiographiesHeroes;
 
 /// <summary>
 /// Модель запроса добавления биографии персонажа
@@ -8,42 +11,42 @@ public class AddBiographyHeroRequest
     /// <summary>
     /// Ссылка на персонажа
     /// </summary>
-    public long? HeroId { get; private set; }
+    public long? HeroId { get; set; }
 
     /// <summary>
     /// День начала
     /// </summary>
-    public int? DayBegin { get; private set; }
+    public int? DayBegin { get; set; }
 
     /// <summary>
     /// Ссылка на месяц начала
     /// </summary>
-    public long? MonthBeginId { get; private set; }
+    public long? MonthBeginId { get; set; }
 
     /// <summary>
     /// Цикл начала
     /// </summary>
-    public int? CycleBegin { get; private set; }
+    public int? CycleBegin { get; set; }
 
     /// <summary>
     /// День окончания
     /// </summary>
-    public int? DayEnd { get; private set; }
+    public int? DayEnd { get; set; }
 
     /// <summary>
     /// Ссылка на месяц окончания
     /// </summary>
-    public long? MonthEndId { get; private set; }
+    public long? MonthEndId { get; set; }
 
     /// <summary>
     /// Цикл окончания
     /// </summary>
-    public int? CycleEnd { get; private set; }
+    public int? CycleEnd { get; set; }
 
     /// <summary>
     /// Текст
     /// </summary>
-    public string? Text { get; private set; }
+    public string? Text { get; set; }
 
     /// <summary>
     /// Простой конструктор модели запроса добавления биографии персонажа
@@ -63,15 +66,29 @@ public class AddBiographyHeroRequest
     /// <param name="monthEnd">Месяц окончания</param>
     /// <param name="cycleEnd">Цикл окончания</param>
     /// <param name="text">Текст</param>
-    public AddBiographyHeroRequest(int? dayBegin, long? monthBegin, int? cycleBegin, int? dayEnd, long? monthEnd, int? cycleEnd,
-        string? text)
+    public AddBiographyHeroRequest(string? dayBegin, long? monthBegin, string? cycleBegin, string? dayEnd, long? monthEnd,
+        string? cycleEnd, string? text)
     {
-        DayBegin = dayBegin;
+        //Обрабатываем входные данные
+        int endDay = 0, endCycle = 0;
+        if (!int.TryParse(dayBegin, out int beginDay)) throw new InnerException(Errors.IncorrectDay);
+        if (dayEnd != null && !int.TryParse(dayEnd, out endDay)) throw new InnerException(Errors.IncorrectDay);
+        if (!int.TryParse(cycleBegin, out int beginCycle)) throw new InnerException(Errors.IncorrectCycle);
+        if (cycleEnd != null && !int.TryParse(cycleEnd, out endCycle)) throw new InnerException(Errors.IncorrectCycle);
+
+        //Проверяем входные данные
+        if (beginDay == 0 || monthBegin == null || beginCycle == 0) throw new InnerException(Errors.EmptyBiographyhDate);
+        if (string.IsNullOrWhiteSpace(text)) throw new InnerException(Errors.EmptyBiographyhText);
+        if (beginDay > 30 || beginDay < 1) throw new InnerException(Errors.IncorrectDay);
+        if (endDay != 0 && (endDay > 30 || endDay < 1)) throw new InnerException(Errors.IncorrectDay);
+
+        //Заполняем модель
+        DayBegin = beginDay;
         MonthBeginId = monthBegin;
-        CycleBegin = cycleBegin;
-        DayEnd = dayEnd;
+        CycleBegin = beginCycle;
+        DayEnd = endDay != 0 ? endDay : null;
         MonthEndId = monthEnd;
-        CycleEnd = cycleEnd;
+        CycleEnd = endCycle != 0 ? endCycle : null;
         Text = text;
     }
 }

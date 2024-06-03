@@ -14,6 +14,11 @@ namespace Insania.Database.Entities.Sociology;
 public class PrefixName : Guide
 {
     /// <summary>
+    /// Навигационное свойство префиксов имён наций
+    /// </summary>
+    public ICollection<PrefixNameNation>? PrefixNameNations { get; set; }
+
+    /// <summary>
     /// Простой конструктор модели сущности префикса имени
     /// </summary>
     public PrefixName() : base()

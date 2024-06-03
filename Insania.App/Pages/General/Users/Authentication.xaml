@@ -29,7 +29,7 @@
                 </StackLayout>
                 <StackLayout>
                     <Entry x:Name="PasswordEntry"
-                           Margin="0,15,0,0"
+                           Margin="0,20,0,0"
                            WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                            Placeholder="Пароль"
                            IsPassword="True"

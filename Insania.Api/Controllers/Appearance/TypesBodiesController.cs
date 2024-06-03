@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Appearance;
 /// <summary>
 /// Контроллер типов телосложений
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="typesBodies">Интерфейс работы с типами телосложений</param>
 [Route("api/v1/typesBodies")]
 public class TypesBodiesController(ILogger<TypesBodiesController> logger, ITypesBodies typesBodies) : BaseController(logger)

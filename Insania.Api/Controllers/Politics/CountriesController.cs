@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Politics;
 /// <summary>
 /// Контроллер стран
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="countries">Интерфейс работы со странами</param>
 [Route("api/v1/countries")]
 public class CountriesController(ILogger<CountriesController> logger, ICountries countries) : BaseController(logger)

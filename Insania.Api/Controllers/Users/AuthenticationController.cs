@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Users;
 /// <summary>
 /// Контроллер аутентификации
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="authentication">Интерфейс атуентифкации</param>
 [Route("api/v1/authentication")]
 public class AuthenticationController(ILogger<AuthenticationController> logger, IAuthentication authentication) : 

@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Appearance;
 /// <summary>
 /// Контроллер цветов глаз
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="eyesColors">Интерфейс работы с цветами глаз</param>
 [Route("api/v1/eyesColors")]
 public class EyesColorsController(ILogger<EyesColorsController> logger, IEyesColors eyesColors) : BaseController(logger)

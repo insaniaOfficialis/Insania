@@ -3,11 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
+using Insania.Database.Entities.AccessRights;
+using Insania.Database.Entities.Users;
 using Insania.Entities.Context;
 using Insania.Initializer.Initialization.InitializationDataBase;
 using Insania.Models.OutCategories.Exceptions;
-using Insania.Database.Entities.AccessRights;
-using Insania.Database.Entities.Users;
 using Insania.Models.OutCategories.Logging;
 
 namespace Insania.Initializer;

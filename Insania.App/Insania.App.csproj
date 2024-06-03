@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>Insania.App</ApplicationTitle>
+		<ApplicationTitle>Инсания</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.insania.app</ApplicationId>
@@ -39,11 +39,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<!-- App icon for Windows -->
+    <MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\desktopicon.svg" ForegroundFile="Resources\AppIcon\desktopiconfg.svg" />
 
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+    <!-- App icon for all other platforms -->
+    <MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'" Include="Resources\AppIcon\mobileicon.svg" ForegroundFile="Resources\AppIcon\mobileiconfg.svg" ForegroundScale="0.6" />
+
+    <!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#272727" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

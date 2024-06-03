@@ -19,10 +19,10 @@ public abstract class Guide : Base
     public string Name { get; private set; }
 
     /// <summary>
-    /// Английское наименование
+    /// Псевдоним
     /// </summary>
     [Column("alias")]
-    [Comment("Английское наименование")]
+    [Comment("Псевдоним")]
     public string Alias { get; private set; }
 
     /// <summary>

@@ -14,8 +14,8 @@ namespace Insania.BusinessLogic.Appearance.TypesBodies;
 /// Сервис работы с типами телосложений
 /// </summary>
 /// <param name="applicationContext">Контекст базы данных</param>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
-/// <param name="mapper">Интерфейс сервиса преобразования моделей</param>
+/// <param name="logger">Интерфейс записи логов</param>
+/// <param name="mapper">Интерфейс преобразования моделей</param>
 public class TypesBodiesService(ApplicationContext applicationContext, ILogger<TypesBodiesService> logger, IMapper mapper) :
     ITypesBodies
 {
@@ -25,12 +25,12 @@ public class TypesBodiesService(ApplicationContext applicationContext, ILogger<T
     public ApplicationContext _applicationContext = applicationContext;
 
     /// <summary>
-    /// Интерфейс сервиса записи логов
+    /// Интерфейс записи логов
     /// </summary>
     private readonly ILogger<TypesBodiesService> _logger = logger;
 
     /// <summary>
-    /// Интерфейс сервиса преобразования моделей
+    /// Интерфейс преобразования моделей
     /// </summary>
     private readonly IMapper _mapper = mapper;
 

@@ -9,7 +9,7 @@ namespace Insania.Api.Controllers.Users;
 /// <summary>
 /// Контроллер пользователей
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="users">Интерфейс работы с пользователями</param>
 [Route("api/v1/users")]
 public class UsersController(ILogger<UsersController> logger, IUsers users) :

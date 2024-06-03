@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Politics;
 /// <summary>
 /// Контроллер областей
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="areas">Интерфейс работы с областями</param>
 [Route("api/v1/areas")]
 public class AreasController(ILogger<AreasController> logger, IAreas areas) : BaseController(logger)

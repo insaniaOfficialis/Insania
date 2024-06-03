@@ -103,12 +103,33 @@
                                 ItemsSource="{Binding Nations}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите нацию'}"
-                                Style="{StaticResource PickerPrimary}"/>
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Nation_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
                     <ActivityIndicator x:Name="NationLoadActivityIndicator"
+                                       IsVisible="False"
+                                       IsRunning="False"
+                                       Color="{StaticResource PrimaryText}"/>
+                    <StackLayout x:Name="PrefixNameStackLayout"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Префикс имени*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="PrefixNamePicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding PrefixesNames}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите префикс имени'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <ActivityIndicator x:Name="PrefixNameLoadActivityIndicator"
                                        IsVisible="False"
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
@@ -289,6 +310,34 @@
                     </StackLayout>
                     <StackLayout Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
+                               Text="Рост в см.*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="HeightEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите рост в см."
+                               Keyboard="Numeric"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
+                               Text="Вес в кг.*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="WeightEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите вес в кг."
+                               Keyboard="Numeric"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout Margin="0,25,0,0">
+                        <Label HorizontalOptions="Start"
                                Text="Изображение персонажа*:"
                                Style="{StaticResource TitleSecondary}"/>
                         <Image x:Name="HeroImage"
@@ -326,7 +375,7 @@
                             Clicked="Save_Clicked"/>
                     <Label x:Name="ErrorLabel"
                            HorizontalOptions="Center"
-                           Margin="0,50,0,0"
+                           Margin="0,50,0,50"
                            Style="{StaticResource ErrorPrimary}"/>
                 </StackLayout>
                 <ActivityIndicator x:Name="LoadActivityIndicator"

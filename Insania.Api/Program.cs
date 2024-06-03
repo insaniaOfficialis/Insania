@@ -17,10 +17,14 @@ using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
+using Insania.BusinessLogic.Files.Files;
+using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.OutOfCategories;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
+using Insania.BusinessLogic.Sociology.PrefixesNames;
+using Insania.BusinessLogic.System.Parameters;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
@@ -136,6 +140,11 @@ services.AddScoped<ITypesBodies, TypesBodiesService>(); //сервис работы с типами
 services.AddScoped<ITypesFaces, TypesFacesService>(); //сервис работы с типами лиц
 services.AddScoped<IHairsColors, HairsColorsService>(); //сервис работы с цветами волос
 services.AddScoped<IEyesColors, EyesColorsService>(); //сервис работы с цветами глаз
+services.AddScoped<IPrefixesNames, PrefixesNamesService>(); //сервис работы с префиксами имён
+services.AddScoped<IParameters, ParametersService>(); //сервис работы с префиксами имён
+services.AddScoped<IPrefixesNames, PrefixesNamesService>(); //сервис работы с параметрами
+services.AddScoped<IHeroes, HeroesService>(); //сервис работы с персонажами
+services.AddScoped<IFiles, FilesService>(); //сервис работы с файлами
 
 //Строим приложение
 var app = builder.Build();

@@ -197,7 +197,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -263,7 +263,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<double>("CoefficientAccrualHonorPoints")
                         .HasColumnType("double precision")
@@ -328,7 +328,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -393,7 +393,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -459,7 +459,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -519,7 +519,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -579,7 +579,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -652,7 +652,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -712,7 +712,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -784,7 +784,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -983,7 +983,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -1128,7 +1128,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -1743,7 +1743,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -2072,7 +2072,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<string>("ColorOnMap")
                         .IsRequired()
@@ -2456,7 +2456,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -2516,7 +2516,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -2725,7 +2725,7 @@ namespace Insania.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("alias")
-                        .HasComment("Английское наименование");
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -3498,7 +3498,7 @@ namespace Insania.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Insania.Database.Entities.Sociology.PrefixName", "PrefixName")
-                        .WithMany()
+                        .WithMany("PrefixNameNations")
                         .HasForeignKey("PrefixNameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3511,6 +3511,11 @@ namespace Insania.Database.Migrations
             modelBuilder.Entity("Insania.Database.Entities.Politics.Organization", b =>
                 {
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Sociology.PrefixName", b =>
+                {
+                    b.Navigation("PrefixNameNations");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Users.User", b =>

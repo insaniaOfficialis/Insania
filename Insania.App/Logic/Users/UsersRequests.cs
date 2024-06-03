@@ -6,10 +6,10 @@ using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
 using Insania.BusinessLogic.Users.Users;
+using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Authentication;
-using Insania.Models.OutCategories.Base;
 using Insania.Models.Users.Users;
 
 namespace Insania.App.Logic.Users;

@@ -8,7 +8,7 @@ namespace Insania.Api.Controllers.Biology;
 /// <summary>
 /// Контроллер рас
 /// </summary>
-/// <param name="logger">Интерфейс сервиса записи логов</param>
+/// <param name="logger">Интерфейс записи логов</param>
 /// <param name="races">Интерфейс работы с расами</param>
 [Route("api/v1/races")]
 public class RacesController(ILogger<RacesController> logger, IRaces races) : BaseController(logger)

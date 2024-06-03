@@ -44,7 +44,7 @@
   * PlaceholderColor
   * Color
 
-  * Image/Text/Placeholder/ItemsSource/Value
+  * Image/Text/Placeholder/ItemsSource/Value/SelectedIndex
   * ItemDisplayBinding
   * Title
   * IsPassword

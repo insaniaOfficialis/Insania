@@ -22,6 +22,7 @@ public static class Informations
     #region Системное
 
     public const string EnteredInitializationParametersMethod = "Вошли в метод инициализации параметров";
+    public const string EnteredGetValueByAliasMethod = "Вошли в метод получения значения по псевдониму";
     public const string ExecuteScript = "Выполняем скрипт:";
     public const string ExecutedScript = "Выполнен скрипт:";
     public const string NotExecutedScript = "Не выполнен скрипт:";
@@ -62,6 +63,7 @@ public static class Informations
     public const string EnteredInitializationHeroesMethod = "Вошли в метод инициализации персонажей";
     public const string EnteredInitializationRequestsHeroesRegistration = "Вошли в метод инициализации заявок на регистрацию персонажей";
     public const string EnteredInitializationStatusesRequestsHeroesRegistrationsMethod = "Вошли в метод инициализации статусов заявок регистрации персонажей";
+    public const string EnteredRegistationHeroMethod = "Вошли в метод регистрации персонажа";
     public const string HeroAdded = "-персонаж добавлен";
     public const string HeroAlreadyAdded = "-персонаж уже добавлен";
     public const string RequestsHeroesRegistrationsAdded = "-заявка на регистрацию персонажа добавлена";
@@ -200,6 +202,7 @@ public static class Informations
 
     #region Социология
 
+    public const string EnteredGetPrefixesNamesListMethod = "Вошли в метод получения списка префиксов имён";
     public const string EnteredInitializationPrefixesNamesMethod = "Вошли в метод инициализации префиксов имён";
     public const string EnteredInitializationPrefixesNamesNationsMethod = "Вошли в метод инициализации префиксов имён наций";
     public const string PrefixNameAdded = "-префикс имени добавлен";
@@ -211,6 +214,7 @@ public static class Informations
 
     #region Файлы
 
+    public const string EnteredAddFileMethod = "Вошли в метод добавлеия файла";
     public const string EnteredInitializationFilesMethod = "Вошли в метод инициализации файлов";
     public const string EnteredInitializationTypesFilesMethod = "Вошли в метод инициализации типов файлов";
     public const string FileAdded = "-файл добавлен";

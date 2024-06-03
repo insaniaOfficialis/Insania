@@ -7,12 +7,15 @@ using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
+using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
+using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Users;
 using Insania.Models.Heroes.BiographiesHeroes;
+using Insania.Models.Heroes.Heroes;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
@@ -39,6 +42,11 @@ public partial class RegistrationHero : ContentPage
     /// Интерфейс работы с нациями
     /// </summary>
     private readonly INations? _nations;
+
+    /// <summary>
+    /// Интерфейс работы с префиксами имён
+    /// </summary>
+    private readonly IPrefixesNames? _prefixNames;
 
     /// <summary>
     /// Интерфейс работы с месяцами
@@ -85,6 +93,11 @@ public partial class RegistrationHero : ContentPage
     /// </summary>
     private readonly IUsers? _users;
 
+    /// <summary>
+    /// Интерфейс работы с персонажами
+    /// </summary>
+    private readonly IHeroes? _heroes;
+
 
     /// <summary>
     /// Модель добавления пользователя
@@ -100,6 +113,11 @@ public partial class RegistrationHero : ContentPage
     /// Список наций
     /// </summary>
     private ObservableCollection<BaseResponseListItem>? Nations { get; set; }
+
+    /// <summary>
+    /// Список префиксов имён
+    /// </summary>
+    private ObservableCollection<BaseResponseListItem>? PrefixesNames { get; set; }
 
     /// <summary>
     /// Список месяцев
@@ -144,7 +162,12 @@ public partial class RegistrationHero : ContentPage
     /// <summary>
     /// Коллеция элемнтов биографий
     /// </summary>
-    private List<BiographyElement> BiographyElements {  get; set; }
+    private List<BiographyElement> BiographyElements { get; set; }
+
+    /// <summary>
+    /// Файл персонажа
+    /// </summary>
+    private FileResult? HeroFile { get; set; }
 
 
     /// <summary>
@@ -160,6 +183,7 @@ public partial class RegistrationHero : ContentPage
         _checkConnection = App.Services?.GetService<ICheckConnection>();
         _races = App.Services?.GetService<IRaces>();
         _nations = App.Services?.GetService<INations>();
+        _prefixNames = App.Services?.GetService<IPrefixesNames>();
         _months = App.Services?.GetService<IMonths>();
         _countries = App.Services?.GetService<ICountries>();
         _regions = App.Services?.GetService<IRegions>();
@@ -169,6 +193,7 @@ public partial class RegistrationHero : ContentPage
         _hairsColors = App.Services?.GetService<IHairsColors>();
         _eyesColors = App.Services?.GetService<IEyesColors>();
         _users = App.Services?.GetService<IUsers>();
+        _heroes = App.Services?.GetService<IHeroes>();
 
         //Записываем входящие параметры
         _addUserRequest = addUserRequest;
@@ -298,6 +323,7 @@ public partial class RegistrationHero : ContentPage
         //Запускаем колесо загрузки
         NationLoadActivityIndicator.IsRunning = true;
         NationStackLayout.IsVisible = false;
+        PrefixNameStackLayout.IsVisible = false;
 
         //Обнуляем текст ошибки
         ErrorLabel.Text = null;
@@ -333,6 +359,57 @@ public partial class RegistrationHero : ContentPage
         {
             //Останавливаем колесо загрузки
             NationLoadActivityIndicator.IsRunning = false;
+        }
+    }
+
+    /// <summary>
+    /// Событие выбора нации
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void Nation_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //Если выбранный элемент пустой, выходим
+        if (NationPicker.SelectedItem == null) return;
+
+        //Запускаем колесо загрузки
+        PrefixNameLoadActivityIndicator.IsRunning = true;
+        PrefixNameStackLayout.IsVisible = false;
+
+        //Обнуляем текст ошибки
+        ErrorLabel.Text = null;
+
+        try
+        {
+            //Проверяем наличие сервиса работы с префиксами имён
+            if (_prefixNames == null) throw new InnerException(Errors.EmptyServicePrefixesNames);
+
+            //Получаем выбранную нацию
+            long? nationId = ((BaseResponseListItem?)NationPicker.SelectedItem)?.Id;
+
+            //Получаем коллекцию
+            PrefixesNames = new ObservableCollection<BaseResponseListItem>((await _prefixNames.GetList(nationId)).Items!);
+
+            //Привязываем данные
+            PrefixNamePicker.ItemsSource = PrefixesNames;
+
+            //Делаем доступным выпадающий список наций
+            PrefixNameStackLayout.IsVisible = true;
+        }
+        catch (InnerException ex)
+        {
+            //Устанавливаем текст ошибки
+            ErrorLabel.Text = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            //Устанавливаем текст ошибки
+            ErrorLabel.Text = ex.Message;
+        }
+        finally
+        {
+            //Останавливаем колесо загрузки
+            PrefixNameLoadActivityIndicator.IsRunning = false;
         }
     }
 
@@ -448,6 +525,9 @@ public partial class RegistrationHero : ContentPage
     {
         try
         {
+            //Обнуляем файл персонажа
+            HeroFile = null;
+
             //Формируем новое окно загрузки фотографий
             var result = await FilePicker.PickAsync(new PickOptions
             {
@@ -457,6 +537,9 @@ public partial class RegistrationHero : ContentPage
 
             //Выходим, если не выбрали изображение
             if (result == null) return;
+
+            //Записываем файл персонажа
+            HeroFile = result;
 
             //Считываем поток
             var stream = await result.OpenReadAsync();
@@ -483,8 +566,24 @@ public partial class RegistrationHero : ContentPage
     /// <param name="e">Событие</param>
     private void AddBiorgaphy_Clicked(object sender, EventArgs e)
     {
-        //Добавляем биографию
-        AddBiography();
+        //Обнуляем текст ошибки
+        ErrorLabel.Text = null;
+
+        try
+        {
+            //Добавляем биографию
+            AddBiography();
+        }
+        catch (InnerException ex)
+        {
+            //Устанавливаем текст ошибки
+            ErrorLabel.Text = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            //Устанавливаем текст ошибки
+            ErrorLabel.Text = ex.Message;
+        }
     }
 
     /// <summary>
@@ -503,22 +602,49 @@ public partial class RegistrationHero : ContentPage
             //Обнуляем текст ошибки
             ErrorLabel.Text = null;
 
-            //Регистрируем игрока
-            //var user = await _users!.AddUser(_addUserRequest);
+            //Проверяем входные данные
+            if (HeroFile == null) throw new InnerException(Errors.EmptyFile);
+            if (_heroes == null) throw new InnerException(Errors.EmptyServiceHeroes);
 
-            //Регистрируем персонажа
+            //Создаём модель запроса добавления персонажа
+            AddHeroRequest request = new(
+                _addUserRequest,
+                PersonalNameEntry.Text,
+                ((BaseResponseListItem?)PrefixNamePicker?.SelectedItem)?.Id,
+                FamilyNameEntry.Text,
+                DayBirthEntry.Text,
+                ((BaseResponseListItem?)MonthBirtPicker?.SelectedItem)?.Id,
+                CycleBirthEntry.Text,
+                ((BaseResponseListItem?)NationPicker?.SelectedItem)?.Id,
+                GenderCheckBox.IsChecked,
+                HeightEntry.Text,
+                WeightEntry.Text,
+                ((BaseResponseListItem?)HairsColorPicker?.SelectedItem)?.Id,
+                ((BaseResponseListItem?)EyesColorPicker?.SelectedItem)?.Id,
+                ((BaseResponseListItem?)TypeBodyPicker?.SelectedItem)?.Id,
+                ((BaseResponseListItem?)TypeFacePicker?.SelectedItem)?.Id,
+                ((BaseResponseListItem?)AreaPicker?.SelectedItem)?.Id
+                );
 
-
+            //Заполняем биографию
             List<AddBiographyHeroRequest> biographiesHero = [];
             foreach (var item in BiographyElements)
             {
-                AddBiographyHeroRequest biographyHero = new(Convert.ToInt32(item.DayBegin!.Text),
-                    ((BaseResponseListItem)item.MonthBegin!.SelectedItem).Id, Convert.ToInt32(item.CycleBegin!.Text),
-                    Convert.ToInt32(item.DayEnd!.Text), ((BaseResponseListItem)item.MonthEnd!.SelectedItem).Id,
-                    Convert.ToInt32(item.CycleEnd!.Text), item.Text!.Text);
+                AddBiographyHeroRequest biographyHero = new(
+                    item.DayBegin!.Text,
+                    ((BaseResponseListItem)item.MonthBegin!.SelectedItem).Id,
+                    item.CycleBegin!.Text,
+                    item.DayEnd!.Text,
+                    ((BaseResponseListItem?)item.MonthEnd!.SelectedItem)?.Id,
+                    item.CycleEnd!.Text,
+                    item.Text!.Text);
 
                 biographiesHero.Add(biographyHero);
             }
+            request.SetBiographies(biographiesHero);
+
+            //Регистрируем персонажа
+            await _heroes.Registration(request);
         }
         catch (InnerException ex)
         {
@@ -556,6 +682,30 @@ public partial class RegistrationHero : ContentPage
     /// </summary>
     private void AddBiography()
     {
+        //Проверяем, что заполнили дату окончания у предыдущего
+        if (BiographyElements.Count > 0
+            && (string.IsNullOrWhiteSpace(BiographyElements.Last().DayEnd?.Text)
+                || BiographyElements.Last().MonthEnd?.SelectedIndex == null
+                || string.IsNullOrWhiteSpace(BiographyElements.Last().CycleEnd?.Text)))
+            throw new InnerException(Errors.NotExistsDateEndBiography);
+
+        //Пробуем получить данные для даты начала новой биографии
+        string? autoDayStart = null;
+        int? autoMonthStart = null;
+        string? autoCycleEnd = null;
+        if (BiographyElements.Count > 0)
+        {
+            autoDayStart = BiographyElements.Last().DayEnd?.Text;
+            autoMonthStart = BiographyElements.Last().MonthEnd?.SelectedIndex;
+            autoCycleEnd = BiographyElements.Last().CycleEnd?.Text;
+        }
+        else
+        {
+            autoDayStart = DayBirthEntry.Text;
+            autoMonthStart = MonthBirtPicker.SelectedIndex;
+            autoCycleEnd = CycleBirthEntry.Text;
+        }
+
         //Получаем стили
         Application.Current!.Resources.TryGetValue("TitleSecondary", out var labelStyle);
         Application.Current!.Resources.TryGetValue("EntryPrimary", out var entryStyle);
@@ -586,6 +736,7 @@ public partial class RegistrationHero : ContentPage
 #else
             WidthRequest = 280,
 #endif
+            Text = autoDayStart,
             Placeholder = "Введите день начала",
             Keyboard = Keyboard.Numeric,
             Style = (Style)entryStyle
@@ -630,6 +781,7 @@ public partial class RegistrationHero : ContentPage
 #endif
             ItemsSource = Months,
             ItemDisplayBinding = new Binding("Name"),
+            SelectedIndex = autoMonthStart ?? -1,
             Style = (Style)pickerStyle
         };
         monthBegin.Add(monthBiographyBeginPicker);
@@ -669,6 +821,7 @@ public partial class RegistrationHero : ContentPage
 #else
             WidthRequest = 280,
 #endif
+            Text = autoCycleEnd,
             Placeholder = "Введите цикл начала",
             Keyboard = Keyboard.Numeric,
             Style = (Style)entryStyle
@@ -698,7 +851,7 @@ public partial class RegistrationHero : ContentPage
         Label dayBiographyEndLabel = new()
         {
             HorizontalOptions = LayoutOptions.Start,
-            Text = "День окончания",
+            Text = "День окончания:",
             Style = (Style)labelStyle
         };
         dayEnd.Add(dayBiographyEndLabel);
@@ -739,7 +892,7 @@ public partial class RegistrationHero : ContentPage
         Label monthBiographyEndLabel = new()
         {
             HorizontalOptions = LayoutOptions.Start,
-            Text = "Месяц окончания*:",
+            Text = "Месяц окончания:",
             Style = (Style)labelStyle
         };
         monthEnd.Add(monthBiographyEndLabel);
@@ -781,7 +934,7 @@ public partial class RegistrationHero : ContentPage
         Label cycleBiographyEndLabel = new()
         {
             HorizontalOptions = LayoutOptions.Start,
-            Text = "Цикл окончания*:",
+            Text = "Цикл окончания:",
             Style = (Style)labelStyle
         };
         cycleEnd.Add(cycleBiographyEndLabel);
@@ -838,17 +991,23 @@ public partial class RegistrationHero : ContentPage
         text.Add(textBiographyScroolView);
         Editor textBiographyEditor = new()
         {
-            VerticalOptions = LayoutOptions.Fill,
-#if WINDOWS
-            WidthRequest = 400,
-#else
-            WidthRequest = 280,
-#endif
+            Margin = new Thickness(0, 0, 0, 25),
             Placeholder = "Введите текст биографии",
             AutoSize = EditorAutoSizeOption.TextChanges,
             Style = (Style)entryStyle
         };
         textBiographyScroolView.Content = textBiographyEditor;
+        BoxView textBiographyBoxView = new()
+        {
+#if WINDOWS
+            WidthRequest = 400,
+#else
+            WidthRequest = 280,
+#endif
+            HeightRequest = 1,
+            Color = (Color)boxViewColor
+        };
+        text.Add(textBiographyBoxView);
 
         //Создаём новый экземляр класса элемента биографии и добавляем его в коллекцию
         BiographyElement biographyElement = new(dayBiographyBeginEntry, monthBiographyBeginPicker, cycleBiographyBeginEntry,

@@ -73,10 +73,17 @@ public static class Errors
 
     #region Персонажи
 
-    public const string EmptyBiography= "Пустая биография";
-    public const string EmptyHero= "Пустой персонаж";
+    public const string EmptyBiography = "Пустая биография";
+    public const string EmptyBiographyhDate = "Пустая дата биографии";
+    public const string EmptyBiographyhText = "Пустой текст биографии";
+    public const string EmptyFamilyName = "Пустое имя семьи";
+    public const string EmptyHero = "Пустой персонаж";
+    public const string EmptyPersonalName = "Пустое личное имя";
     public const string EmptyRequestsHeroesRegistration = "Пустая заявок на регистрацию персонажей";
+    public const string EmptyServiceHeroes = "Пустой сервис работы с персонажами";
     public const string EmptyStatusRequestsHeroesRegistration = "Пустой статус заявок на регистрацию персонажей";
+    public const string EmptyUrlHeroes = "Пустая ссылка работы с персонажами";
+    public const string NotExistsDateEndBiography = "Не указана дата окончания предыдущей бюиографии";
 
     #endregion
 
@@ -94,12 +101,17 @@ public static class Errors
     public const string EmptySeason = "Пустой сезон";
     public const string EmptyServiceMonths = "Пустой сервис работы с месяцами";
     public const string EmptyUrlMonths = "Пустая ссылка работы с месяцами";
+    public const string IncorrectDay = "Некорректный день";
+    public const string IncorrectMonth = "Некорректный месяц";
+    public const string IncorrectCycle = "Некорректный цикл";
 
     #endregion
 
     #region Внешность
 
     public const string EmptyEyesColor = "Пустой цвет глаз";
+    public const string EmptyHeight = "Пустой рост";
+    public const string EmptyHairsColor = "Пустой цвет волос";
     public const string EmptyTypeBody = "Пустой тип телосложения";
     public const string EmptyTypeFace = "Пустой тип лица";
     public const string EmptyServiceEyesColors = "Пустой сервис работы с цветами глаз";
@@ -110,6 +122,9 @@ public static class Errors
     public const string EmptyUrlHairsColors = "Пустая ссылка работы с цветами волос";
     public const string EmptyUrlTypesBodies = "Пустая ссылка работы с типами телосложений";
     public const string EmptyUrlTypesFaces = "Пустая ссылка работы с типами лиц";
+    public const string EmptyWeight = "Пустой вес";
+    public const string IncorrectHeight = "Некорректный рост";
+    public const string IncorrectWeight = "Некорректный вес";
 
     #endregion
 
@@ -178,13 +193,19 @@ public static class Errors
     #region Социология
 
     public const string EmptyPrefixName = "Пустой префикс имени";
+    public const string EmptyServicePrefixesNames = "Пустой сервис работы с префиксами имён";
+    public const string EmptyUrlPrefixesNames = "Пустая ссылка работы с префиксами имён";
 
     #endregion
 
     #region Файлы
 
+    public const string EmptyNameFile = "Пустое наименование файла";
+    public const string EmptyEntityFile = "Пустая сущность файла";
     public const string EmptyFile = "Пустой файл";
+    public const string EmptyStreamFile = "Пустой поток файла";
     public const string EmptyTypeFile = "Пустой тип файла";
+    public const string IncorrectExtention = "Некорректное расширение";
 
     #endregion
 

@@ -6,8 +6,10 @@ using Microsoft.Extensions.Logging;
 using Insania.App.Logic.Appearance;
 using Insania.App.Logic.Biology;
 using Insania.App.Logic.Chronology;
+using Insania.App.Logic.Heroes;
 using Insania.App.Logic.OutCategories;
 using Insania.App.Logic.Polititcs;
+using Insania.App.Logic.Sociology;
 using Insania.App.Logic.Users;
 using Insania.BusinessLogic.Appearance.EyesColors;
 using Insania.BusinessLogic.Appearance.HairsColors;
@@ -16,10 +18,12 @@ using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
+using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
+using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
 
@@ -127,6 +131,8 @@ public static class MauiProgram
             builder.Services.AddScoped<ITypesFaces, TypesFacesRequests>(); //работа с типами лиц
             builder.Services.AddScoped<IHairsColors, HairsColorsRequests>(); //работа с цветами волос
             builder.Services.AddScoped<IEyesColors, EyesColorsRequests>(); //работа с цветами глаз
+            builder.Services.AddScoped<IPrefixesNames, PrefixesNamesRequests>(); //работа с префиксами имён
+            builder.Services.AddScoped<IHeroes, HeroesRequests>(); //работа с персонажами
 
             //Возвращаем построенное приложение
             return builder.Build();
