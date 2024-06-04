@@ -134,7 +134,7 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
             await _applicationContext.SaveChangesAsync();
 
             //Создаём заявку на персонажа
-            StatusRequestHeroRegistration? status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Alias == "Novaya") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            StatusRequestHeroRegistration? status = await _applicationContext.StatusesRequestsHeroesRegistration.FirstAsync(x => x.Alias == "Novaya") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
             RequestHeroRegistration requestHeroRegistration = new(user.UserName!, false, hero, status);
             await _applicationContext.RequestsHeroesRegistration.AddAsync(requestHeroRegistration);
             await _applicationContext.SaveChangesAsync();
@@ -171,7 +171,7 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
             _logger.LogInformation(Informations.Success);
 
             //Возвращаем результат
-            return new BaseResponse(true, hero.Id);
+            return new BaseResponse(true, requestHeroRegistration.Id);
         }
         catch (InnerException ex)
         {

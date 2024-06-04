@@ -62,7 +62,7 @@ public class FilesService(ApplicationContext applicationContext, ILogger<HeroesS
             if (request == null) throw new InnerException(Errors.EmptyRequest);
 
             //Создаём файл
-            Hero? hero = await _applicationContext.Heroes.FirstAsync(x => x.Id == request.Id) ?? throw new InnerException(Errors.EmptyHero);
+            Hero? hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Id == request.Id) ?? throw new InnerException(Errors.EmptyHero);
             TypeFile? typeFile = await _applicationContext.TypesFiles.FirstAsync(x => x.Alias == request.Type) ?? throw new InnerException(Errors.EmptyTypeFile);
             FileEntity file = new(hero.Player.User.UserName!, false, request.Name!, typeFile);
             if (file.Extention == null || !_allowedExtensions.Contains(file.Extention)) throw new InnerException(Errors.IncorrectExtention);
@@ -99,7 +99,7 @@ public class FilesService(ApplicationContext applicationContext, ILogger<HeroesS
             _logger.LogInformation(Informations.Success);
 
             //Возвращаем результат
-            return new BaseResponse(true, hero.Id);
+            return new BaseResponse(true);
         }
         catch (InnerException ex)
         {

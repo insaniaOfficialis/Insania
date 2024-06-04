@@ -102,6 +102,9 @@
 	  <MauiXaml Update="Pages\General\Heroes\RegistrationHero.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\General\Heroes\RequestRegistrationHero.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\General\Users\Authentication.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

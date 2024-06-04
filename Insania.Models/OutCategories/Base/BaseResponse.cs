@@ -13,7 +13,7 @@ public class BaseResponse
     public bool Success { get; set; }
 
     /// <summary>
-    /// Id записи
+    /// Первичный ключ сущности
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public long? Id { get; set; }
@@ -51,7 +51,7 @@ public class BaseResponse
     /// Конструктор базовой модели ответа с id
     /// </summary>
     /// <param name="success">Признак успешности</param>
-    /// <param name="id">Id записи</param>
+    /// <param name="id">Первичный ключ сущности</param>
     public BaseResponse(bool success, long id): this(success)
     {
         Id = id;
@@ -71,7 +71,7 @@ public class BaseResponse
     /// Конструктор базовой модели ответа с id и значением
     /// </summary>
     /// <param name="success">Признак успешности</param>
-    /// <param name="id">Id записи</param>
+    /// <param name="id">Первичный ключ сущности</param>
     /// <param name="value">Значение</param>
     public BaseResponse(bool success, long id, string? value) : this(success, id)
     {

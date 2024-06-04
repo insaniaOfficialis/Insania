@@ -3,9 +3,11 @@
 using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
+using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
 using Insania.Database.Entities.System;
+using Insania.Models.Heroes.Heroes;
 using Insania.Models.OutCategories.Base;
 
 namespace Insania.BusinessLogic.OutOfCategories;
@@ -32,5 +34,6 @@ public class AppMappingProfile : Profile
         CreateMap<EyesColor, BaseResponseListItem>();
         CreateMap<PrefixName, BaseResponseListItem>();
         CreateMap<Parameter, BaseResponse>();
+        CreateMap<RequestHeroRegistration, GetRequestRegistrationHeroResponse>();
     }
 }

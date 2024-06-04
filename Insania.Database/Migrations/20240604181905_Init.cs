@@ -1058,32 +1058,16 @@ namespace Insania.Database.Migrations
                     hero_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на персонажа"),
                     status_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на статус"),
                     administrator_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на ответственного администратора"),
-                    personal_name_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по личному имени"),
-                    comment_on_personal_name = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к личному имени"),
-                    family_name_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по имени семьи"),
-                    comment_on_family_name = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к имени семьи"),
-                    race_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по расе"),
-                    comment_on_race = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к расе"),
-                    nation_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по нации"),
-                    comment_on_nation = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к нации"),
-                    birth_date_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по дате рождения"),
-                    comment_on_birth_date = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к дате рождения"),
-                    location_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по местоположению"),
-                    comment_on_location = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к местоположению"),
-                    height_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по росту"),
-                    comment_on_height = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к росту"),
-                    weight_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по весу"),
-                    comment_on_weight = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к весу"),
-                    type_body_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по типу телосложения"),
-                    comment_on_type_body = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к типу телосложения"),
-                    type_face_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по типу лица"),
-                    comment_on_type_face = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к типу лица"),
-                    hair_color_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по цвету волос"),
-                    comment_on_hair_color = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к цвету волос"),
-                    eye_color_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по цвету глаз"),
-                    comment_on_eye_color = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к цвету глаз"),
-                    image_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по изображению"),
-                    comment_on_image = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к изображению"),
+                    general_block_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по блоку общее"),
+                    comment_on_general_block = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к блоку общее"),
+                    birth_date_block_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по блоку дата рождения"),
+                    comment_on_birth_date_block = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к блоку дата рождения"),
+                    location_block_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по блоку местоположение"),
+                    comment_on_location_block = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к блоку местоположение"),
+                    appearance_block_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по блоку внешность"),
+                    comment_on_appearance_block = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к блоку внешность"),
+                    image_block_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по блоку изображение"),
+                    comment_on_image_block = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к блоку изображение"),
                     date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
@@ -1155,12 +1139,8 @@ namespace Insania.Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     request_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на заявку"),
                     biography_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на персонажа"),
-                    date_begin_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по дате начала"),
-                    comment_on_date_begin = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к дате начала"),
-                    date_end_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по дате окончания"),
-                    comment_on_date_end = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к дате окончания"),
-                    text_decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение по тексту"),
-                    comment_on_text = table.Column<string>(type: "text", nullable: true, comment: "Комментарий к тексту"),
+                    decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение"),
+                    comment = table.Column<string>(type: "text", nullable: true, comment: "Комментарий"),
                     date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
                     user_create = table.Column<string>(type: "text", nullable: false, comment: "Пользователь, создавший"),
                     date_update = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата обновления"),
@@ -1578,7 +1558,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_files_heroes_file_id_hero_id",
                 table: "un_files_heroes",
-                columns: new[] { "file_id", "hero_id" },
+                columns: ["file_id", "hero_id"],
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1594,7 +1574,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_prefixes_names_nations_prefix_name_id_nation_id",
                 table: "un_prefixes_names_nations",
-                columns: new[] { "prefix_name_id", "nation_id" },
+                columns: ["prefix_name_id", "nation_id"],
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1605,7 +1585,7 @@ namespace Insania.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_un_regions_ownerships_region_id_ownership_id",
                 table: "un_regions_ownerships",
-                columns: new[] { "region_id", "ownership_id" },
+                columns: ["region_id", "ownership_id"],
                 unique: true);
         }
 

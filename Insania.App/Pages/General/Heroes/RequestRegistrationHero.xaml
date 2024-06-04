@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Insania.App.Pages.General.Heroes.RegistrationHero"
+             x:Class="Insania.App.Pages.General.Heroes.RequestRegistrationHero"
              Background="{StaticResource MainBackground}"
              Loaded="ContentPage_Loaded">
     <ScrollView>
@@ -16,21 +16,20 @@
                         WidthRequest="{OnIdiom Desktop=50, Phone=50}"
                         HeightRequest="{OnIdiom Desktop=50, Phone=50}"
                         ImageSource="back.png"
-                        Style="{StaticResource ButtonSecondary}"
-                        Clicked="Back_Clicked"/>
+                        Style="{StaticResource ButtonSecondary}"/>
                 <Label VerticalOptions="Center"
-                       Text="Регистрация персонажа"
+                       Text="Заявка на регистрацию персонажа"
                        Style="{StaticResource TitleSecondary}"/>
             </StackLayout>
             <StackLayout x:Name="ContentStackLayout"
                          Grid.Row="1"
                          VerticalOptions="Center">
-                <StackLayout x:Name="RegistrationHeroStackLayout"
+                <StackLayout x:Name="RequestRegistrationHeroStackLayout"
                              Orientation="Vertical"
                              Margin="0,100,0,0"
                              WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                              Spacing="50">
-                    
+
                     <Label HorizontalOptions="Center"
                            Text="ОБЩЕЕ"
                            Style="{StaticResource TitleSecondary}"/>
@@ -67,8 +66,7 @@
                         <StackLayout Orientation="Horizontal">
                             <CheckBox x:Name="GenderCheckBox"
                                       VerticalOptions="Center"
-                                      Style="{StaticResource CheckBoxPrimary}"
-                                      CheckedChanged="Gender_CheckedChanged"/>
+                                      Style="{StaticResource CheckBoxPrimary}"/>
                             <Label x:Name="GenderLabel"
                                    HorizontalOptions="Start"
                                    VerticalOptions="Center"
@@ -86,8 +84,7 @@
                                 ItemsSource="{Binding Races}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите расу'}"
-                                Style="{StaticResource PickerPrimary}"
-                                SelectedIndexChanged="Race_SelectedIndexChanged"/>
+                                Style="{StaticResource PickerPrimary}"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -103,8 +100,7 @@
                                 ItemsSource="{Binding Nations}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите нацию'}"
-                                Style="{StaticResource PickerPrimary}"
-                                SelectedIndexChanged="Nation_SelectedIndexChanged"/>
+                                Style="{StaticResource PickerPrimary}"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -133,7 +129,7 @@
                                        IsVisible="False"
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
-                    
+
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="ДАТА РОЖДЕНИЯ"
@@ -181,7 +177,7 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    
+
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="МЕСТОПОЛОЖЕНИЕ"
@@ -196,8 +192,7 @@
                                 ItemsSource="{Binding Countries}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите страну'}"
-                                Style="{StaticResource PickerPrimary}"
-                                SelectedIndexChanged="Country_SelectedIndexChanged"/>
+                                Style="{StaticResource PickerPrimary}"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -217,8 +212,7 @@
                                 ItemsSource="{Binding Regions}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите регион'}"
-                                Style="{StaticResource PickerPrimary}"
-                                SelectedIndexChanged="Region_SelectedIndexChanged"/>
+                                Style="{StaticResource PickerPrimary}"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -243,7 +237,7 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    
+
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="ВНЕШНОСТЬ"
@@ -350,8 +344,7 @@
                                 Margin="0,25,0,0"
                                 WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                                 Text="Загрузить"
-                                Style="{StaticResource ButtonPrimary}"
-                                Clicked="Download_Clicked"/>
+                                Style="{StaticResource ButtonPrimary}"/>
                     </StackLayout>
 
                     <Label HorizontalOptions="Center"
@@ -364,15 +357,13 @@
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                             Text="Добавить"
-                            Style="{StaticResource ButtonPrimary}"
-                            Clicked="AddBiorgaphy_Clicked"/>
+                            Style="{StaticResource ButtonPrimary}"/>
 
                     <Button x:Name="SaveButton"
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                             Text="Сохранить"
-                            Style="{StaticResource ButtonPrimary}"
-                            Clicked="Save_Clicked"/>
+                            Style="{StaticResource ButtonPrimary}"/>
                     <Label x:Name="ErrorLabel"
                            HorizontalOptions="Center"
                            Margin="0,50,0,50"

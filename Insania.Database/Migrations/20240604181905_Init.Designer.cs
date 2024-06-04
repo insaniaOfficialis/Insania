@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240603142739_Init")]
+    [Migration("20240604181905_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1289,25 +1289,10 @@ namespace Insania.Database.Migrations
                         .HasColumnName("biography_id")
                         .HasComment("Ссылка на персонажа");
 
-                    b.Property<string>("CommentOnDateBegin")
+                    b.Property<string>("Comment")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_date_begin")
-                        .HasComment("Комментарий к дате начала");
-
-                    b.Property<string>("CommentOnDateEnd")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_date_end")
-                        .HasComment("Комментарий к дате окончания");
-
-                    b.Property<string>("CommentOnText")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_text")
-                        .HasComment("Комментарий к тексту");
-
-                    b.Property<bool?>("DateBeginDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("date_begin_decision")
-                        .HasComment("Решение по дате начала");
+                        .HasColumnName("comment")
+                        .HasComment("Комментарий");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -1319,15 +1304,15 @@ namespace Insania.Database.Migrations
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
-                    b.Property<bool?>("DateEndDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("date_end_decision")
-                        .HasComment("Решение по дате окончания");
-
                     b.Property<DateTime>("DateUpdate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
+
+                    b.Property<bool?>("Decision")
+                        .HasColumnType("boolean")
+                        .HasColumnName("decision")
+                        .HasComment("Решение");
 
                     b.Property<bool>("IsSystem")
                         .HasColumnType("boolean")
@@ -1338,11 +1323,6 @@ namespace Insania.Database.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("request_id")
                         .HasComment("Ссылка на заявку");
-
-                    b.Property<bool?>("TextDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("text_decision")
-                        .HasComment("Решение по тексту");
 
                     b.Property<string>("UserCreate")
                         .IsRequired()
@@ -1546,75 +1526,40 @@ namespace Insania.Database.Migrations
                         .HasColumnName("administrator_id")
                         .HasComment("Ссылка на ответственного администратора");
 
-                    b.Property<bool?>("BirthDateDecision")
+                    b.Property<bool?>("AppearanceBlockDecision")
                         .HasColumnType("boolean")
-                        .HasColumnName("birth_date_decision")
-                        .HasComment("Решение по дате рождения");
+                        .HasColumnName("appearance_block_decision")
+                        .HasComment("Решение по блоку внешность");
 
-                    b.Property<string>("CommentOnBirthDate")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_birth_date")
-                        .HasComment("Комментарий к дате рождения");
+                    b.Property<bool?>("BirthDateBlockDecision")
+                        .HasColumnType("boolean")
+                        .HasColumnName("birth_date_block_decision")
+                        .HasComment("Решение по блоку дата рождения");
 
-                    b.Property<string>("CommentOnEyesColor")
+                    b.Property<string>("CommentOnAppearanceBlock")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_eye_color")
-                        .HasComment("Комментарий к цвету глаз");
+                        .HasColumnName("comment_on_appearance_block")
+                        .HasComment("Комментарий к блоку внешность");
 
-                    b.Property<string>("CommentOnFamilyName")
+                    b.Property<string>("CommentOnBirthDateBlock")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_family_name")
-                        .HasComment("Комментарий к имени семьи");
+                        .HasColumnName("comment_on_birth_date_block")
+                        .HasComment("Комментарий к блоку дата рождения");
 
-                    b.Property<string>("CommentOnHairColor")
+                    b.Property<string>("CommentOnGeneralBlock")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_hair_color")
-                        .HasComment("Комментарий к цвету волос");
+                        .HasColumnName("comment_on_general_block")
+                        .HasComment("Комментарий к блоку общее");
 
-                    b.Property<string>("CommentOnHeight")
+                    b.Property<string>("CommentOnImageBlock")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_height")
-                        .HasComment("Комментарий к росту");
+                        .HasColumnName("comment_on_image_block")
+                        .HasComment("Комментарий к блоку изображение");
 
-                    b.Property<string>("CommentOnImage")
+                    b.Property<string>("CommentOnLocationBlock")
                         .HasColumnType("text")
-                        .HasColumnName("comment_on_image")
-                        .HasComment("Комментарий к изображению");
-
-                    b.Property<string>("CommentOnLocation")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_location")
-                        .HasComment("Комментарий к местоположению");
-
-                    b.Property<string>("CommentOnNation")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_nation")
-                        .HasComment("Комментарий к нации");
-
-                    b.Property<string>("CommentOnPersonalName")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_personal_name")
-                        .HasComment("Комментарий к личному имени");
-
-                    b.Property<string>("CommentOnRace")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_race")
-                        .HasComment("Комментарий к расе");
-
-                    b.Property<string>("CommentOnTypeBody")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_type_body")
-                        .HasComment("Комментарий к типу телосложения");
-
-                    b.Property<string>("CommentOnTypeFace")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_type_face")
-                        .HasComment("Комментарий к типу лица");
-
-                    b.Property<string>("CommentOnWeight")
-                        .HasColumnType("text")
-                        .HasColumnName("comment_on_weight")
-                        .HasComment("Комментарий к весу");
+                        .HasColumnName("comment_on_location_block")
+                        .HasComment("Комментарий к блоку местоположение");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -1631,75 +1576,35 @@ namespace Insania.Database.Migrations
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
-                    b.Property<bool?>("EyesColorDecision")
+                    b.Property<bool?>("GeneralBlockDecision")
                         .HasColumnType("boolean")
-                        .HasColumnName("eye_color_decision")
-                        .HasComment("Решение по цвету глаз");
-
-                    b.Property<bool?>("FamilyNameDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("family_name_decision")
-                        .HasComment("Решение по имени семьи");
-
-                    b.Property<bool?>("HairColorDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("hair_color_decision")
-                        .HasComment("Решение по цвету волос");
-
-                    b.Property<bool?>("HeightDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("height_decision")
-                        .HasComment("Решение по росту");
+                        .HasColumnName("general_block_decision")
+                        .HasComment("Решение по блоку общее");
 
                     b.Property<long>("HeroId")
                         .HasColumnType("bigint")
                         .HasColumnName("hero_id")
                         .HasComment("Ссылка на персонажа");
 
-                    b.Property<bool?>("ImageDecision")
+                    b.Property<bool?>("ImageBlockDecision")
                         .HasColumnType("boolean")
-                        .HasColumnName("image_decision")
-                        .HasComment("Решение по изображению");
+                        .HasColumnName("image_block_decision")
+                        .HasComment("Решение по блоку изображение");
 
                     b.Property<bool>("IsSystem")
                         .HasColumnType("boolean")
                         .HasColumnName("is_system")
                         .HasComment("Признак системной записи");
 
-                    b.Property<bool?>("LocationDecision")
+                    b.Property<bool?>("LocationBlockDecision")
                         .HasColumnType("boolean")
-                        .HasColumnName("location_decision")
-                        .HasComment("Решение по местоположению");
-
-                    b.Property<bool?>("NationDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("nation_decision")
-                        .HasComment("Решение по нации");
-
-                    b.Property<bool?>("PersonalNameDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("personal_name_decision")
-                        .HasComment("Решение по личному имени");
-
-                    b.Property<bool?>("RaceDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("race_decision")
-                        .HasComment("Решение по расе");
+                        .HasColumnName("location_block_decision")
+                        .HasComment("Решение по блоку местоположение");
 
                     b.Property<long>("StatusId")
                         .HasColumnType("bigint")
                         .HasColumnName("status_id")
                         .HasComment("Ссылка на статус");
-
-                    b.Property<bool?>("TypeBodyDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("type_body_decision")
-                        .HasComment("Решение по типу телосложения");
-
-                    b.Property<bool?>("TypeFaceDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("type_face_decision")
-                        .HasComment("Решение по типу лица");
 
                     b.Property<string>("UserCreate")
                         .IsRequired()
@@ -1712,11 +1617,6 @@ namespace Insania.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("user_update")
                         .HasComment("Пользователь, обновивший");
-
-                    b.Property<bool?>("WeightDecision")
-                        .HasColumnType("boolean")
-                        .HasColumnName("weight_decision")
-                        .HasComment("Решение по весу");
 
                     b.HasKey("Id");
 

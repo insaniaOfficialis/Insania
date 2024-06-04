@@ -925,9 +925,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем биографию от -9999 заявки на регистрацию персонажа Амлус
                 BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
-                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
-                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
-                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                biographyRequestHeroRegistration.SetDecision(true, null);
                 await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
 
                 //Логгируем
@@ -961,9 +959,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем биографию от 0 заявки на регистрацию персонажа Амлус
                 BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
-                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
-                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
-                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                biographyRequestHeroRegistration.SetDecision(true, null);
                 await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
 
                 //Логгируем
@@ -997,9 +993,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем биографию от 224 заявки на регистрацию персонажа Амлус
                 BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
-                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
-                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
-                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                biographyRequestHeroRegistration.SetDecision(true, null);
                 await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
 
                 //Логгируем
@@ -1033,9 +1027,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             {
                 //Добавляем биографию от 643 заявки на регистрацию персонажа Амлус
                 BiographyRequestHeroRegistration? biographyRequestHeroRegistration = new(_userCreated, true, request, biography);
-                biographyRequestHeroRegistration.SetDateBeginDecision(true, null);
-                biographyRequestHeroRegistration.SetDateEndDecision(true, null);
-                biographyRequestHeroRegistration.SetTextDecision(true, null);
+                biographyRequestHeroRegistration.SetDecision(true, null);
                 await _applicationContext.BiographiesRequestsHeroesRegistration.AddAsync(biographyRequestHeroRegistration);
 
                 //Логгируем
@@ -1160,31 +1152,24 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
         {
             //Проверяем заявку персонажа Амлус
             Hero? hero = await _applicationContext.Heroes.Include(x => x.Player).ThenInclude(y => y.User).FirstAsync(x => x.Player.User.UserName == "divinitas" && x.PersonalName == "Алмус") ?? throw new InnerException(Errors.EmptyHero);
-            StatusRequestHeroRegistration? status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "Принята") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            StatusRequestHeroRegistration? status = await _applicationContext.StatusesRequestsHeroesRegistration.FirstAsync(x => x.Name == "Принята") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
             Administrator? administrator = await _applicationContext.Administrators.Include(x => x.User).FirstAsync(x => x.User.UserName == "demiurge") ?? throw new InnerException(Errors.EmptyAdministrator);
             if (!await _applicationContext.RequestsHeroesRegistration.AnyAsync(x => x.Hero == hero && x.Status == status))
             {
                 //Добавляем заявку персонажа Амлус
                 RequestHeroRegistration request = new(_userCreated, true, hero, status);
                 request.SetAdministrator(administrator);
-                request.SetEyesColor(true, null);
-                request.SetFamilyNameDecision(true, null);
-                request.SetHairColorDescision(true, null);
-                request.SetHeightDecision(true, null);
-                request.SetImageDecision(true, null);
-                request.SetLocationDecision(true, null);
-                request.SetNationDecision(true, null);
-                request.SetPersonalNameDecision(true, null);
-                request.SetRaceDecision(true, null);
-                request.SetTypeBodyDescision(true, null);
-                request.SetTypeFaceDescision(true, null);
-                request.SetWeightDecision(true, null);
+                request.SetGeneralBlockDecision(true, null);
+                request.SetBirthDateBlockDecision(true, null);
+                request.SetLocationBlockDecision(true, null);
+                request.SetAppearanceBlockDecision(true, null);
+                request.SetImageBlockDecision(true, null);
                 await _applicationContext.RequestsHeroesRegistration.AddAsync(request);
 
                 //Логгируем
-                Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationsAdded);
+                Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationAdded);
             }
-            else Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationsAlreadyAdded);
+            else Console.WriteLine("Алмус{0}", Informations.RequestsHeroesRegistrationAlreadyAdded);
             hero = null;
             status = null;
             administrator = null;
@@ -1222,76 +1207,76 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     public async Task InitializationStatusesRequestsHeroesRegistration()
     {
         //Логгируем
-        Console.WriteLine(Informations.EnteredInitializationStatusesRequestsHeroesRegistrationsMethod);
+        Console.WriteLine(Informations.EnteredInitializationStatusesRequestsHeroesRegistrationMethod);
 
         try
         {
             //Проверяем статус новая
             StatusRequestHeroRegistration? status = null;
-            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Новая"))
+            if (!await _applicationContext.StatusesRequestsHeroesRegistration.AnyAsync(x => x.Name == "Новая"))
             {
                 //Добавляем статус новая
                 StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Новая", status);
-                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+                await _applicationContext.StatusesRequestsHeroesRegistration.AddAsync(statusRequestHeroRegistration);
 
                 //Сохраняем добавленные данные
                 await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
-                Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+                Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationAdded);
             }
-            else Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            else Console.WriteLine("Новая{0}", Informations.StatusesRequestsHeroesRegistrationAlreadyAdded);
             status = null;
 
             //Проверяем статус на рассмотрении
-            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "Новая") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
-            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "На рассмотрении"))
+            status = await _applicationContext.StatusesRequestsHeroesRegistration.FirstAsync(x => x.Name == "Новая") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistration.AnyAsync(x => x.Name == "На рассмотрении"))
             {
                 //Добавляем статус на рассмотрении
                 StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "На рассмотрении", status);
-                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+                await _applicationContext.StatusesRequestsHeroesRegistration.AddAsync(statusRequestHeroRegistration);
 
                 //Сохраняем добавленные данные
                 await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
-                Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+                Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationAdded);
             }
-            else Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            else Console.WriteLine("На рассмотрении{0}", Informations.StatusesRequestsHeroesRegistrationAlreadyAdded);
             status = null;
 
             //Проверяем статус принята
-            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
-            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Принята"))
+            status = await _applicationContext.StatusesRequestsHeroesRegistration.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistration.AnyAsync(x => x.Name == "Принята"))
             {
                 //Добавляем статус принята
                 StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Принята", status);
-                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+                await _applicationContext.StatusesRequestsHeroesRegistration.AddAsync(statusRequestHeroRegistration);
 
                 //Сохраняем добавленные данные
                 await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
-                Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+                Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationAdded);
             }
-            else Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            else Console.WriteLine("Принята{0}", Informations.StatusesRequestsHeroesRegistrationAlreadyAdded);
             status = null;
 
             //Проверяем статус отклонена
-            status = await _applicationContext.StatusesRequestsHeroesRegistrations.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
-            if (!await _applicationContext.StatusesRequestsHeroesRegistrations.AnyAsync(x => x.Name == "Отклонена"))
+            status = await _applicationContext.StatusesRequestsHeroesRegistration.FirstAsync(x => x.Name == "На рассмотрении") ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
+            if (!await _applicationContext.StatusesRequestsHeroesRegistration.AnyAsync(x => x.Name == "Отклонена"))
             {
                 //Добавляем статус отклонена
                 StatusRequestHeroRegistration statusRequestHeroRegistration = new(_userCreated, "Отклонена", status);
-                await _applicationContext.StatusesRequestsHeroesRegistrations.AddAsync(statusRequestHeroRegistration);
+                await _applicationContext.StatusesRequestsHeroesRegistration.AddAsync(statusRequestHeroRegistration);
 
                 //Сохраняем добавленные данные
                 await _applicationContext.SaveChangesAsync();
 
                 //Логгируем
-                Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationsAdded);
+                Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationAdded);
             }
-            else Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationsAlreadyAdded);
+            else Console.WriteLine("Отклонена{0}", Informations.StatusesRequestsHeroesRegistrationAlreadyAdded);
             status = null;
 
             //Создаём шаблон файла скриптов

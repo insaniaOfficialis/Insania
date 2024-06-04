@@ -4,6 +4,7 @@ public static class Errors
 {
     #region Вне категорий
 
+    public const string EmptyId = "Пустой первичный ключ";
     public const string EmptyRequest = "Пустой запрос";
     public const string EmptyResponse = "Пустой ответ";
     public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
@@ -76,6 +77,7 @@ public static class Errors
     public const string EmptyBiography = "Пустая биография";
     public const string EmptyBiographyhDate = "Пустая дата биографии";
     public const string EmptyBiographyhText = "Пустой текст биографии";
+    public const string EmtryCommentOnDecision = "Пустой комментарий решения";
     public const string EmptyFamilyName = "Пустое имя семьи";
     public const string EmptyHero = "Пустой персонаж";
     public const string EmptyPersonalName = "Пустое личное имя";
@@ -203,8 +205,10 @@ public static class Errors
     public const string EmptyNameFile = "Пустое наименование файла";
     public const string EmptyEntityFile = "Пустая сущность файла";
     public const string EmptyFile = "Пустой файл";
+    public const string EmptyServiceFiles = "Пустой сервис работы с файлами";
     public const string EmptyStreamFile = "Пустой поток файла";
     public const string EmptyTypeFile = "Пустой тип файла";
+    public const string EmptyUrlFiles = "Пустая ссылка работы с файлами";
     public const string IncorrectExtention = "Некорректное расширение";
 
     #endregion

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Insania.App.Logic.Appearance;
 using Insania.App.Logic.Biology;
 using Insania.App.Logic.Chronology;
+using Insania.App.Logic.Files;
 using Insania.App.Logic.Heroes;
 using Insania.App.Logic.OutCategories;
 using Insania.App.Logic.Polititcs;
@@ -19,6 +20,7 @@ using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
@@ -44,6 +46,18 @@ public static class MauiProgram
         {
             //Убираем подчёркивания у полей ввода
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if ANDROID
+                    handler.PlatformView.Background = null;
+                    handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                    handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList
+                        .ValueOf(Android.Graphics.Color.Transparent);
+#elif WINDOWS
+                    handler.PlatformView.BorderBrush = null;
+                    handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+            Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
             {
 #if ANDROID
                     handler.PlatformView.Background = null;
@@ -133,6 +147,7 @@ public static class MauiProgram
             builder.Services.AddScoped<IEyesColors, EyesColorsRequests>(); //работа с цветами глаз
             builder.Services.AddScoped<IPrefixesNames, PrefixesNamesRequests>(); //работа с префиксами имён
             builder.Services.AddScoped<IHeroes, HeroesRequests>(); //работа с персонажами
+            builder.Services.AddScoped<IFiles, FilesRequests>(); //работа с файлами
 
             //Возвращаем построенное приложение
             return builder.Build();

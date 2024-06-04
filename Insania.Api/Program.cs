@@ -19,6 +19,7 @@ using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
@@ -145,6 +146,7 @@ services.AddScoped<IParameters, ParametersService>(); //сервис работы с префикса
 services.AddScoped<IPrefixesNames, PrefixesNamesService>(); //сервис работы с параметрами
 services.AddScoped<IHeroes, HeroesService>(); //сервис работы с персонажами
 services.AddScoped<IFiles, FilesService>(); //сервис работы с файлами
+services.AddScoped<IRequestsHeroesRegistration, ReuestsHeroRegistration>(); //сервис работы с заявками на регистрацию персонажей
 
 //Строим приложение
 var app = builder.Build();

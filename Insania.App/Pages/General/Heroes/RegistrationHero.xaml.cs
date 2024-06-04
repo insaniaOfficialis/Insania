@@ -7,6 +7,7 @@ using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
+using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
@@ -14,6 +15,7 @@ using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Users;
+using Insania.Models.Files.Files;
 using Insania.Models.Heroes.BiographiesHeroes;
 using Insania.Models.Heroes.Heroes;
 using Insania.Models.OutCategories.Base;
@@ -74,7 +76,7 @@ public partial class RegistrationHero : ContentPage
     private readonly ITypesBodies? _typesBodies;
 
     /// <summary>
-    /// Интерфейс работы с типами лицы
+    /// Интерфейс работы с типами лиц
     /// </summary>
     private readonly ITypesFaces? _typesFaces;
 
@@ -97,6 +99,11 @@ public partial class RegistrationHero : ContentPage
     /// Интерфейс работы с персонажами
     /// </summary>
     private readonly IHeroes? _heroes;
+
+    /// <summary>
+    /// Интерфейс работы с файлами
+    /// </summary>
+    private readonly IFiles? _files;
 
 
     /// <summary>
@@ -194,6 +201,7 @@ public partial class RegistrationHero : ContentPage
         _eyesColors = App.Services?.GetService<IEyesColors>();
         _users = App.Services?.GetService<IUsers>();
         _heroes = App.Services?.GetService<IHeroes>();
+        _files = App.Services?.GetService<IFiles>();
 
         //Записываем входящие параметры
         _addUserRequest = addUserRequest;
@@ -605,6 +613,7 @@ public partial class RegistrationHero : ContentPage
             //Проверяем входные данные
             if (HeroFile == null) throw new InnerException(Errors.EmptyFile);
             if (_heroes == null) throw new InnerException(Errors.EmptyServiceHeroes);
+            if (_files == null) throw new InnerException(Errors.EmptyServiceFiles);
 
             //Создаём модель запроса добавления персонажа
             AddHeroRequest request = new(
@@ -644,7 +653,13 @@ public partial class RegistrationHero : ContentPage
             request.SetBiographies(biographiesHero);
 
             //Регистрируем персонажа
-            await _heroes.Registration(request);
+            var response = await _heroes.Registration(request);
+
+            //Создаём модель запрос добавления файла
+            AddFileRequest fileRequest = new(response.Id, HeroFile.FileName, "Personazhi", await HeroFile.OpenReadAsync(), null);
+
+            //Регистрируем файл
+            await _files.Add(fileRequest);
         }
         catch (InnerException ex)
         {

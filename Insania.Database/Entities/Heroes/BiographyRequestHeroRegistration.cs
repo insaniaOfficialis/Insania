@@ -38,46 +38,18 @@ public class BiographyRequestHeroRegistration : Reestr
     public BiographyHero Biography { get; private set; }
 
     /// <summary>
-    /// Решение по дате начала
+    /// Решение
     /// </summary>
-    [Column("date_begin_decision")]
-    [Comment("Решение по дате начала")]
-    public bool? DateBeginDecision { get; private set; }
+    [Column("decision")]
+    [Comment("Решение")]
+    public bool? Decision { get; private set; }
 
     /// <summary>
-    /// Комментарий к дате начала
+    /// Комментарий
     /// </summary>
-    [Column("comment_on_date_begin")]
-    [Comment("Комментарий к дате начала")]
-    public string? CommentOnDateBegin { get; private set; }
-
-    /// <summary>
-    /// Решение по дате окончания
-    /// </summary>
-    [Column("date_end_decision")]
-    [Comment("Решение по дате окончания")]
-    public bool? DateEndDecision { get; private set; }
-
-    /// <summary>
-    /// Комментарий к дате окончания
-    /// </summary>
-    [Column("comment_on_date_end")]
-    [Comment("Комментарий к дате окончания")]
-    public string? CommentOnDateEnd { get; private set; }
-
-    /// <summary>
-    /// Решение по тексту
-    /// </summary>
-    [Column("text_decision")]
-    [Comment("Решение по тексту")]
-    public bool? TextDecision { get; private set; }
-
-    /// <summary>
-    /// Комментарий к тексту
-    /// </summary>
-    [Column("comment_on_text")]
-    [Comment("Комментарий к тексту")]
-    public string? CommentOnText { get; private set; }
+    [Column("comment")]
+    [Comment("Комментарий")]
+    public string? Comment { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности биографии заявки на регистрацию персонажа
@@ -142,35 +114,13 @@ public class BiographyRequestHeroRegistration : Reestr
     }
 
     /// <summary>
-    /// Метод записи решения по дате начала
+    /// Метод записи решения
     /// </summary>
-    /// <param name="dateBeginDecision">Решение по дате начала</param>
-    /// <param name="commnetOnDateBegin">Комментарий к дате начала</param>
-    public void SetDateBeginDecision(bool dateBeginDecision, string? commnetOnDateBegin)
+    /// <param name="decision">Решение</param>
+    /// <param name="comment">Комментарий</param>
+    public void SetDecision(bool decision, string? comment)
     {
-        DateBeginDecision = dateBeginDecision;
-        CommentOnDateBegin = commnetOnDateBegin;
-    }
-
-    /// <summary>
-    /// Метод записи решения по дате окончания
-    /// </summary>
-    /// <param name="dateBeginDecision">Решение по дате окончания</param>
-    /// <param name="commnetOnDateBegin">Комментарий к дате окончания</param>
-    public void SetDateEndDecision(bool dateEndDecision, string? commnetOnDateEnd)
-    {
-        DateEndDecision = dateEndDecision;
-        CommentOnDateEnd = commnetOnDateEnd;
-    }
-
-    /// <summary>
-    /// Метод записи решения по тексту
-    /// </summary>
-    /// <param name="textDecision">Решение по тексту</param>
-    /// <param name="commnetOnText">Комментарий к тексту</param>
-    public void SetTextDecision(bool textDecision, string? commnetOnText)
-    {
-        TextDecision = textDecision;
-        CommentOnText = commnetOnText;
+        Decision = decision;
+        Comment = comment;
     }
 }

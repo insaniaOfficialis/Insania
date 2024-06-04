@@ -81,7 +81,7 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     /// <summary>
     /// Статусы заявки на регистрацию персонажа
     /// </summary>
-    public DbSet<StatusRequestHeroRegistration> StatusesRequestsHeroesRegistrations { get; set; }
+    public DbSet<StatusRequestHeroRegistration> StatusesRequestsHeroesRegistration { get; set; }
 
     /// <summary>
     /// Заявки на регистрацию персонажа
