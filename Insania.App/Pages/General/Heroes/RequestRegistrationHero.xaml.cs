@@ -9,16 +9,18 @@ using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
+using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Users;
+using Insania.Models.Heroes.RequestsHeroesRegistration;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
-using Insania.Models.Users.Users;
 
 namespace Insania.App.Pages.General.Heroes;
 
@@ -107,6 +109,16 @@ public partial class RequestRegistrationHero : ContentPage
     /// </summary>
     private readonly IFiles? _files;
 
+    /// <summary>
+    /// Интерфейс работы с заявками на регистрацию персонажей
+    /// </summary>
+    private readonly IRequestsHeroesRegistration? _requestsHeroesRegistration;
+
+    /// <summary>
+    /// Интерфейс работы со статусами заявок на регистрацию персонажей
+    /// </summary>
+    private readonly IStatusesRequestsHeroesRegistration? _statusesRequestsHeroesRegistration;
+
 
     /// <summary>
     /// Список рас
@@ -163,6 +175,16 @@ public partial class RequestRegistrationHero : ContentPage
     /// </summary>
     private ObservableCollection<BaseResponseListItem>? EyesColors { get; set; }
 
+    /// <summary>
+    /// Заявка на регистрацию персонажа
+    /// </summary>
+    private GetRequestRegistrationHeroResponse? RequestRegistrationHeroModel { get; set; }
+
+    /// <summary>
+    /// Список статусов заявок на регистрацию персонажей
+    /// </summary>
+    private ObservableCollection<BaseResponseListItem>? Statuses { get; set; }
+
 
     /// <summary>
     /// Конструктор класса страницы заявки регистрации персонажа
@@ -190,6 +212,8 @@ public partial class RequestRegistrationHero : ContentPage
         _users = App.Services?.GetService<IUsers>();
         _heroes = App.Services?.GetService<IHeroes>();
         _files = App.Services?.GetService<IFiles>();
+        _requestsHeroesRegistration = App.Services?.GetService<IRequestsHeroesRegistration>();
+        _statusesRequestsHeroesRegistration = App.Services?.GetService<IStatusesRequestsHeroesRegistration>();
     }
 
     /// <summary>
@@ -218,6 +242,8 @@ public partial class RequestRegistrationHero : ContentPage
             if (_users == null) throw new InnerException(Errors.EmptyServiceUsers);
             if (_heroes == null) throw new InnerException(Errors.EmptyServiceHeroes);
             if (_files == null) throw new InnerException(Errors.EmptyServiceFiles);
+            if (_requestsHeroesRegistration == null) throw new InnerException(Errors.EmptyServiceRequestsHeroesRegistration);
+            if (_statusesRequestsHeroesRegistration == null) throw new InnerException(Errors.EmptyServiceStatusesRequestsHeroesRegistration);
 
             //Проверяем соединение
             if (!await _checkConnection.CheckNotAuthorize()) throw new InnerException(Errors.NoConnection);
@@ -238,9 +264,13 @@ public partial class RequestRegistrationHero : ContentPage
             tasks.Add(hairsColorsTask);
             Task<BaseResponseList> eyesColorsTask = _eyesColors.GetEyesColorsList();
             tasks.Add(eyesColorsTask);
+            Task<GetRequestRegistrationHeroResponse> requestRegistrationHeroTask = _requestsHeroesRegistration.GetById(_id);
+            tasks.Add(requestRegistrationHeroTask);
+            Task<BaseResponseList> statusesTask = _statusesRequestsHeroesRegistration.GetList();
+            tasks.Add(statusesTask);
             await Task.WhenAll(tasks);
 
-            //Получаем коллекци
+            //Получаем данные
             Races = new ObservableCollection<BaseResponseListItem>(racesTask.Result.Items!);
             Months = new ObservableCollection<BaseResponseListItem>(monthsTask.Result.Items!);
             Countries = new ObservableCollection<BaseResponseListItem>(countriesTask.Result.Items!);
@@ -248,15 +278,20 @@ public partial class RequestRegistrationHero : ContentPage
             TypesFaces = new ObservableCollection<BaseResponseListItem>(typesFacesTask.Result.Items!);
             HairsColors = new ObservableCollection<BaseResponseListItem>(hairsColorsTask.Result.Items!);
             EyesColors = new ObservableCollection<BaseResponseListItem>(eyesColorsTask.Result.Items!);
+            RequestRegistrationHeroModel = requestRegistrationHeroTask.Result;
+            Statuses = new ObservableCollection<BaseResponseListItem>(statusesTask.Result.Items!);
 
             //Привязываем данные
             RacePicker.ItemsSource = Races;
+            //RacePicker.SelectedItem = Races.First(x => x.Id == RequestRegistrationHeroModel.);
             MonthBirtPicker.ItemsSource = Months;
             CountryPicker.ItemsSource = Countries;
             TypeBodyPicker.ItemsSource = TypesBodies;
             TypeFacePicker.ItemsSource = TypesFaces;
             HairsColorPicker.ItemsSource = HairsColors;
             EyesColorPicker.ItemsSource = EyesColors;
+            StatusPicker.ItemsSource = Statuses;
+            StatusPicker.SelectedItem = Statuses.First(x => x.Id == RequestRegistrationHeroModel.Id) ?? throw new InnerException(Errors.EmptyStatusRequestsHeroesRegistration);
 
             //Запускаем получение данных по персонажу
             tasks.Clear();

@@ -1,4 +1,4 @@
-﻿using Insania.Models.Heroes.Heroes;
+﻿using Insania.Models.Heroes.RequestsHeroesRegistration;
 using Insania.Models.OutCategories.Exceptions;
 
 namespace Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;

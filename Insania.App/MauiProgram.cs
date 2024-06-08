@@ -28,6 +28,8 @@ using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
+using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
 
 namespace Insania.App;
 
@@ -148,6 +150,8 @@ public static class MauiProgram
             builder.Services.AddScoped<IPrefixesNames, PrefixesNamesRequests>(); //работа с префиксами имён
             builder.Services.AddScoped<IHeroes, HeroesRequests>(); //работа с персонажами
             builder.Services.AddScoped<IFiles, FilesRequests>(); //работа с файлами
+            builder.Services.AddScoped<IRequestsHeroesRegistration, RequestsHeroesRegistrationRequests>(); //работа с заявками на регистрацию персонажей
+            builder.Services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationRequests>(); //работа со статусами заявок на регистрацию персонажей
 
             //Возвращаем построенное приложение
             return builder.Build();

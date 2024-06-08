@@ -2,14 +2,16 @@ using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
 using Insania.Api.Middleware;
+using Insania.Api.Swagger;
+using Insania.BusinessLogic.Administrators.Administrators;
 using Insania.BusinessLogic.Appearance.EyesColors;
 using Insania.BusinessLogic.Appearance.HairsColors;
 using Insania.BusinessLogic.Appearance.TypesBodies;
@@ -20,6 +22,7 @@ using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
+using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
@@ -126,6 +129,16 @@ services.AddSwaggerGen(options =>
 
     var filePath = Path.Combine(AppContext.BaseDirectory, "Insania.Api.xml");
     options.IncludeXmlComments(filePath);
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Авторизация по ключу приложения",
+        Scheme = "Bearer"
+    });
+    options.OperationFilter<AuthenticationRequirementsOperationFilter>();
 });
 
 //Внедряем зависимости для сервисов
@@ -146,7 +159,9 @@ services.AddScoped<IParameters, ParametersService>(); //сервис работы с префикса
 services.AddScoped<IPrefixesNames, PrefixesNamesService>(); //сервис работы с параметрами
 services.AddScoped<IHeroes, HeroesService>(); //сервис работы с персонажами
 services.AddScoped<IFiles, FilesService>(); //сервис работы с файлами
-services.AddScoped<IRequestsHeroesRegistration, ReuestsHeroRegistration>(); //сервис работы с заявками на регистрацию персонажей
+services.AddScoped<IRequestsHeroesRegistration, ReuestsHeroRegistrationService>(); //сервис работы с заявками на регистрацию персонажей
+services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationService>(); //сервис работы со статусами заявок на регистрацию персонажей
+services.AddScoped<IAdministrators, AdministratorsService>(); //сервис работы с администраторами
 
 //Строим приложение
 var app = builder.Build();

@@ -31,6 +31,42 @@
                              Spacing="50">
 
                     <Label HorizontalOptions="Center"
+                           Text="ЗАЯВКА"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="StatusStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Статус*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="StatusPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Statuses}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите статус'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    <StackLayout x:Name="AdministratorStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Ответственный администратор*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Picker x:Name="AdministratorPicker"
+                                Margin="0,25,0,0"
+                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                ItemsSource="{Binding Administrators}"
+                                ItemDisplayBinding="{Binding Name}"
+                                Title="{OnIdiom Desktop='', Phone='Выберите администратора'}"
+                                Style="{StaticResource PickerPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+
+                    <Label HorizontalOptions="Center"
                            Text="ОБЩЕЕ"
                            Style="{StaticResource TitleSecondary}"/>
                     <StackLayout>

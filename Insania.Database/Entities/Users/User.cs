@@ -63,9 +63,8 @@ public class User : IdentityUser<long>
     [NotMapped]
     public string? FullName
     {
-        get => (!string.IsNullOrWhiteSpace(FirstName) ? (FirstName + " ") : string.Empty) +
-            (!string.IsNullOrWhiteSpace(Patronymic) ? (Patronymic + " ") : string.Empty) +
-            LastName;
+        get => !string.IsNullOrWhiteSpace(Name) ? Name : ((!string.IsNullOrWhiteSpace(FirstName) ? (FirstName + " ") :
+            string.Empty) + (!string.IsNullOrWhiteSpace(Patronymic) ? (Patronymic + " ") : string.Empty) + LastName);
     }
 
     /// <summary>
@@ -76,8 +75,14 @@ public class User : IdentityUser<long>
     { 
         get => (!string.IsNullOrWhiteSpace(FirstName) ? (FirstName[0] + ". ") : string.Empty) + 
             (!string.IsNullOrWhiteSpace(Patronymic) ? (Patronymic[0] + ". ") : string.Empty) + 
-            LastName; 
+            LastName;
     }
+
+    /// <summary>
+    /// Имя
+    /// </summary>
+    [NotMapped]
+    public string? Name { get; private set; }
 
     /// <summary>
     /// Навигационное свойство игрока
@@ -88,6 +93,11 @@ public class User : IdentityUser<long>
     /// Навигационное свойство администратора
     /// </summary>
     public Administrator? Administrator { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство ролей пользователя
+    /// </summary>
+    public HashSet<IdentityUserRole<long>>? UserRoles { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности пользователя
@@ -227,5 +237,14 @@ public class User : IdentityUser<long>
     public void SetBirthDate(DateTime birthDate)
     {
         BirthDate = birthDate;
+    }
+    
+    /// <summary>
+    /// Метод записи имени
+    /// </summary>
+    /// <param name="name">Имя</param>
+    public void SetName(string name)
+    {
+        Name = name;
     }
 }

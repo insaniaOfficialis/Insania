@@ -920,7 +920,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                 .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas" 
                     && x.Hero.PersonalName == "Алмус"
                     && x.Status.Name == "Принята") 
-                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+                ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
             if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
             {
                 //Добавляем биографию от -9999 заявки на регистрацию персонажа Амлус
@@ -954,7 +954,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                 .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
                     && x.Hero.PersonalName == "Алмус"
                     && x.Status.Name == "Принята")
-                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+                ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
             if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
             {
                 //Добавляем биографию от 0 заявки на регистрацию персонажа Амлус
@@ -988,7 +988,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                 .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
                     && x.Hero.PersonalName == "Алмус"
                     && x.Status.Name == "Принята")
-                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+                ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
             if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
             {
                 //Добавляем биографию от 224 заявки на регистрацию персонажа Амлус
@@ -1022,7 +1022,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
                 .FirstAsync(x => x.Hero.Player.User.UserName == "divinitas"
                     && x.Hero.PersonalName == "Алмус"
                     && x.Status.Name == "Принята")
-                ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+                ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
             if (!await _applicationContext.BiographiesRequestsHeroesRegistration.AnyAsync(x => x.Biography == biography && x.Request == request))
             {
                 //Добавляем биографию от 643 заявки на регистрацию персонажа Амлус
@@ -2095,17 +2095,17 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
         try
         {
-            //Проверяем звание демиург
-            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Демиург"))
+            //Проверяем звание единый
+            if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Единый"))
             {
-                //Добавляем звание демиург
-                Rank rank = new(_userCreated, "Демиург", 1024);
+                //Добавляем звание единый
+                Rank rank = new(_userCreated, "Единый", 1024);
                 await _applicationContext.Ranks.AddAsync(rank);
 
                 //Логгируем
-                Console.WriteLine("Демиург{0}", Informations.RankAdded);
+                Console.WriteLine("Единый{0}", Informations.RankAdded);
             }
-            else Console.WriteLine("Демиург{0}", Informations.RankAlreadyAdded);
+            else Console.WriteLine("Единый{0}", Informations.RankAlreadyAdded);
 
             //Проверяем звание верховный
             if (!await _applicationContext.Ranks.AnyAsync(x => x.Name == "Верховный"))

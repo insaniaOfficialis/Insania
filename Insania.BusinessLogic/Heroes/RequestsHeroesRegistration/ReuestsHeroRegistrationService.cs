@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Insania.Database.Entities.Heroes;
 using Insania.Entities.Context;
-using Insania.Models.Heroes.Heroes;
+using Insania.Models.Heroes.RequestsHeroesRegistration;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
@@ -18,7 +18,7 @@ namespace Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 /// <param name="mapper">Интерфейс преобразования моделей</param>
 /// <param name="parameters">Интерфейс работы с параметрами</param>
 /// <param name="userManager">Менеджер пользователей</param>
-public class ReuestsHeroRegistration(ApplicationContext applicationContext, ILogger<ReuestsHeroRegistration> logger, IMapper mapper) : 
+public class ReuestsHeroRegistrationService(ApplicationContext applicationContext, ILogger<ReuestsHeroRegistrationService> logger, IMapper mapper) : 
     IRequestsHeroesRegistration
 {
     /// <summary>
@@ -29,7 +29,7 @@ public class ReuestsHeroRegistration(ApplicationContext applicationContext, ILog
     /// <summary>
     /// Интерфейс записи логов
     /// </summary>
-    private readonly ILogger<ReuestsHeroRegistration> _logger = logger;
+    private readonly ILogger<ReuestsHeroRegistrationService> _logger = logger;
 
     /// <summary>
     /// Интерфейс преобразования моделей
@@ -54,7 +54,7 @@ public class ReuestsHeroRegistration(ApplicationContext applicationContext, ILog
             if (id == null) throw new InnerException(Errors.EmptyRequest);
 
             //Получаем данные с базы
-            RequestHeroRegistration row = await _applicationContext.RequestsHeroesRegistration.FirstAsync(x => x.Id == id) ?? throw new InnerException(Errors.EmptyRequestsHeroesRegistration);
+            RequestHeroRegistration row = await _applicationContext.RequestsHeroesRegistration.FirstAsync(x => x.Id == id) ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
 
             //Конвертируем ответ
             GetRequestRegistrationHeroResponse response = _mapper.Map<GetRequestRegistrationHeroResponse>(row);

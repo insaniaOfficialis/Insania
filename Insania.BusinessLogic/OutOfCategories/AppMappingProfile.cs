@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using Insania.Database.Entities.Administrators;
 using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
@@ -7,7 +8,7 @@ using Insania.Database.Entities.Heroes;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
 using Insania.Database.Entities.System;
-using Insania.Models.Heroes.Heroes;
+using Insania.Models.Heroes.RequestsHeroesRegistration;
 using Insania.Models.OutCategories.Base;
 
 namespace Insania.BusinessLogic.OutOfCategories;
@@ -35,5 +36,8 @@ public class AppMappingProfile : Profile
         CreateMap<PrefixName, BaseResponseListItem>();
         CreateMap<Parameter, BaseResponse>();
         CreateMap<RequestHeroRegistration, GetRequestRegistrationHeroResponse>();
+        CreateMap<StatusRequestHeroRegistration, BaseResponseListItem>();
+        CreateMap<Administrator, BaseResponseListItem>().ForMember(x => x.Name, y => y.MapFrom(z => z.Rank.Name + " " +
+            z.Post.Name.ToLower() + " капитула \"" + z.Chapter.Name + "\" " + z.User.FullName));
     }
 }

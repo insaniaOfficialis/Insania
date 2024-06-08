@@ -2,7 +2,7 @@
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.Models.Heroes.Heroes;
+namespace Insania.Models.Heroes.RequestsHeroesRegistration;
 
 /// <summary>
 /// Модель ответа получения заявки на регистрацию персонажа

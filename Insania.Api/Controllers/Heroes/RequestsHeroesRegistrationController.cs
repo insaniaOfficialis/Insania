@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using Insania.Api.Controllers.OutCategories;
 using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
-using Insania.Models.Heroes.Heroes;
+using Insania.Models.Heroes.RequestsHeroesRegistration;
 
 namespace Insania.Api.Controllers.Heroes;
 
@@ -11,6 +12,7 @@ namespace Insania.Api.Controllers.Heroes;
 /// </summary>
 /// <param name="logger">Интерфейс записи логов</param>
 /// <param name="requestsHeroesRegistration">Интерфейс работы с заявками на регистрацию персонажей</param>
+[Authorize]
 [Route("api/v1/requestsHeroesRegistration")]
 public class RequestsHeroesRegistrationController(ILogger<RequestsHeroesRegistrationController> logger, 
     IRequestsHeroesRegistration requestsHeroesRegistration) : BaseController(logger)

@@ -59,7 +59,7 @@ public class AuthenticationService(UserManager<User> userManager, IConfiguration
             if (validatePassword != PasswordVerificationResult.Success) throw new InnerException(Errors.IncorrectPassword);
 
             //Создаём токен
-            var token = CreateToken(login);
+            var token = "Bearer " + CreateToken(login);
 
             //Возвращаем результат с токеном
             return new AuthenticationResponse(true, null, token);

@@ -81,10 +81,15 @@ public static class Errors
     public const string EmptyFamilyName = "Пустое имя семьи";
     public const string EmptyHero = "Пустой персонаж";
     public const string EmptyPersonalName = "Пустое личное имя";
-    public const string EmptyRequestsHeroesRegistration = "Пустая заявок на регистрацию персонажей";
+    public const string EmptyRequestHeroRegistration = "Пустая заявка на регистрацию персонажа";
     public const string EmptyServiceHeroes = "Пустой сервис работы с персонажами";
+    public const string EmptyServiceRequestsHeroesRegistration = "Пустой сервис работы с заявками на регистрацию персонажа";
+    public const string EmptyServiceStatusesRequestsHeroesRegistration = "Пустой сервис работы со статусами заявок на регистрацию персонажа";
     public const string EmptyStatusRequestsHeroesRegistration = "Пустой статус заявок на регистрацию персонажей";
+    public const string EmptyStatusesRequestsHeroesRegistration = "Пустые статусы заявок на регистрацию персонажей";
     public const string EmptyUrlHeroes = "Пустая ссылка работы с персонажами";
+    public const string EmptyUrlRequestsHeroesRegistration = "Пустая ссылка работы с заявками на регистрацию персонажей";
+    public const string EmptyUrlStatusesRequestsHeroesRegistration = "Пустая ссылка работы со статусами заявок на регистрацию персонажей";
     public const string NotExistsDateEndBiography = "Не указана дата окончания предыдущей бюиографии";
 
     #endregion
@@ -92,6 +97,7 @@ public static class Errors
     #region Администраторы
 
     public const string EmptyAdministrator = "Пустой администратор";
+    public const string EmptyAdministrators = "Пустые администраторы";
     public const string EmptyPost = "Пустая должность";
     public const string EmptyRank = "Пустое звание";
 

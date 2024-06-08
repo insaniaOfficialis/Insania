@@ -1,5 +1,8 @@
 ﻿namespace Insania.Models.OutCategories.Logging;
 
+/// <summary>
+/// Список информационных сообщений
+/// </summary>
 public static class Informations
 {
     #region Вне категорий
@@ -58,6 +61,7 @@ public static class Informations
     public const string BiographyHeroAlreadyAdded = "-биография персонажа уже добавлена";
     public const string BiographiesRequestsHeroesRegistrationAdded = "-биография заявки на регистрацию персонажа добавлена";
     public const string BiographiesRequestsHeroesRegistrationAlreadyAdded = "-биография заявки на регистрацию персонажа уже добавлена";
+    public const string EnteredGetListStatusesRequestsHeroesRegistrationByIdMethod = "Вошли в метод получения список заявок на регистрацию персонажей";
     public const string EnteredGetRequestHeroRegistrationByIdMethod = "Вошли в метод получения заявки на регистрацию персонажа по id";
     public const string EnteredInitializationBiographiesHeroesMethod = "Вошли в метод инициализации биографией персонажей";
     public const string EnteredInitializationBiographiesRequestsHeroesRegistrationMethod = "Вошли в метод инициализации биографией заявок на регистрацию персонажей";
@@ -80,6 +84,7 @@ public static class Informations
     public const string AdministratorAlreadyAdded = "-администратор уже добавлен";
     public const string ChapterAdded = "-капитул добавлен";
     public const string ChapterAlreadyAdded = "-капитул уже добавлен";
+    public const string EnteredGetListAdmistratorsMethod = "Вошли в метод получения списка администраторов";
     public const string EnteredInitializationAdmistratorsMethod = "Вошли в метод инициализации администраторов";
     public const string EnteredInitializationChaptersMethod = "Вошли в метод инициализации капитулов";
     public const string EnteredInitializationPostsMethod = "Вошли в метод инициализации должностей";
