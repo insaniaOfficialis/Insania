@@ -196,4 +196,60 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
             throw;
         }
     }
+
+    /// <summary>
+    /// Метод получения персонажа по первичному ключу
+    /// </summary>
+    /// <param name="id">Первичный ключ</param>
+    /// <returns cref="GetHeroResponse">Модель ответа получения персонажа</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    public async Task<GetHeroResponse> GetById(long? id)
+    {
+        //Логгируем
+        _logger.LogInformation(Informations.EnteredGetHeroByIdMethod);
+
+        try
+        {
+            //Проверяем данные
+            if (id == null) throw new InnerException(Errors.EmptyRequest);
+
+            //Получаем данные с базы
+            Hero row = await _applicationContext
+                .Heroes
+                .Include(x => x.Nation)
+                .Include(x => x.CurrentLocation)
+                .ThenInclude(x => x.Region)
+                .ThenInclude(x => x.Country)
+                .Include(x => x.FilesHero)
+                .FirstAsync(x => x.Id == id)
+                ?? throw new InnerException(Errors.EmptyHero);
+
+            //Конвертируем ответ
+            GetHeroResponse response = _mapper.Map<GetHeroResponse>(row);
+            response.Success = true;
+
+            //Логгируем
+            _logger.LogInformation(Informations.Success);
+
+            //Возвращаем результат
+            return response;
+        }
+        catch (InnerException ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+    }
 }

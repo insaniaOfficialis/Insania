@@ -69,7 +69,8 @@
                     <Label HorizontalOptions="Center"
                            Text="ОБЩЕЕ"
                            Style="{StaticResource TitleSecondary}"/>
-                    <StackLayout>
+                    <StackLayout x:Name="PersonalNameStackLayout"
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Личное имя*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -82,7 +83,8 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout x:Name="FamilyNameStackLayout"
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Имя семьи*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -95,14 +97,16 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout x:Name="GenderStackLayout"
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Пол*:"
                                Style="{StaticResource TitleSecondary}"/>
                         <StackLayout Orientation="Horizontal">
                             <CheckBox x:Name="GenderCheckBox"
                                       VerticalOptions="Center"
-                                      Style="{StaticResource CheckBoxPrimary}"/>
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="Gender_CheckedChanged"/>
                             <Label x:Name="GenderLabel"
                                    HorizontalOptions="Start"
                                    VerticalOptions="Center"
@@ -110,7 +114,8 @@
                                    Style="{StaticResource TitleSecondary}"/>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout>
+                    <StackLayout x:Name="RaceStackLayout"
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Раса*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -120,13 +125,14 @@
                                 ItemsSource="{Binding Races}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите расу'}"
-                                Style="{StaticResource PickerPrimary}"/>
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Race_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
                     <StackLayout x:Name="NationStackLayout"
-                                 IsVisible="False">
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Нация*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -136,7 +142,8 @@
                                 ItemsSource="{Binding Nations}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите нацию'}"
-                                Style="{StaticResource PickerPrimary}"/>
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Nation_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -145,8 +152,7 @@
                                        IsVisible="False"
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
-                    <StackLayout x:Name="PrefixNameStackLayout"
-                                 IsVisible="False">
+                    <StackLayout x:Name="PrefixNameStackLayout">
                         <Label HorizontalOptions="Start"
                                Text="Префикс имени*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -165,12 +171,50 @@
                                        IsVisible="False"
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
-
+                    <Label HorizontalOptions="Center"
+                           Text="РЕШЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="GeneralBlockDecisionStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Решение:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="GeneralBlockDecisionCheckBox"
+                                      IsChecked = "False"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="GeneralBlockDecision_CheckedChanged"/>
+                            <Label x:Name="GeneralBlockDecisionLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Неизвестно"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="CommentOnGeneralBlockStackLayout"
+                                 IsEnabled="False"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Комментарий*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CommentOnGeneralBlockEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите комментарий"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="ДАТА РОЖДЕНИЯ"
                            Style="{StaticResource TitleSecondary}"/>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="DayBirthStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="День рождения*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -213,12 +257,50 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-
+                    <Label HorizontalOptions="Center"
+                           Text="РЕШЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="BirthDateBlockDecisionStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Решение:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="BirthDateBlockDecisionCheckBox"
+                                      IsChecked = "False"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="BirthDateBlockDecision_CheckedChanged"/>
+                            <Label x:Name="BirthDateBlockDecisionLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Неизвестно"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="CommentOnBirthDateBlockStackLayout"
+                                 IsEnabled="False"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Комментарий*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CommentOnBirthDateBlockEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите комментарий"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="МЕСТОПОЛОЖЕНИЕ"
                            Style="{StaticResource TitleSecondary}"/>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="CountryStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Страна*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -228,7 +310,8 @@
                                 ItemsSource="{Binding Countries}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите страну'}"
-                                Style="{StaticResource PickerPrimary}"/>
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Country_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -238,7 +321,7 @@
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
                     <StackLayout x:Name="RegionStackLayout"
-                                 IsVisible="False">
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Регион*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -248,7 +331,8 @@
                                 ItemsSource="{Binding Regions}"
                                 ItemDisplayBinding="{Binding Name}"
                                 Title="{OnIdiom Desktop='', Phone='Выберите регион'}"
-                                Style="{StaticResource PickerPrimary}"/>
+                                Style="{StaticResource PickerPrimary}"
+                                SelectedIndexChanged="Region_SelectedIndexChanged"/>
                         <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
@@ -258,7 +342,7 @@
                                        IsRunning="False"
                                        Color="{StaticResource PrimaryText}"/>
                     <StackLayout x:Name="AreaStackLayout"
-                                 IsVisible="False">
+                                 IsEnabled="False">
                         <Label HorizontalOptions="Start"
                                Text="Область*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -273,12 +357,50 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
+                    <Label HorizontalOptions="Center"
+                           Text="РЕШЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="LocationBlockDecisionStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Решение:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="LocationBlockDecisionCheckBox"
+                                      IsChecked = "False"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="LocationBlockDecision_CheckedChanged"/>
+                            <Label x:Name="LocationBlockDecisionLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Неизвестно"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="CommentOnLocationBlockStackLayout"
+                                 IsEnabled="False"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Комментарий*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CommentOnLocationBlockEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите комментарий"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
 
                     <Label HorizontalOptions="Center"
                            Margin="0,25,0,0"
                            Text="ВНЕШНОСТЬ"
                            Style="{StaticResource TitleSecondary}"/>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="TypeBodyStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Тип телосложения*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -293,7 +415,9 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="TypeFaceStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Тип лица*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -308,7 +432,9 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="HairsColorStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Цвет волос*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -323,7 +449,9 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="EyesColorStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Цвет глаз*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -338,7 +466,9 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="HeightStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Рост в см.*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -352,7 +482,9 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <StackLayout x:Name="WeightStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Вес в кг.*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -366,7 +498,50 @@
                                  HeightRequest="1"
                                  Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
-                    <StackLayout Margin="0,25,0,0">
+                    <Label HorizontalOptions="Center"
+                           Text="РЕШЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="AppearanceBlockDecisionStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Решение:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="AppearanceBlockDecisionCheckBox"
+                                      IsChecked = "False"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="AppearanceBlockDecision_CheckedChanged"/>
+                            <Label x:Name="AppearanceBlockDecisionLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Неизвестно"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="CommentOnAppearanceBlockStackLayout"
+                                 IsEnabled="False"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Комментарий*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CommentOnAppearanceBlockEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите комментарий"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
+                    </StackLayout>
+                    
+                    <Label HorizontalOptions="Center"
+                           Margin="0,25,0,0"
+                           Text="ИЗОБРАЖЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="ImageStackLayout"
+                                 IsEnabled="False"
+                                 Margin="0,25,0,0">
                         <Label HorizontalOptions="Start"
                                Text="Изображение персонажа*:"
                                Style="{StaticResource TitleSecondary}"/>
@@ -381,6 +556,42 @@
                                 WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                                 Text="Загрузить"
                                 Style="{StaticResource ButtonPrimary}"/>
+                    </StackLayout>
+                    <Label HorizontalOptions="Center"
+                           Text="РЕШЕНИЕ"
+                           Style="{StaticResource TitleSecondary}"/>
+                    <StackLayout x:Name="ImageBlockDecisionStackLayout"
+                                 IsEnabled="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Решение:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <StackLayout Orientation="Horizontal">
+                            <CheckBox x:Name="ImageBlockDecisionCheckBox"
+                                      IsChecked = "False"
+                                      VerticalOptions="Center"
+                                      Style="{StaticResource CheckBoxPrimary}"
+                                      CheckedChanged="ImageBlockDecision_CheckedChanged"/>
+                            <Label x:Name="ImageBlockDecisionLabel"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Text="Неизвестно"
+                                   Style="{StaticResource TitleSecondary}"/>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="CommentOnImageBlockStackLayout"
+                                 IsEnabled="False"
+                                 IsVisible="False">
+                        <Label HorizontalOptions="Start"
+                               Text="Комментарий*:"
+                               Style="{StaticResource TitleSecondary}"/>
+                        <Entry x:Name="CommentOnImageBlockEntry"
+                               Margin="0,25,0,0"
+                               WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                               Placeholder="Введите комментарий"
+                               Style="{StaticResource EntryPrimary}"/>
+                        <BoxView WidthRequest="{OnIdiom Desktop=400, Phone=280}"
+                                 HeightRequest="1"
+                                 Color="{StaticResource PrimaryText}"/>
                     </StackLayout>
 
                     <Label HorizontalOptions="Center"

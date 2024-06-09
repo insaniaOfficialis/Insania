@@ -97,7 +97,7 @@ public class User : IdentityUser<long>
     /// <summary>
     /// Навигационное свойство ролей пользователя
     /// </summary>
-    public HashSet<IdentityUserRole<long>>? UserRoles { get; private set; }
+    public ICollection<IdentityUserRole<long>>? UserRoles { get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности пользователя

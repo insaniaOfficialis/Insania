@@ -22,9 +22,9 @@ public class FilesController(ILogger<FilesController> logger, IFiles files) : Ba
     /// <summary>
     /// Метод добавления файла
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="id"></param>
-    /// <param name="file"></param>
+    /// <param name="type">Тип</param>
+    /// <param name="id">Первичный ключ</param>
+    /// <param name="file">Файл</param>
     /// <returns></returns>
     [HttpPost("{type}/{id}")]
     public async Task<IActionResult> Add([FromRoute] string type, [FromRoute] long id, IFormFile file) =>
@@ -34,4 +34,29 @@ public class FilesController(ILogger<FilesController> logger, IFiles files) : Ba
 
             return await _files.Add(request); 
         });
+
+    /// <summary>
+    /// Метод получения файла по первичному ключу
+    /// </summary>
+    /// <param name="id">Первичный ключ</param>
+    /// <returns cref="FileStreamResult">Файл</returns>
+    [HttpGet("{id}")]
+    public async Task<FileStreamResult?> GetById([FromRoute] long id)
+    {
+        try
+        {
+            //Получаем данные по файлу
+            var response = await _files.GetById(id);
+
+            //Проверяем данные по файлу
+            if (response == null || !response.Success || string.IsNullOrWhiteSpace(response.ContentType) || response.FileStream == null) return null;
+
+            //Возвращаем ответ
+            return File(response.FileStream, response.ContentType);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

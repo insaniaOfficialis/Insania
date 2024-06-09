@@ -43,7 +43,6 @@
     <Color x:Key="SecondaryBackground">#FF2F2F2F</Color>
     <Color x:Key="PrimaryText">#FFD9D9D9</Color>
     <Color x:Key="SecondaryText">#FFFFD700</Color>
-    <Color x:Key="PrimaryButton">#FFD9D9D9</Color>
     <Color x:Key="SecondaryButton">#FF888888</Color>
     <Color x:Key="ThirdButton">#32D9D9D9</Color>
     <Color x:Key="PrimaryTextDisable">#77D9D9D9</Color>

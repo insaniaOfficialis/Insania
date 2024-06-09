@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 
+using Insania.BusinessLogic.Users.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using Insania.App.Logic.Administrators;
 using Insania.App.Logic.Appearance;
 using Insania.App.Logic.Biology;
 using Insania.App.Logic.Chronology;
@@ -12,6 +14,7 @@ using Insania.App.Logic.OutCategories;
 using Insania.App.Logic.Polititcs;
 using Insania.App.Logic.Sociology;
 using Insania.App.Logic.Users;
+using Insania.BusinessLogic.Administrators.Administrators;
 using Insania.BusinessLogic.Appearance.EyesColors;
 using Insania.BusinessLogic.Appearance.HairsColors;
 using Insania.BusinessLogic.Appearance.TypesBodies;
@@ -19,17 +22,16 @@ using Insania.BusinessLogic.Appearance.TypesFaces;
 using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
-using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.Files.Files;
+using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
+using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Sociology.PrefixesNames;
 using Insania.BusinessLogic.Users.Authentication;
-using Insania.BusinessLogic.Users.Users;
-using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
-using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
 
 namespace Insania.App;
 
@@ -152,6 +154,7 @@ public static class MauiProgram
             builder.Services.AddScoped<IFiles, FilesRequests>(); //работа с файлами
             builder.Services.AddScoped<IRequestsHeroesRegistration, RequestsHeroesRegistrationRequests>(); //работа с заявками на регистрацию персонажей
             builder.Services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationRequests>(); //работа со статусами заявок на регистрацию персонажей
+            builder.Services.AddScoped<IAdministrators, AdministratorsRequests>(); //работа с администраторами
 
             //Возвращаем построенное приложение
             return builder.Build();

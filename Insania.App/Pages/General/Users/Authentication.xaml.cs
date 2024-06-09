@@ -1,4 +1,5 @@
 using Insania.App.Pages.Desktop.OutCategories;
+using Insania.App.Pages.General.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.Models.OutCategories.Exceptions;
@@ -146,9 +147,10 @@ public partial class Authentication : ContentPage
     /// </summary>
     /// <param name="sender">Отправитель</param>
     /// <param name="e">Событие</param>
-    private async void RestorePassword_Clicked(object sender, EventArgs e)
+    private void RestorePassword_Clicked(object sender, EventArgs e)
     {
-        await Task.Delay(500);
+        //Переход на страницу восстановления пароля
+        ToRestrorePassword(null, null);
     }
 
     /// <summary>
@@ -158,7 +160,7 @@ public partial class Authentication : ContentPage
     /// <param name="e">Событие</param>
     private void Registration_Clicked(object sender, EventArgs e)
     {
-        //Переходи на страницу регистрации
+        //Переход на страницу регистрации
         ToRegistration(null, null);
     }
 
@@ -170,6 +172,15 @@ public partial class Authentication : ContentPage
     private async void Feedback_Clicked(object sender, EventArgs e)
     {
         await Task.Delay(500);
+    }
+
+    /// <summary>
+    /// Событие нажатия кнопки назад
+    /// </summary>
+    /// <returns></returns>
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
     }
 
     /// <summary>
@@ -194,11 +205,13 @@ public partial class Authentication : ContentPage
     }
 
     /// <summary>
-    /// Метод нажатия кнопки назад
+    /// Метод перехода на страницу восстановления пароля
     /// </summary>
-    /// <returns></returns>
-    protected override bool OnBackButtonPressed()
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void ToRestrorePassword(object? sender, EventArgs? e)
     {
-        return true;
+        //Переходим на новую страницу
+        await Navigation.PushAsync(new RequestRegistrationHero(1));
     }
 }

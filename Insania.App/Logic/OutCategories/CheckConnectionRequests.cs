@@ -52,7 +52,7 @@ public class CheckConnectionRequests(IConfiguration configuration) : ICheckConne
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; },
             });
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token.Replace("Bearer ", ""));
 
             //Получаем данные по запросу
             using var result = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url));

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
+using Insania.Database.Entities.Files;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
@@ -197,6 +198,11 @@ public class Hero : Reestr
     /// Навигационное свойство текущего местоположения
     /// </summary>
     public Area CurrentLocation { get; private set; }
+
+    /// <summary>
+    /// Навигационное свойство файлов персонажа
+    /// </summary>
+    public ICollection<FileHero>? FilesHero {  get; private set; }
 
     /// <summary>
     /// Простой конструктор модели сущности персонажа

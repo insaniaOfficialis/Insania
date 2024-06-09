@@ -10,7 +10,6 @@ using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Authentication;
-using System.Net.Security;
 
 namespace Insania.App.Logic.Files;
 
@@ -90,6 +89,54 @@ public class FilesRequests(IConfiguration configuration) : IFiles
 
             //Возвращаем ответ
             return response;
+        }
+        catch (InnerException)
+        {
+            throw;
+        }
+        catch (Exception)
+        {
+            //Возвращаем общее исключение
+            throw new Exception(Errors.ServerError);
+        }
+    }
+    
+    /// <summary>
+    /// Метод получения файла по первичному ключу
+    /// </summary>
+    /// <param name="id">Первичный ключ</param>
+    /// <returns cref="GetFileResponse">Модель ответа получения персонажа</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    public async Task<GetFileResponse> GetById(long? id)
+    {
+        try
+        {
+            //Проверяем данные из файла конфигурации
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Files"])) throw new InnerException(Errors.EmptyUrlFiles);
+
+            //Проверяем входные данные
+            if ((id ?? 0) == 0) throw new InnerException(Errors.EmptyRequest);
+
+            //Формируем ссылку запроса
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Files"] + id.ToString();
+
+            //Формируем клиента
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyError) => { return true; }; ;
+            using HttpClient client = new(new HttpClientHandler()
+            {
+                ServerCertificateCustomValidationCallback = delegate { return true; },
+            });
+            
+            //Получаем данные по запросу
+            using Stream stream = await client.GetStreamAsync(url);
+            Stream fileStream = new MemoryStream();
+            stream.CopyTo(fileStream);
+
+            //Возвращаем ответ
+            return new(true, (id ?? 0), fileStream);
         }
         catch (InnerException)
         {

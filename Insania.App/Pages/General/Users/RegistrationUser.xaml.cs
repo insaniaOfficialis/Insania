@@ -130,7 +130,7 @@ public partial class RegistrationUser : ContentPage
 
             //Проверяем доступность логина
             if (_users == null) throw new InnerException(Errors.EmptyServiceUsers);
-            if(!(await _users.CheckLogin(addUserRequest.Login)).Success) throw new InnerException(Errors.LoginAlreadyExists);
+            if (!(await _users.CheckLogin(addUserRequest.Login)).Success) throw new InnerException(Errors.LoginAlreadyExists);
 
             //Переходим на страницу регистрации героя
             ToRegistrationHero(addUserRequest);

@@ -10,12 +10,14 @@ public static class Errors
     public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
     public const string EmptyServiceInitializtionDataBase = "Пустой сервис инициализации базы данных";
     public const string EmptyToken = "Пустой токен";
+    public const string EmptyTypeContent = "Пустой тип контента";
     public const string EmptyUrl = "Пустая ссылка";
     public const string EmptyUrlCheckConnection = "Пустая ссылка проверки соединения";
     public const string EmptyVersion = "Пустая версия api";
     public const string Error = "Ошибка:";
     public const string IncorrectToken = "Некорректный токен";
     public const string NoConnection = "Нет соединения";
+    public const string NotImplemented = "Не реализовано";
     public const string ServerError = "Ошибка сервера";
     public const string Unknown = "Неопознанная ошибка";
 
@@ -99,7 +101,9 @@ public static class Errors
     public const string EmptyAdministrator = "Пустой администратор";
     public const string EmptyAdministrators = "Пустые администраторы";
     public const string EmptyPost = "Пустая должность";
+    public const string EmptyServiceAdministrators = "Пустой сервис работы с администраторами";
     public const string EmptyRank = "Пустое звание";
+    public const string EmptyUrlAdministrators = "Пустая ссылка работы с администраторами";
 
     #endregion
 
@@ -208,9 +212,10 @@ public static class Errors
 
     #region Файлы
 
-    public const string EmptyNameFile = "Пустое наименование файла";
     public const string EmptyEntityFile = "Пустая сущность файла";
     public const string EmptyFile = "Пустой файл";
+    public const string EmptyNameFile = "Пустое наименование файла";
+    public const string EmptyPathFile = "Пустой путь к файлу";
     public const string EmptyServiceFiles = "Пустой сервис работы с файлами";
     public const string EmptyStreamFile = "Пустой поток файла";
     public const string EmptyTypeFile = "Пустой тип файла";

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,11 @@ public class RequestsHeroesRegistrationRequests(IConfiguration configuration) : 
     private readonly IConfiguration _configuration = configuration;
 
     /// <summary>
+    /// Токен доступа
+    /// </summary>
+    private string? _token;
+
+    /// <summary>
     /// Параметры json
     /// </summary>
     private readonly JsonSerializerOptions _settings = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
@@ -41,14 +47,18 @@ public class RequestsHeroesRegistrationRequests(IConfiguration configuration) : 
             //Проверяем данные из файла конфигурации
             if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
             if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
-            if (string.IsNullOrWhiteSpace(_configuration["Api:RequestsHeroesRegistration"])) throw new InnerException(Errors.EmptyUrlHeroes);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:RequestsHeroesRegistration"])) throw new InnerException(Errors.EmptyUrlRequestsHeroesRegistration);
 
             //Проверяем входные данные
             if ((id ?? 0) == 0) throw new InnerException(Errors.EmptyRequest);
 
+            //Получаем токен
+            _token = await SecureStorage.Default.GetAsync("token");
+            if (string.IsNullOrWhiteSpace(_token)) throw new InnerException(Errors.EmptyToken);
+
             //Формируем ссылку запроса
             NameValueCollection queryParam = System.Web.HttpUtility.ParseQueryString(string.Empty);
-            queryParam.Add("regionId", id.ToString());
+            queryParam.Add("id", id.ToString());
             string? param = queryParam?.ToString();
             string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:RequestsHeroesRegistration"]
                 + "byId" + (!string.IsNullOrWhiteSpace(param) ? $"?{param}" : "");
@@ -59,6 +69,7 @@ public class RequestsHeroesRegistrationRequests(IConfiguration configuration) : 
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; },
             });
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token.Replace("Bearer ", ""));
 
             //Получаем данные по запросу
             using var result = await client.GetAsync(url) ?? throw new InnerException(Errors.EmptyResponse);

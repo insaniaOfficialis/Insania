@@ -45,15 +45,14 @@ public class AdministratorsRequests(IConfiguration configuration) : IAdministrat
             //Проверяем данные из файла конфигурации
             if (string.IsNullOrWhiteSpace(_configuration["Api:Url"])) throw new InnerException(Errors.EmptyUrl);
             if (string.IsNullOrWhiteSpace(_configuration["Api:Version"])) throw new InnerException(Errors.EmptyVersion);
-            if (string.IsNullOrWhiteSpace(_configuration["Api:StatusesRequestsHeroesRegistration"])) throw new InnerException(Errors.EmptyUrlStatusesRequestsHeroesRegistration);
+            if (string.IsNullOrWhiteSpace(_configuration["Api:Administrators"])) throw new InnerException(Errors.EmptyUrlAdministrators);
 
             //Получаем токен
             _token = await SecureStorage.Default.GetAsync("token");
             if (string.IsNullOrWhiteSpace(_token)) throw new InnerException(Errors.EmptyToken);
 
             //Формируем ссылку запроса
-            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:RequestsHeroesRegistration"]
-                + "list";
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Administrators"] + "list";
 
             //Формируем клиента
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
@@ -61,7 +60,7 @@ public class AdministratorsRequests(IConfiguration configuration) : IAdministrat
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; },
             });
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token.Replace("Bearer ", ""));
 
             //Получаем данные по запросу
             using var result = await client.GetAsync(url) ?? throw new InnerException(Errors.EmptyResponse);

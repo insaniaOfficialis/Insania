@@ -52,7 +52,7 @@ public class StatusesRequestsHeroesRegistrationRequests(IConfiguration configura
             if (string.IsNullOrWhiteSpace(_token)) throw new InnerException(Errors.EmptyToken);
 
             //Формируем ссылку запроса
-            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:RequestsHeroesRegistration"]
+            string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:StatusesRequestsHeroesRegistration"]
                 + "list";
 
             //Формируем клиента
@@ -61,7 +61,7 @@ public class StatusesRequestsHeroesRegistrationRequests(IConfiguration configura
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; },
             });
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token.Replace("Bearer ", ""));
 
             //Получаем данные по запросу
             using var result = await client.GetAsync(url) ?? throw new InnerException(Errors.EmptyResponse);

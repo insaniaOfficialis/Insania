@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using Insania.Api.Controllers.OutCategories;
 using Insania.BusinessLogic.Heroes.Heroes;
@@ -28,4 +29,14 @@ public class HeroesController(ILogger<HeroesController> logger, IHeroes heroes) 
     [Route("registration")]
     public async Task<IActionResult> GetList([FromBody] AddHeroRequest? request) =>
         await GetAnswerAsync(async () => { return await _heroes.Registration(request); });
+
+    /// <summary>
+    /// Метод получения персонажа по первичному ключу
+    /// </summary>
+    /// <param name="id">Первичный ключ</param>
+    /// <returns cref="GetHeroResponse">Модель ответа получения персонажа</returns>
+    [Authorize]
+    [HttpGet("byId")]
+    public async Task<IActionResult> GetById([FromQuery] long? id) => 
+        await GetAnswerAsync(async () => { return await _heroes.GetById(id); });
 }

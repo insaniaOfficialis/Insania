@@ -6,6 +6,11 @@
     <Style TargetType="CheckBox" x:Key="CheckBoxPrimary">
         <Setter Property="IsChecked" Value="True"/>
         <Setter Property="Color" Value="{StaticResource PrimaryText}"/>
+        <Style.Triggers>
+            <Trigger TargetType="CheckBox" Property="IsEnabled" Value="False">
+                <Setter Property="Color" Value="{StaticResource SecondaryButton}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

@@ -61,6 +61,7 @@ public static class Informations
     public const string BiographyHeroAlreadyAdded = "-биография персонажа уже добавлена";
     public const string BiographiesRequestsHeroesRegistrationAdded = "-биография заявки на регистрацию персонажа добавлена";
     public const string BiographiesRequestsHeroesRegistrationAlreadyAdded = "-биография заявки на регистрацию персонажа уже добавлена";
+    public const string EnteredGetHeroByIdMethod = "Вошли в метод получения персонажа по id";
     public const string EnteredGetListStatusesRequestsHeroesRegistrationByIdMethod = "Вошли в метод получения список заявок на регистрацию персонажей";
     public const string EnteredGetRequestHeroRegistrationByIdMethod = "Вошли в метод получения заявки на регистрацию персонажа по id";
     public const string EnteredInitializationBiographiesHeroesMethod = "Вошли в метод инициализации биографией персонажей";
@@ -221,6 +222,7 @@ public static class Informations
     #region Файлы
 
     public const string EnteredAddFileMethod = "Вошли в метод добавлеия файла";
+    public const string EnteredGetFileByIdMethod = "Вошли в метод получения файла по id";
     public const string EnteredInitializationFilesMethod = "Вошли в метод инициализации файлов";
     public const string EnteredInitializationTypesFilesMethod = "Вошли в метод инициализации типов файлов";
     public const string FileAdded = "-файл добавлен";
