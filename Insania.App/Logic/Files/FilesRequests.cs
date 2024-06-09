@@ -10,6 +10,7 @@ using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 using Insania.Models.Users.Authentication;
+using System.Net.Security;
 
 namespace Insania.App.Logic.Files;
 
