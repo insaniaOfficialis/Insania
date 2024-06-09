@@ -124,16 +124,19 @@ public class FilesRequests(IConfiguration configuration) : IFiles
             string url = _configuration["Api:Url"] + _configuration["Api:Version"] + _configuration["Api:Files"] + id.ToString();
 
             //Формируем клиента
-            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyError) => { return true; }; ;
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyError) => { return true; };
             using HttpClient client = new(new HttpClientHandler()
             {
                 ServerCertificateCustomValidationCallback = delegate { return true; },
             });
-            
+
             //Получаем данные по запросу
-            using Stream stream = await client.GetStreamAsync(url);
             Stream fileStream = new MemoryStream();
-            stream.CopyTo(fileStream);
+            await Task.Run(async () =>
+            {
+                using Stream stream = await client.GetStreamAsync(url);
+                stream.CopyTo(fileStream);
+            });
 
             //Возвращаем ответ
             return new(true, (id ?? 0), fileStream);
