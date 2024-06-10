@@ -76,6 +76,7 @@ public static class Errors
 
     #region Персонажи
 
+    public const string EmptyBiographies = "Пустые биографии";
     public const string EmptyBiography = "Пустая биография";
     public const string EmptyBiographyhDate = "Пустая дата биографии";
     public const string EmptyBiographyhText = "Пустой текст биографии";

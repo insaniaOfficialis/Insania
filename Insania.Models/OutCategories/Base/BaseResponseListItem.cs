@@ -8,6 +8,18 @@ namespace Insania.Models.OutCategories.Base;
 public class BaseResponseListItem
 {
     /// <summary>
+    /// Первичный ключ
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public long? Id { get; set; }
+
+    /// <summary>
+    /// Наименование
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Name { get; set; }
+
+    /// <summary>
     /// Простой конструктор модели ответа элемента списка
     /// </summary>
     public BaseResponseListItem()
@@ -43,16 +55,4 @@ public class BaseResponseListItem
     {
         Name = name;
     }
-
-    /// <summary>
-    /// Первичный ключ
-    /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public long? Id { get; set; }
-
-    /// <summary>
-    /// Наименование
-    /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? Name { get; set; }
 }

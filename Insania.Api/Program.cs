@@ -34,6 +34,7 @@ using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Users;
 using Insania.Entities.Context;
+using Insania.BusinessLogic.Heroes.BiographiesHeroes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -162,6 +163,7 @@ services.AddScoped<IFiles, FilesService>(); //сервис работы с файлами
 services.AddScoped<IRequestsHeroesRegistration, ReuestsHeroRegistrationService>(); //сервис работы с заявками на регистрацию персонажей
 services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationService>(); //сервис работы со статусами заявок на регистрацию персонажей
 services.AddScoped<IAdministrators, AdministratorsService>(); //сервис работы с администраторами
+services.AddScoped<IBiographiesHeroes, BiographiesHeroesService>(); //сервис работы с биографиями персонажей
 
 //Строим приложение
 var app = builder.Build();

@@ -61,6 +61,7 @@ public static class Informations
     public const string BiographyHeroAlreadyAdded = "-биография персонажа уже добавлена";
     public const string BiographiesRequestsHeroesRegistrationAdded = "-биография заявки на регистрацию персонажа добавлена";
     public const string BiographiesRequestsHeroesRegistrationAlreadyAdded = "-биография заявки на регистрацию персонажа уже добавлена";
+    public const string EnteredGetBiographiesHeroMethod = "Вошли в метод получения биографий персонажа";
     public const string EnteredGetHeroByIdMethod = "Вошли в метод получения персонажа по id";
     public const string EnteredGetListStatusesRequestsHeroesRegistrationByIdMethod = "Вошли в метод получения список заявок на регистрацию персонажей";
     public const string EnteredGetRequestHeroRegistrationByIdMethod = "Вошли в метод получения заявки на регистрацию персонажа по id";

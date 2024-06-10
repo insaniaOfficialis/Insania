@@ -29,7 +29,7 @@ public class BaseResponseList : BaseResponse
     }
 
     /// <summary>
-    /// онструктор базовой модели ответа для списка с элементами
+    /// Конструктор базовой модели ответа для списка с элементами
     /// </summary>
     /// <param name="success">Признак успешности</param>
     /// <param name="error">Ошибка</param>

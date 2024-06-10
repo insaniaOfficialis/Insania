@@ -25,9 +25,8 @@ public class HeroesController(ILogger<HeroesController> logger, IHeroes heroes) 
     /// </summary>
     /// <param name="request">Запрос</param>
     /// <returns></returns>
-    [HttpPost]
-    [Route("registration")]
-    public async Task<IActionResult> GetList([FromBody] AddHeroRequest? request) =>
+    [HttpPost("registration")]
+    public async Task<IActionResult> Registration([FromBody] AddHeroRequest? request) =>
         await GetAnswerAsync(async () => { return await _heroes.Registration(request); });
 
     /// <summary>
