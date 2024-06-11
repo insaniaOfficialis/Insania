@@ -9,6 +9,7 @@ using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
 using Insania.Database.Entities.System;
 using Insania.Models.Heroes.BiographiesHeroes;
+using Insania.Models.Heroes.BiographiesRequestsHeroesRegistration;
 using Insania.Models.Heroes.Heroes;
 using Insania.Models.Heroes.RequestsHeroesRegistration;
 using Insania.Models.OutCategories.Base;
@@ -47,5 +48,6 @@ public class AppMappingProfile : Profile
             .ForMember(x => x.CurrentCountryId, y => y.MapFrom(z => z.CurrentLocation.Region.CountryId))
             .ForMember(x => x.FileId, y => y.MapFrom(z => z.FilesHero!.OrderBy(a => a.SequenceNumber).First().FileId));
         CreateMap<BiographyHero, GetBiographiesHeroResponseListItem>();
+        CreateMap<BiographyRequestHeroRegistration, GetBiographyRequestHeroRegistrationResponse>();
     }
 }

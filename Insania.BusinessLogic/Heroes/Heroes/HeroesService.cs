@@ -89,7 +89,6 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
                 request.User?.BirthDate);
             var userResult = await _userManager.CreateAsync(user, request.User?.Password!) ?? throw new InnerException(Errors.EmptyUser);
             if (!userResult.Succeeded) throw new InnerException(userResult?.Errors?.FirstOrDefault()?.Description ?? Errors.Unknown);
-            await _applicationContext.SaveChangesAsync();
 
             //Добавляем пользователю роль
             var userRoleResult = await _userManager.AddToRoleAsync(user, "guest");
@@ -171,7 +170,7 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
             _logger.LogInformation(Informations.Success);
 
             //Возвращаем результат
-            return new BaseResponse(true, requestHeroRegistration.Id);
+            return new BaseResponse(true, hero.Id);
         }
         catch (InnerException ex)
         {

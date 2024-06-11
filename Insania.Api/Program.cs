@@ -20,6 +20,8 @@ using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
+using Insania.BusinessLogic.Heroes.BiographiesHeroes;
+using Insania.BusinessLogic.Heroes.BiographiesRequestsHeroesRegistration;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
@@ -34,7 +36,6 @@ using Insania.BusinessLogic.Users.Users;
 using Insania.Database.Entities.AccessRights;
 using Insania.Database.Entities.Users;
 using Insania.Entities.Context;
-using Insania.BusinessLogic.Heroes.BiographiesHeroes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -164,6 +165,7 @@ services.AddScoped<IRequestsHeroesRegistration, ReuestsHeroRegistrationService>(
 services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationService>(); //сервис работы со статусами заявок на регистрацию персонажей
 services.AddScoped<IAdministrators, AdministratorsService>(); //сервис работы с администраторами
 services.AddScoped<IBiographiesHeroes, BiographiesHeroesService>(); //сервис работы с биографиями персонажей
+services.AddScoped<IBiographiesRequestsHeroesRegistration, BiographiesRequestsHeroesRegistrationService>(); //сервис работы с биографиями заявок на регистрацию персонажей
 
 //Строим приложение
 var app = builder.Build();

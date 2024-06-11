@@ -16,7 +16,8 @@
                         WidthRequest="{OnIdiom Desktop=50, Phone=50}"
                         HeightRequest="{OnIdiom Desktop=50, Phone=50}"
                         ImageSource="back.png"
-                        Style="{StaticResource ButtonSecondary}"/>
+                        Style="{StaticResource ButtonSecondary}"
+                        Clicked="Back_Clicked"/>
                 <Label VerticalOptions="Center"
                        Text="Заявка на регистрацию персонажа"
                        Style="{StaticResource TitleSecondary}"/>
@@ -599,14 +600,18 @@
                            Text="БИОГРАФИЯ"
                            Style="{StaticResource TitleSecondary}"/>
                     <StackLayout x:Name="BiographyStackLayout"
+                                 IsEnabled="False"
                                  Spacing="50"/>
                     <Button x:Name="AddBiorgaphyButton"
+                            IsEnabled="False"
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                             Text="Добавить"
-                            Style="{StaticResource ButtonPrimary}"/>
+                            Style="{StaticResource ButtonPrimary}"
+                            Clicked="AddBiorgaphy_Clicked"/>
 
                     <Button x:Name="SaveButton"
+                            IsEnabled="False"
                             Margin="0,50,0,0"
                             WidthRequest="{OnIdiom Desktop=160, Phone=120}"
                             Text="Сохранить"

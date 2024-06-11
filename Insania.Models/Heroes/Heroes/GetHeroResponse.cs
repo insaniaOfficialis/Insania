@@ -189,5 +189,4 @@ public class GetHeroResponse : BaseResponse
         CurrentLocationId = currentLocationId;
         FileId = fileId;
     }
-
 }

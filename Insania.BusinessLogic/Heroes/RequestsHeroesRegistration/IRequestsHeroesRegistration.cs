@@ -16,4 +16,13 @@ public interface IRequestsHeroesRegistration
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
     Task<GetRequestRegistrationHeroResponse> GetById(long? id);
+
+    /// <summary>
+    /// Метод получения заявки на регистрацию персонажа по персонажу
+    /// </summary>
+    /// <param name="heroId">Персонаж</param>
+    /// <returns cref="GetRequestRegistrationHeroResponse">Ответ</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    Task<GetRequestRegistrationHeroResponse> GetByHero(long? heroId);
 }

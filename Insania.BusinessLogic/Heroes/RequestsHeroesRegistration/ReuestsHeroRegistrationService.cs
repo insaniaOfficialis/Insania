@@ -83,4 +83,56 @@ public class ReuestsHeroRegistrationService(ApplicationContext applicationContex
             throw;
         }
     }
+
+    /// <summary>
+    /// Метод получения заявки на регистрацию персонажа по персонажу
+    /// </summary>
+    /// <param name="heroId">Персонаж</param>
+    /// <returns cref="GetRequestRegistrationHeroResponse">Ответ</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    public async Task<GetRequestRegistrationHeroResponse> GetByHero(long? heroId)
+    {
+        //Логгируем
+        _logger.LogInformation(Informations.EnteredGetRequestHeroRegistrationByHeroMethod);
+
+        try
+        {
+            //Проверяем данные
+            if (heroId == null) throw new InnerException(Errors.EmptyRequest);
+
+            //Получаем данные с базы
+            RequestHeroRegistration row = await _applicationContext
+                .RequestsHeroesRegistration
+                .OrderByDescending(x => x.DateCreate)
+                .FirstAsync(x => x.DateDeleted == null && x.HeroId == heroId)
+                ?? throw new InnerException(Errors.EmptyRequestHeroRegistration);
+
+            //Конвертируем ответ
+            GetRequestRegistrationHeroResponse response = _mapper.Map<GetRequestRegistrationHeroResponse>(row);
+            response.Success = true;
+
+            //Логгируем
+            _logger.LogInformation(Informations.Success);
+
+            //Возвращаем результат
+            return response;
+        }
+        catch (InnerException ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+    }
 }

@@ -361,7 +361,7 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
         modelBuilder.Entity<BiographyHero>();
 
         //Биографии заявок на регистрацию персонажей
-        modelBuilder.Entity<BiographyRequestHeroRegistration>();
+        modelBuilder.Entity<BiographyRequestHeroRegistration>().HasIndex(x => new { x.BiographyId, x.RequestId }).IsUnique();
 
         //Персонажи
         modelBuilder.Entity<Hero>();

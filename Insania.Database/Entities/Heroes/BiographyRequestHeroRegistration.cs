@@ -29,7 +29,7 @@ public class BiographyRequestHeroRegistration : Reestr
     /// Ссылка на биографию персонажа
     /// </summary>
     [Column("biography_id")]
-    [Comment("Ссылка на персонажа")]
+    [Comment("Ссылка на биографию персонажа")]
     public long BiographyId { get; private set; }
 
     /// <summary>

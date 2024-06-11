@@ -23,6 +23,8 @@ using Insania.BusinessLogic.Biology.Nations;
 using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
+using Insania.BusinessLogic.Heroes.BiographiesHeroes;
+using Insania.BusinessLogic.Heroes.BiographiesRequestsHeroesRegistration;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.Heroes.StatusesRequestsHeroesRegistration;
@@ -155,6 +157,8 @@ public static class MauiProgram
             builder.Services.AddScoped<IRequestsHeroesRegistration, RequestsHeroesRegistrationRequests>(); //работа с заявками на регистрацию персонажей
             builder.Services.AddScoped<IStatusesRequestsHeroesRegistration, StatusesRequestsHeroesRegistrationRequests>(); //работа со статусами заявок на регистрацию персонажей
             builder.Services.AddScoped<IAdministrators, AdministratorsRequests>(); //работа с администраторами
+            builder.Services.AddScoped<IBiographiesHeroes, BiographiesHeroesRequests>(); //работа с биографиями персонажей
+            builder.Services.AddScoped<IBiographiesRequestsHeroesRegistration, BiographiesRequestsHeroesRegistrationRequsts>(); //работа с биографиями заявок на регистрацию персонажей
 
             //Возвращаем построенное приложение
             return builder.Build();

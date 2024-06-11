@@ -428,18 +428,6 @@ namespace Insania.Database.Migrations
                 comment: "Пользователи");
 
             migrationBuilder.CreateTable(
-                name: "sys_users_roles",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    RoleId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sys_users_roles", x => new { x.RoleId, x.UserId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "dir_nations",
                 columns: table => new
                 {
@@ -616,6 +604,24 @@ namespace Insania.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 },
                 comment: "Игроки");
+
+            migrationBuilder.CreateTable(
+                name: "sys_users_roles",
+                columns: table => new
+                {
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sys_users_roles", x => new { x.RoleId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_sys_users_roles_sys_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "sys_users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "un_prefixes_names_nations",
@@ -1138,7 +1144,7 @@ namespace Insania.Database.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false, comment: "Первичный ключ таблицы")
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     request_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на заявку"),
-                    biography_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на персонажа"),
+                    biography_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на биографию персонажа"),
                     decision = table.Column<bool>(type: "boolean", nullable: true, comment: "Решение"),
                     comment = table.Column<string>(type: "text", nullable: true, comment: "Комментарий"),
                     date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, comment: "Дата создания"),
@@ -1362,9 +1368,10 @@ namespace Insania.Database.Migrations
                 column: "month_end_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_re_biographies_requests_heroes_registration_biography_id",
+                name: "IX_re_biographies_requests_heroes_registration_biography_id_re~",
                 table: "re_biographies_requests_heroes_registration",
-                column: "biography_id");
+                columns: ["biography_id", "request_id"],
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_re_biographies_requests_heroes_registration_request_id",
@@ -1554,6 +1561,11 @@ namespace Insania.Database.Migrations
                 name: "IX_sys_users_UserName",
                 table: "sys_users",
                 column: "UserName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sys_users_roles_UserId",
+                table: "sys_users_roles",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_un_files_heroes_file_id_hero_id",

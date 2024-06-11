@@ -9,11 +9,13 @@ using Insania.BusinessLogic.Biology.Races;
 using Insania.BusinessLogic.Chronology.Months;
 using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Politics.Areas;
 using Insania.BusinessLogic.Politics.Countries;
 using Insania.BusinessLogic.Politics.Regions;
 using Insania.BusinessLogic.Sociology.PrefixesNames;
+using Insania.BusinessLogic.Users.Authentication;
 using Insania.BusinessLogic.Users.Users;
 using Insania.Models.Files.Files;
 using Insania.Models.Heroes.BiographiesHeroes;
@@ -21,6 +23,7 @@ using Insania.Models.Heroes.Heroes;
 using Insania.Models.OutCategories.Base;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
+using Insania.Models.Users.Authentication;
 using Insania.Models.Users.Users;
 
 namespace Insania.App.Pages.General.Heroes;
@@ -104,6 +107,16 @@ public partial class RegistrationHero : ContentPage
     /// Интерфейс работы с файлами
     /// </summary>
     private readonly IFiles? _files;
+
+    /// <summary>
+    /// Интерфейс сервиса аутентификации
+    /// </summary>
+    private readonly IAuthentication? _authentication;
+
+    /// <summary>
+    /// Интерфейс работы с заявками на регистрацию персонажей
+    /// </summary>
+    private readonly IRequestsHeroesRegistration? _requestsHeroesRegistration;
 
 
     /// <summary>
@@ -202,6 +215,8 @@ public partial class RegistrationHero : ContentPage
         _users = App.Services?.GetService<IUsers>();
         _heroes = App.Services?.GetService<IHeroes>();
         _files = App.Services?.GetService<IFiles>();
+        _authentication = App.Services?.GetService<IAuthentication>();
+        _requestsHeroesRegistration = App.Services?.GetService<IRequestsHeroesRegistration>();
 
         //Записываем входящие параметры
         _addUserRequest = addUserRequest;
@@ -614,6 +629,7 @@ public partial class RegistrationHero : ContentPage
             if (HeroFile == null) throw new InnerException(Errors.EmptyFile);
             if (_heroes == null) throw new InnerException(Errors.EmptyServiceHeroes);
             if (_files == null) throw new InnerException(Errors.EmptyServiceFiles);
+            if (_authentication == null) throw new InnerException(Errors.EmptyServiceAuthentication);
 
             //Создаём модель запроса добавления персонажа
             AddHeroRequest request = new(
@@ -660,6 +676,16 @@ public partial class RegistrationHero : ContentPage
 
             //Регистрируем файл
             await _files.Add(fileRequest);
+
+            //Проходим атуентифкацию
+            AuthenticationResponse? result = await _authentication.Login(_addUserRequest?.Login, _addUserRequest?.Password);
+
+            //Получаем информацию о заявке на регистрацию персонажа
+            if (_requestsHeroesRegistration == null) throw new InnerException(Errors.EmptyServiceRequestsHeroesRegistration);
+            var requestHeroRegistration = await _requestsHeroesRegistration.GetByHero(response.Id);
+
+            //Переходим на страницу заявки на регистрацию персонажа
+            ToRequestHeroRegistration(requestHeroRegistration.Id);
         }
         catch (InnerException ex)
         {
@@ -727,7 +753,17 @@ public partial class RegistrationHero : ContentPage
         Application.Current!.Resources.TryGetValue("PrimaryText", out var boxViewColor);
         Application.Current!.Resources.TryGetValue("PickerPrimary", out var pickerStyle);
 
+        
+        //Создаём заголовок блока
+        Label numberTitleLabel = new()
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            Text = (BiographyElements.Count + 1).ToString(),
+            Style = (Style)labelStyle
+        };
+        BiographyStackLayout.Add(numberTitleLabel);
 
+        
         //Создаём стек дня начала и добавляем в коллекцию биографий
         StackLayout dayBegin = new() 
         {
@@ -1070,5 +1106,15 @@ public partial class RegistrationHero : ContentPage
         /// Поле ввода текст биографии
         /// </summary>
         public Editor? Text { get; set; } = text;
+    }
+
+    /// <summary>
+    /// Метод перехода на страницу заявки на регистрацию персонажа
+    /// </summary>
+    /// <param name="requestId">Заявка на регистрацию персонажа</param>
+    private async void ToRequestHeroRegistration(long? requestId)
+    {
+        //Переходим на новую страницу
+        await Navigation.PushAsync(new RequestRegistrationHero(requestId ?? 0));
     }
 }

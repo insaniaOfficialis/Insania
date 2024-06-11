@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240604181905_Init")]
+    [Migration("20240611143818_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1287,7 +1287,7 @@ namespace Insania.Database.Migrations
                     b.Property<long>("BiographyId")
                         .HasColumnType("bigint")
                         .HasColumnName("biography_id")
-                        .HasComment("Ссылка на персонажа");
+                        .HasComment("Ссылка на биографию персонажа");
 
                     b.Property<string>("Comment")
                         .HasColumnType("text")
@@ -1338,9 +1338,10 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BiographyId");
-
                     b.HasIndex("RequestId");
+
+                    b.HasIndex("BiographyId", "RequestId")
+                        .IsUnique();
 
                     b.ToTable("re_biographies_requests_heroes_registration", t =>
                         {
@@ -2917,6 +2918,8 @@ namespace Insania.Database.Migrations
 
                     b.HasKey("RoleId", "UserId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("sys_users_roles", (string)null);
                 });
 
@@ -3095,7 +3098,7 @@ namespace Insania.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Insania.Database.Entities.Heroes.Hero", "Hero")
-                        .WithMany()
+                        .WithMany("FilesHero")
                         .HasForeignKey("HeroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3411,6 +3414,20 @@ namespace Insania.Database.Migrations
                     b.Navigation("PrefixName");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Users.User", null)
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Heroes.Hero", b =>
+                {
+                    b.Navigation("FilesHero");
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.Politics.Organization", b =>
                 {
                     b.Navigation("Country");
@@ -3426,6 +3443,8 @@ namespace Insania.Database.Migrations
                     b.Navigation("Administrator");
 
                     b.Navigation("Player");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

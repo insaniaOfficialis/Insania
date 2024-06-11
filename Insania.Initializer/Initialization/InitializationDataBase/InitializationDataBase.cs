@@ -1317,7 +1317,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             //Проверяем администратора пользователя демиург
             User? user = await _userManager.FindByNameAsync("demiurge") ?? throw new InnerException(Errors.EmptyUser);
             Post? post = await _applicationContext.Posts.FirstAsync(x => x.Name == "Демиург") ?? throw new InnerException(Errors.EmptyPost);
-            Rank? rank = await _applicationContext.Ranks.FirstAsync(x => x.Name == "Демиург") ?? throw new InnerException(Errors.EmptyRank);
+            Rank? rank = await _applicationContext.Ranks.FirstAsync(x => x.Name == "Единый") ?? throw new InnerException(Errors.EmptyRank);
             Chapter? chapter = await _applicationContext.Chapters.FirstAsync(x => x.Name == "Генеральный капитул") ?? throw new InnerException(Errors.EmptyChapter);
             if (!await _applicationContext.Administrators.AnyAsync(x => x.User == user))
             {
