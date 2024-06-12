@@ -1408,6 +1408,7 @@ namespace Insania.Database.Migrations
 
                     b.Property<bool>("Gender")
                         .HasColumnType("boolean")
+                        .HasColumnName("gender")
                         .HasComment("Пол (истина - мужской/ложь - женский)");
 
                     b.Property<long?>("HairsColorId")

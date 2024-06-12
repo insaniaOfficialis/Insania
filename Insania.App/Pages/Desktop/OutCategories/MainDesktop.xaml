@@ -7,7 +7,7 @@
     <Grid x:Name="GridContent"
           RowDefinitions="Auto, *, Auto">
         <HorizontalStackLayout>
-
+            <Label Text="OK"/>
         </HorizontalStackLayout>
     </Grid>
 </ContentPage>

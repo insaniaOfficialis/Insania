@@ -4,7 +4,9 @@ public static class Errors
 {
     #region Вне категорий
 
+    public const string EmptyCurrentUser = "Пустой текущий пользователь";
     public const string EmptyId = "Пустой первичный ключ";
+    public const string EmptyName = "Пустое наименование";
     public const string EmptyRequest = "Пустой запрос";
     public const string EmptyResponse = "Пустой ответ";
     public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
@@ -84,6 +86,8 @@ public static class Errors
     public const string EmtryCommentOnDecision = "Пустой комментарий решения";
     public const string EmptyFamilyName = "Пустое имя семьи";
     public const string EmptyHero = "Пустой персонаж";
+    public const string EmptyHeroes = "Пустые персонажи";
+    public const string EmptyIsCurrent = "Пустой признак текущего персонажа";
     public const string EmptyPersonalName = "Пустое личное имя";
     public const string EmptyRequestHeroRegistration = "Пустая заявка на регистрацию персонажа";
     public const string EmptyServiceHeroes = "Пустой сервис работы с персонажами";

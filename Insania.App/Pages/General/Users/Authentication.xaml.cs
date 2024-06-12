@@ -1,5 +1,7 @@
 using Insania.App.Pages.Desktop.OutCategories;
 using Insania.App.Pages.General.Heroes;
+using Insania.BusinessLogic.Heroes.Heroes;
+using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
 using Insania.BusinessLogic.Users.Authentication;
 using Insania.Models.OutCategories.Exceptions;
@@ -24,6 +26,16 @@ public partial class Authentication : ContentPage
     private readonly IAuthentication? _authentication;
 
     /// <summary>
+    /// Интерфейс работы с персонажами
+    /// </summary>
+    private readonly IHeroes? _heroes;
+
+    /// <summary>
+    /// Интерфейс работы с заявками на регистрацию персонажей
+    /// </summary>
+    private readonly IRequestsHeroesRegistration? _requestsHeroesRegistration;
+
+    /// <summary>
     /// Конструктор страницы аутентификации
     /// </summary>
     public Authentication()
@@ -36,6 +48,8 @@ public partial class Authentication : ContentPage
         //Получаем сервисы
         _checkConnection = App.Services?.GetService<ICheckConnection>();
         _authentication = App.Services?.GetService<IAuthentication>();
+        _heroes = App.Services?.GetService<IHeroes>();
+        _requestsHeroesRegistration = App.Services?.GetService<IRequestsHeroesRegistration>();
     }
 
     /// <summary>
@@ -85,7 +99,7 @@ public partial class Authentication : ContentPage
         }
 
         //Если проверка соединения прошла успешна, переходим на главную
-        if (checkConnection) ToMain(null, null);
+        if (checkConnection) ToMain();
     }
 
     /// <summary>
@@ -117,6 +131,28 @@ public partial class Authentication : ContentPage
             //Вызываем метод авторизации
             if (_authentication == null) throw new InnerException(Errors.EmptyServiceAuthentication);
             result = await _authentication.Login(LoginEntry.Text, PasswordEntry.Text);
+
+            //Получаем список текущих персонажей
+            if (_heroes == null) throw new InnerException(Errors.EmptyServiceHeroes);
+            var heroes = await _heroes.GetListByCurrent(null);
+
+            //Если есть только один персонаж
+            if (heroes != null && heroes.Items != null && heroes.Items.Count == 1)
+            {
+                //Проверяем наличие незавершённой заявки
+                if (_requestsHeroesRegistration == null) throw new InnerException(Errors.EmptyServiceRequestsHeroesRegistration);
+                var requestHeroRegistration = await _requestsHeroesRegistration.GetByHero(heroes.Items.First(x => x.IsCurrent == true).Id);
+
+                //Если есть заявка без статуса "Принято"
+                if (requestHeroRegistration != null && requestHeroRegistration.StatusId != 3)
+                {
+                    //Переходим на страницу заявки на регистрацию персонажа
+                    ToRequestHeroRegistration(requestHeroRegistration.Id ?? 0);
+                }
+                else ToMain();
+
+            }
+            else ToMain();
         }
         catch (InnerException ex)
         {
@@ -137,9 +173,6 @@ public partial class Authentication : ContentPage
             AuthenticationStackLayout.IsVisible = true;
             FeedbackButton.IsVisible = true;
         }
-
-        //Если получили токен, переходим на главную страницу
-        if (!string.IsNullOrWhiteSpace(result.Token)) ToMain(null, null);
     }
 
     /// <summary>
@@ -186,9 +219,7 @@ public partial class Authentication : ContentPage
     /// <summary>
     /// Метод перехода на главную страницу
     /// </summary>
-    /// <param name="sender">Отправитель</param>
-    /// <param name="e">Событие</param>
-    private async void ToMain(object? sender, EventArgs? e)
+    private async void ToMain()
     {
         if (DeviceInfo.Idiom == DeviceIdiom.Desktop) await Navigation.PushModalAsync(new MainDesktop());
     }
@@ -213,5 +244,15 @@ public partial class Authentication : ContentPage
     {
         //Переходим на новую страницу
         await Navigation.PushAsync(new RequestRegistrationHero(1));
+    }
+
+    /// <summary>
+    /// Метод перехода на страницу заявки на регистрацию персонажа
+    /// </summary>
+    /// <param name="requestId">Заявка</param>
+    public async void ToRequestHeroRegistration(long requestId)
+    {
+        //Переходим на новую страницу
+        await Navigation.PushAsync(new RequestRegistrationHero(requestId));
     }
 }

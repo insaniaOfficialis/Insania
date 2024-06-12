@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Insania.Database.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240611143818_Init")]
+    [Migration("20240612143631_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1411,6 +1411,7 @@ namespace Insania.Database.Migrations
 
                     b.Property<bool>("Gender")
                         .HasColumnType("boolean")
+                        .HasColumnName("gender")
                         .HasComment("Пол (истина - мужской/ложь - женский)");
 
                     b.Property<long?>("HairsColorId")

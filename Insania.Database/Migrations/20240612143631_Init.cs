@@ -935,7 +935,7 @@ namespace Insania.Database.Migrations
                     birth_month_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на месяц рождения"),
                     birth_cycle = table.Column<int>(type: "integer", nullable: false, comment: "Цикл рождения"),
                     nation_id = table.Column<long>(type: "bigint", nullable: false, comment: "Ссылка на нацию"),
-                    Gender = table.Column<bool>(type: "boolean", nullable: false, comment: "Пол (истина - мужской/ложь - женский)"),
+                    gender = table.Column<bool>(type: "boolean", nullable: false, comment: "Пол (истина - мужской/ложь - женский)"),
                     height = table.Column<int>(type: "integer", nullable: false, comment: "Рост"),
                     weight = table.Column<int>(type: "integer", nullable: false, comment: "Вес"),
                     hairs_color_id = table.Column<long>(type: "bigint", nullable: true, comment: "Ссылка на цвет волос"),

@@ -19,6 +19,15 @@ public class BaseResponseList : BaseResponse
     }
 
     /// <summary>
+    /// Конструктор базовой модели ответа для списка с признаком успешности
+    /// </summary>
+    /// <param name="success">Признак успешности</param>
+    public BaseResponseList(bool success) : base(success)
+    {
+
+    }
+
+    /// <summary>
     /// Конструктор базовой модели ответа для списка с ошибкой
     /// </summary>
     /// <param name="success">Признак успешности</param>

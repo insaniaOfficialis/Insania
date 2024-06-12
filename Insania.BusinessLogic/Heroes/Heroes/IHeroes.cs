@@ -24,4 +24,13 @@ public interface IHeroes
     /// <exception cref="InnerException">Обработанное исключение</exception>
     /// <exception cref="Exception">Необработанное исключение</exception>
     Task<GetHeroResponse> GetById(long? id);
+
+    /// <summary>
+    /// Метод получения списка персонажей по текущему пользователю
+    /// </summary>
+    /// <param name="login">Текущий пользователь</param>
+    /// <returns cref="GetHeroesResponseList">Модель ответа получения списка персонажей</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    Task<GetHeroesResponseList> GetListByCurrent(string? login);
 }

@@ -1,5 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
+using Insania.Models.OutCategories.Exceptions;
+using Insania.Models.OutCategories.Logging;
+
 namespace Insania.Models.OutCategories.Base;
 
 /// <summary>
@@ -43,6 +46,11 @@ public class BaseResponseListItem
     /// <param name="id"></param>
     public BaseResponseListItem(long? id, string? name)
     {
+        //Проверяем входные данные
+        if ((id ?? 0) == 0) throw new InnerException(Errors.EmptyId);
+        if (string.IsNullOrWhiteSpace(name)) throw new InnerException(Errors.EmptyName);
+
+        //Заполняем модель
         Id = id;
         Name = name;
     }

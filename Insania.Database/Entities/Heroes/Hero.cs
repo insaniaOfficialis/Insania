@@ -100,6 +100,7 @@ public class Hero : Reestr
     /// <summary>
     /// Пол (истина - мужской/ложь - женский)
     /// </summary>
+    [Column("gender")]
     [Comment("Пол (истина - мужской/ложь - женский)")]
     public bool Gender { get; private set; }
 

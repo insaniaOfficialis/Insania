@@ -49,5 +49,9 @@ public class AppMappingProfile : Profile
             .ForMember(x => x.FileId, y => y.MapFrom(z => z.FilesHero!.OrderBy(a => a.SequenceNumber).First().FileId));
         CreateMap<BiographyHero, GetBiographiesHeroResponseListItem>();
         CreateMap<BiographyRequestHeroRegistration, GetBiographyRequestHeroRegistrationResponse>();
+        CreateMap<Hero, GetHeroesResponseListItem>().ForMember(x => x.Name, y => y.MapFrom(z =>
+            (!string.IsNullOrWhiteSpace(z.PersonalName) ? z.PersonalName : "") +
+            (z.PrefixName != null && !string.IsNullOrWhiteSpace(z.PrefixName.Name) ? " " + z.PrefixName.Name : "") +
+            (!string.IsNullOrWhiteSpace(z.FamilyName) ? " " + z.FamilyName : "")));
     }
 }

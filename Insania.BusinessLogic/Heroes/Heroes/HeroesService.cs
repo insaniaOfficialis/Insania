@@ -251,4 +251,58 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
             throw;
         }
     }
+
+    /// <summary>
+    /// Метод получения списка персонажей по текущему пользователю
+    /// </summary>
+    /// <param name="login">Текущий пользователь</param>
+    /// <returns cref="GetHeroesResponseList">Модель ответа получения списка персонажей</returns>
+    /// <exception cref="InnerException">Обработанное исключение</exception>
+    /// <exception cref="Exception">Необработанное исключение</exception>
+    public async Task<GetHeroesResponseList> GetListByCurrent(string? login)
+    {
+        //Логгируем
+        _logger.LogInformation(Informations.EnteredGetHeroesListByCurrentMethod);
+
+        try
+        {
+            //Проверяем данные
+            if (login == null) throw new InnerException(Errors.EmptyCurrentUser);
+
+            //Получаем данные с базы
+            List<Hero>? rows = await _applicationContext
+                .Heroes
+                .Include(x => x.Player)
+                .ThenInclude(y => y.User)
+                .Include(x => x.PrefixName)
+                .Where(x => x.DateDeleted == null && x.IsActive == true && x.Player.User.UserName == login)
+                .ToListAsync()
+                ?? throw new InnerException(Errors.EmptyHeroes);
+
+            //Конвертируем ответ
+            List<GetHeroesResponseListItem> items = rows.Select(_mapper.Map<GetHeroesResponseListItem>).ToList();
+
+            //Логгируем
+            _logger.LogInformation(Informations.Success);
+
+            //Возвращаем результат
+            return new(true, items);
+        }
+        catch (InnerException ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //Логгируем
+            _logger.LogError("{errors} {text}", Errors.Error, ex);
+
+            //Прокидываем ошибку
+            throw;
+        }
+    }
 }

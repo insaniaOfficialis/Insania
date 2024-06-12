@@ -288,9 +288,6 @@ public partial class RequestRegistrationHero : ContentPage
 
         try
         {
-            //Записываем токен
-            await SecureStorage.Default.SetAsync("token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZGl2aW5pdGFzIiwiZXhwIjoxNzE4NTI0NDE5LCJpc3MiOiJBcGkiLCJhdWQiOiJBcHAifQ.kBNppHKxGSqpx2u5psWsg4hIsBCMcFex09Er9Au6EPY");
-
             //Устанавливаем, что идёт инициализация
             Initialize = true;
 
