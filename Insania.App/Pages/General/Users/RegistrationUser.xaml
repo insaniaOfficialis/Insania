@@ -180,7 +180,8 @@
                     <Label x:Name="ErrorLabel"
                            HorizontalOptions="Center"
                            Margin="0,50,0,0"
-                           Style="{StaticResource ErrorPrimary}"/>
+                           Style="{StaticResource ErrorPrimary}"
+                           PropertyChanged="Error_PropertyChanged"/>
                 </StackLayout>
                 <ActivityIndicator x:Name="LoadActivityIndicator"
                                    IsRunning="False"

@@ -7,6 +7,7 @@ public static class Errors
     public const string EmptyCurrentUser = "Пустой текущий пользователь";
     public const string EmptyId = "Пустой первичный ключ";
     public const string EmptyName = "Пустое наименование";
+    public const string EmptyParent = "Пустой родитель";
     public const string EmptyRequest = "Пустой запрос";
     public const string EmptyResponse = "Пустой ответ";
     public const string EmptyServiceCheckConnection = "Пустой сервис проверки соединения";
@@ -18,6 +19,7 @@ public static class Errors
     public const string EmptyVersion = "Пустая версия api";
     public const string Error = "Ошибка:";
     public const string IncorrectToken = "Некорректный токен";
+    public const string Known = "Ошибка";
     public const string NoConnection = "Нет соединения";
     public const string NotImplemented = "Не реализовано";
     public const string ServerError = "Ошибка сервера";
@@ -151,6 +153,9 @@ public static class Errors
     #endregion
 
     #region Информационные статьи
+
+    public const string EmptyHeaderInformationArticle = "Пустое оглавление информационной статьи";
+    public const string EmptySectionInformationArticle = "Пустой раздел информационной статьи";
 
     #endregion
 

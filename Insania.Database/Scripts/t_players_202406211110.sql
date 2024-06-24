@@ -1,0 +1,1 @@
+INSERT INTO public.re_players (user_id, loyalty_points, date_create, user_create, date_update, user_update, date_deleted, is_system) VALUES((select "Id" from public.sys_users where "UserName" = 'allen' limit 1), 0, '2024-06-12 15:43:16.407', 'allen', '2024-06-12 15:43:16.407', 'allen', NULL, false);

@@ -24,6 +24,14 @@
         <Setter Property="FontFamily" Value="Georgia"/>
         <Setter Property="FontSize" Value="{OnIdiom Desktop=15, Phone=10}"/>
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
+        <Style.Triggers>
+            <Trigger TargetType="Button" Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource SecondaryButton}"/>
+            </Trigger>
+            <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource PrimaryTextDisable}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ButtonThird" TargetType="Button">

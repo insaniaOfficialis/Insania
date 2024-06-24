@@ -1,0 +1,1 @@
+INSERT INTO public.re_files ("name", extention, type_id, date_create, user_create, date_update, user_update, date_deleted, is_system) VALUES('bv8kvHBLEbc.jpg', 'jpg', 1, '2024-06-12 15:43:16.750', 'allen', '2024-06-12 15:43:16.750', 'allen', NULL, false);

@@ -11,7 +11,7 @@ namespace Insania.Database.Entities.Files;
 /// </summary>
 [Table("un_files_heroes")]
 [Comment("Файлы персонажей")]
-public class FileHero : EntityFile
+public class FileHero : FileEntity
 {
     /// <summary>
     /// Ссылка на персонажа

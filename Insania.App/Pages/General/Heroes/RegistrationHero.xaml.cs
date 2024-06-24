@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 
+using Insania.App.Resources.Models.Heroes.BiographiesHeroes;
 using Insania.BusinessLogic.Appearance.EyesColors;
 using Insania.BusinessLogic.Appearance.HairsColors;
 using Insania.BusinessLogic.Appearance.TypesBodies;
@@ -188,6 +189,11 @@ public partial class RegistrationHero : ContentPage
     /// Файл персонажа
     /// </summary>
     private FileResult? HeroFile { get; set; }
+
+    /// <summary>
+    /// Текст ошибки
+    /// </summary>
+    private string? _error = null;
 
 
     /// <summary>
@@ -708,6 +714,34 @@ public partial class RegistrationHero : ContentPage
     }
 
     /// <summary>
+    /// Событие изменения текста ошибки
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void Error_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        try
+        {
+            //Если нет объекта с текстом ошибки, или текст ошибки пустой, или он соответсвует уже показанному, выходим
+            if (ErrorLabel == null || string.IsNullOrWhiteSpace(ErrorLabel.Text) || ErrorLabel.Text == _error) return;
+
+            //Записываем показанный текст ошибки
+            _error = ErrorLabel.Text;
+
+            //Отображаем сообщение
+            await DisplayAlert(Errors.Known, ErrorLabel.Text, "ОK");
+        }
+        catch (InnerException ex)
+        {
+            await DisplayAlert(Errors.Known, string.Format("{0} {1}", Errors.Error, ex), "ОK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(Errors.Unknown, string.Format("{0} {1}", Errors.Error, ex), "ОK");
+        }
+    }
+
+    /// <summary>
     /// Метод возврата на предыдущую страницу
     /// </summary>
     /// <param name="sender">Отправитель</param>
@@ -1064,48 +1098,6 @@ public partial class RegistrationHero : ContentPage
         BiographyElement biographyElement = new(dayBiographyBeginEntry, monthBiographyBeginPicker, cycleBiographyBeginEntry,
             dayBiographyEndEntry, monthBiographyEndPicker, cycleBiographyEndEntry, textBiographyEditor);
         BiographyElements.Add(biographyElement);
-    }
-
-    /// <summary>
-    /// Класс элемента биографии
-    /// </summary>
-    private class BiographyElement(Entry dayBegin, Picker monthBegin, Entry cycleBegin, Entry dayEnd, Picker monthEnd,
-        Entry cycleEnd, Editor text)
-    {
-        /// <summary>
-        /// Поле ввода даты начала
-        /// </summary>
-        public Entry? DayBegin { get; set; } = dayBegin;
-
-        /// <summary>
-        /// Выпадающий список месяцев начала
-        /// </summary>
-        public Picker? MonthBegin { get; set; } = monthBegin;
-
-        /// <summary>
-        /// Поле ввода цикла начала
-        /// </summary>
-        public Entry? CycleBegin { get; set; } = cycleBegin;
-
-        /// <summary>
-        /// Поле ввода даты окончания
-        /// </summary>
-        public Entry? DayEnd { get; set; } = dayEnd;
-
-        /// <summary>
-        /// Выпадающий список месяцев окончания
-        /// </summary>
-        public Picker? MonthEnd { get; set; } = monthEnd;
-
-        /// <summary>
-        /// Поле ввода даты окончания
-        /// </summary>
-        public Entry? CycleEnd { get; set; } = cycleEnd;
-
-        /// <summary>
-        /// Поле ввода текст биографии
-        /// </summary>
-        public Editor? Text { get; set; } = text;
     }
 
     /// <summary>

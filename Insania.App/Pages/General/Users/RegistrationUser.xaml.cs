@@ -23,6 +23,11 @@ public partial class RegistrationUser : ContentPage
     private readonly IUsers? _users;
 
     /// <summary>
+    /// Текст ошибки
+    /// </summary>
+    private string? _error = null;
+
+    /// <summary>
     /// Конструктор класса страницы регистрации пользователя
     /// </summary>
 	public RegistrationUser()
@@ -166,6 +171,34 @@ public partial class RegistrationUser : ContentPage
         if (GenderCheckBox.IsChecked) GenderLabel.Text = "Мужской";
         //Иначе - женский
         else GenderLabel.Text = "Женский";
+    }
+    
+    /// <summary>
+    /// Событие изменения текста ошибки
+    /// </summary>
+    /// <param name="sender">Отправитель</param>
+    /// <param name="e">Событие</param>
+    private async void Error_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        try
+        {
+            //Если нет объекта с текстом ошибки, или текст ошибки пустой, или он соответсвует уже показанному, выходим
+            if (ErrorLabel == null || string.IsNullOrWhiteSpace(ErrorLabel.Text) || ErrorLabel.Text == _error) return;
+
+            //Записываем показанный текст ошибки
+            _error = ErrorLabel.Text;
+
+            //Отображаем сообщение
+            await DisplayAlert(Errors.Known, ErrorLabel.Text, "ОK");
+        }
+        catch (InnerException ex)
+        {
+            await DisplayAlert(Errors.Known, string.Format("{0} {1}", Errors.Error, ex), "ОK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(Errors.Unknown, string.Format("{0} {1}", Errors.Error, ex), "ОK");
+        }
     }
 
     /// <summary>

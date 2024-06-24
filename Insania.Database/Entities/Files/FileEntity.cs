@@ -9,7 +9,7 @@ namespace Insania.Database.Entities.Files;
 /// <summary>
 /// Модель сущности файла сущности
 /// </summary>
-public abstract class EntityFile : BaseEntity
+public abstract class FileEntity : BaseEntity
 {
     /// <summary>
     /// Ссылка на файл
@@ -33,7 +33,7 @@ public abstract class EntityFile : BaseEntity
     /// <summary>
     /// Простой конструктор модели сущности файла сущности
     /// </summary>
-    public EntityFile() : base()
+    public FileEntity() : base()
     {
         File = new();
     }
@@ -43,7 +43,7 @@ public abstract class EntityFile : BaseEntity
     /// </summary>
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="file">Ссылка на файл</param>
-    public EntityFile(string user, File file) : base(user)
+    public FileEntity(string user, File file) : base(user)
     {
         FileId = file.Id;
         File = file;
@@ -55,7 +55,7 @@ public abstract class EntityFile : BaseEntity
     /// <param name="id">Первичный ключ таблицы</param>
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
-    public EntityFile(long id, string user, File file) : base(id, user)
+    public FileEntity(long id, string user, File file) : base(id, user)
     {
         FileId = file.Id;
         File = file;
@@ -67,7 +67,7 @@ public abstract class EntityFile : BaseEntity
     /// <param name="user">Пользователь, изменивший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="sequenceNumber">орядковый номер</param>
-    public EntityFile(string user, File file, int sequenceNumber) : base(user)
+    public FileEntity(string user, File file, int sequenceNumber) : base(user)
     {
         FileId = file.Id;
         File = file;
@@ -81,7 +81,7 @@ public abstract class EntityFile : BaseEntity
     /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="sequenceNumber">орядковый номер</param>
-    public EntityFile(long id, string user, File file, int sequenceNumber) : base(id, user)
+    public FileEntity(long id, string user, File file, int sequenceNumber) : base(id, user)
     {
         FileId = file.Id;
         File = file;

@@ -17,6 +17,7 @@ using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Files;
 using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
+using Insania.Database.Entities.InformationArticles;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
@@ -201,6 +202,15 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
 
             //ФАЙЛЫ ПЕРСОНАЖЕЙ
             if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationFilesHeroes"])) await InitializationFilesHeroes();
+
+            //РАЗДЕЛЫ ИНФОРМАЦИОННЫХ СТАТЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationSectionsInformationArticles"])) await InitializationSectionsInformationArticles();
+
+            //ОГЛАВЛЕНИЯ ИНФОРМАЦИОННЫХ СТАТЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationHeadersInformationArticles"])) await InitializationHeadersInformationArticles();
+
+            //ДЕТАЛЬНЫЕ ЧАСТИ ИНФОРМАЦИОННЫХ СТАТЕЙ
+            if (Convert.ToBoolean(_configuration["InitializeOptions:InitializationDetailsInformationArticles"])) await InitializationDetailsInformationArticles();
         }
         catch (Exception ex)
         {
@@ -274,7 +284,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (await _userManager.FindByNameAsync("demiurge") == null)
             {
                 //Добавляем пользователя демиург
-                User user = new("demiurge", "insania_officialis@vk.com", "+79996370439", "https://vk.com/khachko09", false, true, "Хачко", "Иван", "Валерьевич", DateTime.SpecifyKind(DateTime.ParseExact("31.03.1999", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
+                User user = new("demiurge", null, null, "https://vk.com/altair_fon_alfheim", false, true, "Альфхейм", "Альтаир", "фон", DateTime.SpecifyKind(DateTime.ParseExact("31.03.1999", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
                 var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptyUser);
 
                 //Если не успешно, выдаём ошибку
@@ -287,7 +297,7 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
             if (await _userManager.FindByNameAsync("divinitas") == null)
             {
                 //Добавляем пользователя божество
-                User user = new("divinitas", "poetrevolution_09@outlook.com", "+79996370439", "https://vk.com/allenobrien", false, true, "Брайен", "Аллен", "O'", DateTime.SpecifyKind(DateTime.ParseExact("09.08.1996", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
+                User user = new("divinitas", null, null, "https://vk.com/khachko09", false, true, "Альфхейм", "Альтаир", "фон", DateTime.SpecifyKind(DateTime.ParseExact("09.08.1996", "dd.MM.yyyy", CultureInfo.InvariantCulture), DateTimeKind.Utc));
                 var result = await _userManager.CreateAsync(user, "K02032018v.") ?? throw new InnerException(Errors.EmptyUser);
 
                 //Если не успешно, выдаём ошибку
@@ -3068,6 +3078,288 @@ public class InitializationDataBase(RoleManager<Role> roleManager, UserManager<U
     #endregion
 
     #region Информационные статьи
+
+    /// <summary>
+    /// Метод инициализации разделов информационных статей
+    /// </summary>
+    /// <exception cref="Exception">Необработанная ошибка</exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationSectionsInformationArticles()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationSectionsInformationArticlesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Помощь при регистрации игроков";
+            SectionInformationArticle? parent = null;
+            if (!await _applicationContext.SectionsInformationArticles.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                SectionInformationArticle row = new(_userCreated, value, 0, parent);
+                await _applicationContext.SectionsInformationArticles.AddAsync(row);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAlreadyAdded);
+            value = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Общее";
+            parent = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Помощь при регистрации игроков") ?? throw new InnerException(Errors.EmptyParent);
+            if (!await _applicationContext.SectionsInformationArticles.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                SectionInformationArticle row = new(_userCreated, value, 1, parent);
+                await _applicationContext.SectionsInformationArticles.AddAsync(row);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAlreadyAdded);
+            value = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Расы и нации";
+            parent = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Помощь при регистрации игроков") ?? throw new InnerException(Errors.EmptyParent);
+            if (!await _applicationContext.SectionsInformationArticles.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                SectionInformationArticle row = new(_userCreated, value, 2, parent);
+                await _applicationContext.SectionsInformationArticles.AddAsync(row);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAlreadyAdded);
+            value = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Страны, регионы и области";
+            parent = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Помощь при регистрации игроков") ?? throw new InnerException(Errors.EmptyParent);
+            if (!await _applicationContext.SectionsInformationArticles.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                SectionInformationArticle row = new(_userCreated, value, 3, parent);
+                await _applicationContext.SectionsInformationArticles.AddAsync(row);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAlreadyAdded);
+            value = null;
+            parent = null;
+
+            //Проверяем наличие записи
+            value = "Летоисчисление";
+            parent = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Помощь при регистрации игроков") ?? throw new InnerException(Errors.EmptyParent);
+            if (!await _applicationContext.SectionsInformationArticles.AnyAsync(x => x.Name == value))
+            {
+                //Добавляем запись
+                SectionInformationArticle row = new(_userCreated, value, 4, parent);
+                await _applicationContext.SectionsInformationArticles.AddAsync(row);
+
+                //Сохраняем добавленные данные
+                await _applicationContext.SaveChangesAsync();
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.SectionInformationArticlesAlreadyAdded);
+            value = null;
+            parent = null;
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_sections_information_articles_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
+
+    /// <summary>
+    /// Метод инициализации оглавлений информационных статей
+    /// </summary>
+    /// <exception cref="Exception">Необработанная ошибка</exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationHeadersInformationArticles()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationHeadersInformationArticlesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "О проекте";
+            SectionInformationArticle? section = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Общее") ?? throw new InnerException(Errors.EmptySectionInformationArticle);
+            if (!await _applicationContext.HeadersInformationArticles.AnyAsync(x => x.Name == value && x.Section == section))
+            {
+                //Добавляем запись
+                HeaderInformationArticle row = new(_userCreated, true, value, 0, section);
+                await _applicationContext.HeadersInformationArticles.AddAsync(row);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAlreadyAdded);
+            value = null;
+            section = null;
+
+            //Проверяем наличие записи
+            value = "О регистрации";
+            section = await _applicationContext.SectionsInformationArticles.FirstAsync(x => x.Name == "Общее") ?? throw new InnerException(Errors.EmptySectionInformationArticle);
+            if (!await _applicationContext.HeadersInformationArticles.AnyAsync(x => x.Name == value && x.Section == section))
+            {
+                //Добавляем запись
+                HeaderInformationArticle row = new(_userCreated, true, value, 0, section);
+                await _applicationContext.HeadersInformationArticles.AddAsync(row);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAlreadyAdded);
+            value = null;
+            section = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_headers_information_articles_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
+
+    /// <summary>
+    /// Метод инициализации детальных частей информационных статей
+    /// </summary>
+    /// <exception cref="Exception">Необработанная ошибка</exception>
+    /// <exception cref="InnerException">Обработанная ошибка</exception>
+    public async Task InitializationDetailsInformationArticles()
+    {
+        //Логгируем
+        Console.WriteLine(Informations.EnteredInitializationDetailsInformationArticlesMethod);
+
+        //Открываем транзакцию
+        using var transaction = _applicationContext.Database.BeginTransaction();
+
+        try
+        {
+            //Объявляем переменную, по которой будет осуществляться поиск/добавление/логгирование
+            string? value = null;
+
+            //Проверяем наличие записи
+            value = "Общие сведения";
+            HeaderInformationArticle? header = await _applicationContext.HeadersInformationArticles.FirstAsync(x => x.Name == "О проекте") ?? throw new InnerException(Errors.EmptyHeaderInformationArticle);
+            if (!await _applicationContext.DetailsInformationArticles.AnyAsync(x => x.Title == value && x.Header == header))
+            {
+                //Добавляем запись
+                DetailInformationArticle row = new(_userCreated, true, value, "Проект \"Инсания\" представляет собой текстовую " +
+                    "ролевую игру по одноимённому авторскому фэнтези миру эпохи высокого средневековья. В данном проекта вы " +
+                    "берёте на себя роль персонажа различного уровня (правители, аристократы, торговцы, воины, маги, жрецы, " +
+                    "учённые и т.п.) из этого мира посредством регистрации. Игра построена на принципе пост - вердикт, где вы " +
+                    "в специальных чатах отписываете действия своего персонажа от третьего лица, после чего администраторы " +
+                    "выдают решение/вердикт на ваши действия. В игре важно соблюдать уважение по отношению к администрации и " +
+                    "другим игрокам. Администрация имеет право заблокировать вашу учётную запись на любой срок за нарушение " +
+                    "правил проекта. При регистрации вы подтверждаете, что в случае прекращения игры за персонажа " +
+                    "(добровольного или в следствии нарушений правил проекта), ваши персонажи могут быть " +
+                    "использованы администрацией в своих интересах. Все авторские права на мир, персонажей (в том числе " +
+                    "игровых) и их действия в принадлежат автору проекта.", 0, header);
+                await _applicationContext.DetailsInformationArticles.AddAsync(row);
+
+                //Логгируем
+                Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAdded);
+            }
+            else Console.WriteLine("{0}{1}", value, Informations.HeaderInformationArticleAlreadyAdded);
+            value = null;
+            header = null;
+
+            //Сохраняем добавленные данные
+            await _applicationContext.SaveChangesAsync();
+
+            //Создаём шаблон файла скриптов
+            string pattern = @"^t_details_information_articles_\d+.sql";
+
+            //Проходим по всем скриптам
+            foreach (var file in Directory.GetFiles(ScriptsPath!).Where(x => Regex.IsMatch(Path.GetFileName(x), pattern)))
+            {
+                //Выполняем скрипт
+                await ExecuteScript(file);
+            }
+
+            //Фиксируем транзакцию
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            //Откатываем транзакцию
+            await transaction.RollbackAsync();
+
+            //Логгируем
+            Console.WriteLine("{0} {1}", Errors.Error, ex);
+        }
+    }
 
     #endregion
 

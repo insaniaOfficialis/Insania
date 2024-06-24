@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Insania.App.Pages.Mobile.OutCategories.MainMobile"
+             Background="{StaticResource MainBackground}"
+             Loaded="ContentPage_Loaded">
+    <StackLayout>
+        <Grid x:Name="MainDesktopGrid"
+              VerticalOptions="FillAndExpand"
+              RowDefinitions="*, Auto, *">
+            <StackLayout Grid.Row="0"
+                         Margin="25,25,0,0"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Start"
+                         Orientation="Horizontal">
+                <Border HorizontalOptions="Center"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        StrokeShape = "RoundRectangle 100"
+                        Stroke="{StaticResource PrimaryText}">
+                    <Image x:Name="HeroImage"
+                           Background="{StaticResource SecondaryButtonPressed}"
+                           Aspect="AspectFill"/>
+                </Border>
+                <Picker x:Name="HeroPicker"
+                        VerticalOptions="Center"
+                        MaximumWidthRequest="275"
+                        ItemsSource="{Binding Heroes}"
+                        ItemDisplayBinding="{Binding Name}"
+                        Title="{OnIdiom Desktop='', Phone='Выберите персонажа'}"
+                        Style="{StaticResource PickerSecondary}"/>
+                <Button x:Name="NotificationButton"
+                        HorizontalOptions="EndAndExpand"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        ImageSource="notification.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+                <Button x:Name="SettingsButton"
+                        HorizontalOptions="End"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        ImageSource="settings.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1"
+                         VerticalOptions="CenterAndExpand"
+                         Orientation="Vertical">
+            </StackLayout>
+            <StackLayout Grid.Row="2"
+                         VerticalOptions="End"
+                         HorizontalOptions="Center"
+                         Orientation="Horizontal">
+                <Button x:Name="HomeButton"
+                        WidthRequest="75"
+                        HeightRequest="75"
+                        ImageSource="home.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+                <Button x:Name="MechanicsButton"
+                        WidthRequest="75"
+                        HeightRequest="75"
+                        ImageSource="mechanics.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+                <Button x:Name="MessengerButton"
+                        WidthRequest="75"
+                        HeightRequest="75"
+                        ImageSource="messenger.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+                <Button x:Name="MapButton"
+                        WidthRequest="75"
+                        HeightRequest="75"
+                        ImageSource="map.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+                <Button x:Name="InformationButton"
+                        WidthRequest="75"
+                        HeightRequest="75"
+                        ImageSource="information.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+            </StackLayout>
+        </Grid>
+        <StackLayout x:Name="LoadStackLayout"
+                     IsVisible="False"
+                     HorizontalOptions="Center"
+                     VerticalOptions="FillAndExpand"
+                     Orientation="Horizontal">
+            <ActivityIndicator x:Name="LoadActivityIndicator"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               Color="{StaticResource PrimaryText}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

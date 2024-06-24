@@ -1,5 +1,6 @@
 using Insania.App.Pages.Desktop.OutCategories;
 using Insania.App.Pages.General.Heroes;
+using Insania.App.Pages.Mobile.OutCategories;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.Heroes.RequestsHeroesRegistration;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
@@ -40,8 +41,6 @@ public partial class Authentication : ContentPage
     /// </summary>
     public Authentication()
 	{
-        SecureStorage.Default.Remove("token");
-
         //Инициализируем компоненты
         InitializeComponent();
 
@@ -222,6 +221,7 @@ public partial class Authentication : ContentPage
     private async void ToMain()
     {
         if (DeviceInfo.Idiom == DeviceIdiom.Desktop) await Navigation.PushModalAsync(new MainDesktop());
+        else await Navigation.PushModalAsync(new MainMobile());
     }
 
     /// <summary>

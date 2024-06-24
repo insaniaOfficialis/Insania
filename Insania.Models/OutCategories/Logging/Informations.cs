@@ -136,6 +136,14 @@ public static class Informations
 
     #region Информационные статьи
 
+    public const string EnteredInitializationDetailsInformationArticlesMethod = "Вошли в метод инициализации детальных частей информационных статей";
+    public const string EnteredInitializationHeadersInformationArticlesMethod = "Вошли в метод инициализации оглавлений информационных статей";
+    public const string EnteredInitializationSectionsInformationArticlesMethod = "Вошли в метод инициализации разделов информационных статей";
+    public const string HeaderInformationArticleAdded = "-оглавление информационной статьи добавлено";
+    public const string HeaderInformationArticleAlreadyAdded = "-оглавление информационной статьи уже добавлено";
+    public const string SectionInformationArticlesAdded = "-раздел информационных статей добавлен";
+    public const string SectionInformationArticlesAlreadyAdded = "-раздел информационных статей уже добавлен";
+
     #endregion
 
     #region Политика

@@ -2,12 +2,174 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Insania.App.Pages.Desktop.OutCategories.MainDesktop"
-             Title="Main"
-             Background="{StaticResource MainBackground}">
-    <Grid x:Name="GridContent"
-          RowDefinitions="Auto, *, Auto">
-        <HorizontalStackLayout>
-            <Label Text="OK"/>
-        </HorizontalStackLayout>
-    </Grid>
+             Background="{StaticResource MainBackground}"
+             Loaded="ContentPage_Loaded">
+    <StackLayout>
+        <Grid x:Name="MainDesktopGrid"
+              VerticalOptions="FillAndExpand"
+              RowDefinitions="Auto, Auto, *"
+              ColumnDefinitions="400, *">
+            <Border Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Stroke="{StaticResource SecondaryBackground}"
+                    Background="{StaticResource SecondaryBackground}"/>
+            <StackLayout Grid.Row="0"
+                         Margin="25,25,0,0"
+                         VerticalOptions="Start"
+                         Orientation="Horizontal">
+                <Border HorizontalOptions="Center"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        StrokeShape = "RoundRectangle 100"
+                        Stroke="{StaticResource PrimaryText}">
+                    <Image x:Name="HeroImage"
+                           Background="{StaticResource SecondaryButtonPressed}"
+                           Aspect="AspectFill"/>
+                </Border>
+                <Picker x:Name="HeroPicker"
+                        HorizontalOptions="Center"
+                        MaximumWidthRequest="350"
+                        ItemsSource="{Binding Heroes}"
+                        ItemDisplayBinding="{Binding Name}"
+                        Title="{OnIdiom Desktop='', Phone='Выберите персонажа'}"
+                        Style="{StaticResource PickerSecondary}"/>
+                <Button x:Name="NotificationButton"
+                        HorizontalOptions="EndAndExpand"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        ImageSource="notification.png"
+                        Style="{StaticResource ButtonSecondary}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1"
+                         Margin="25,0,0,0"
+                         Orientation="Vertical">
+                <StackLayout Margin="0,25,0,0"
+                             Orientation="Horizontal">
+                    <Button x:Name="HomeButton"
+                            Padding="0,30,30,0"
+                            WidthRequest="75"
+                            HeightRequest="75"
+                            ImageSource="home.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Padding="0,30,0,0"
+                           Text="Домашняя"
+                           Style="{StaticResource TitleSecondary}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="MechanicsButton"
+                            Padding="0,30,30,0"
+                            WidthRequest="75"
+                            HeightRequest="75"
+                            ImageSource="mechanics.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Padding="0,30,0,0"
+                           Text="Механики"
+                           Style="{StaticResource TitleSecondary}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="MessengerButton"
+                            Padding="0,30,30,0"
+                            WidthRequest="75"
+                            HeightRequest="75"
+                            ImageSource="messenger.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Padding="0,30,0,0"
+                           Text="Мессенджер"
+                           Style="{StaticResource TitleSecondary}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="MapButton"
+                            Padding="0,30,30,0"
+                            WidthRequest="75"
+                            HeightRequest="75"
+                            ImageSource="map.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Padding="0,30,0,0"
+                           Text="Карта"
+                           Style="{StaticResource TitleSecondary}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="InformationButton"
+                            Padding="0,30,30,0"
+                            WidthRequest="75"
+                            HeightRequest="75"
+                            ImageSource="information.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Padding="0,30,0,0"
+                           Text="Информация"
+                           Style="{StaticResource TitleSecondary}"/>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Grid.Row="2"
+                         HorizontalOptions="Start"
+                         VerticalOptions="EndAndExpand"
+                         Margin="25,25,0,0"
+                         Orientation="Vertical">
+                <BoxView WidthRequest="350"
+                         HeightRequest="2"
+                         Color="{StaticResource PrimaryText}"/>
+                <StackLayout Margin="0,10,0,0"
+                             Orientation="Horizontal">
+                    <Button x:Name="HelpButton"
+                            Padding="0,10,15,10"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            ImageSource="help.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Text="Справка"
+                           Style="{StaticResource TitleFourth}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="SettingsButton"
+                            Padding="0,10,15,10"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            ImageSource="settings.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Text="Настройки"
+                           Style="{StaticResource TitleFourth}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="FeedbackButton"
+                            Padding="0,10,15,10"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            ImageSource="feedback.png"
+                            Style="{StaticResource ButtonSecondary}"/>
+                    <Label VerticalOptions="Center"
+                           Text="Тех.поддержка"
+                           Style="{StaticResource TitleFourth}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button x:Name="LogoutButton"
+                            Padding="0,10,15,10"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            ImageSource="logout.png"
+                            Style="{StaticResource ButtonSecondary}"
+                            Clicked="LogoutButton_Clicked"/>
+                    <Label VerticalOptions="Center"
+                           Text="Выход"
+                           Style="{StaticResource TitleFourth}"/>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+        <StackLayout x:Name="LoadStackLayout"
+                     IsVisible="False"
+                     HorizontalOptions="Center"
+                     VerticalOptions="FillAndExpand"
+                     Orientation="Horizontal">
+            <ActivityIndicator x:Name="LoadActivityIndicator"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               Color="{StaticResource PrimaryText}"/>
+        </StackLayout>
+    </StackLayout>
 </ContentPage>

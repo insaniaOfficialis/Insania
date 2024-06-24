@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 
-using Insania.App.Pages.General.Users;
 using Insania.BusinessLogic.Files.Files;
 using Insania.BusinessLogic.Heroes.Heroes;
 using Insania.BusinessLogic.OutOfCategories.CheckConnection;
@@ -10,12 +9,12 @@ using Insania.Models.Heroes.Heroes;
 using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.OutCategories.Logging;
 
-namespace Insania.App.Pages.Desktop.OutCategories;
+namespace Insania.App.Pages.Mobile.OutCategories;
 
 /// <summary>
-/// Класс главной страницы для пк
+/// Класс главной страницы для мобильных устройств
 /// </summary>
-public partial class MainDesktop : ContentPage
+public partial class MainMobile : ContentPage
 {
     /// <summary>
     /// Интерфейс проверки соединения
@@ -40,7 +39,7 @@ public partial class MainDesktop : ContentPage
     /// <summary>
     /// Персонажи
     /// </summary>
-    private ObservableCollection<GetHeroesResponseListItem>? Heroes {  get; set; }
+    private ObservableCollection<GetHeroesResponseListItem>? Heroes { get; set; }
 
     /// <summary>
     /// Персонаж
@@ -53,12 +52,12 @@ public partial class MainDesktop : ContentPage
     private GetFileResponse? FileResponse { get; set; }
 
     /// <summary>
-    /// Конструктор главной страницы для пк
+    /// Конструктор главной страницы для мобильных устройств
     /// </summary>
-    public MainDesktop()
-	{
+    public MainMobile()
+    {
         //Инициализируем компоненты
-		InitializeComponent();
+        InitializeComponent();
 
         //Получаем сервисы
         _checkConnection = App.Services?.GetService<ICheckConnection>();
@@ -126,45 +125,5 @@ public partial class MainDesktop : ContentPage
             //Возвращаем видимость элементов
             MainDesktopGrid.IsVisible = true;
         }
-    }
-
-    /// <summary>
-    /// Событие нажатия на кнопку выхода
-    /// </summary>
-    /// <param name="sender">Отправитель</param>
-    /// <param name="e">Событие</param>
-    private async void LogoutButton_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            //Очищаем токен
-            SecureStorage.Remove("token");
-
-            //Переходим на страницу авторизации
-            ToAuthentication();
-        }
-        catch (InnerException ex)
-        {
-            //Устанавливаем текст ошибки
-            await DisplayAlert(Errors.Known, string.Format("{0} {1}", Errors.Error, ex), "ОK");
-        }
-        catch (Exception ex)
-        {
-            //Устанавливаем текст ошибки
-            await DisplayAlert(Errors.Unknown, string.Format("{0} {1}", Errors.Error, ex), "ОK");
-        }
-    }
-
-    /// <summary>
-    /// Метод перехода на страницу аутентификации
-    /// </summary>
-    private async void ToAuthentication()
-    {
-        //Переходим на страницу авторизации
-        await Navigation.PushModalAsync(new NavigationPage(new Authentication())
-        {
-            BarBackgroundColor = Color.FromArgb("#FF272727"),
-            BarTextColor = Colors.Transparent
-        });
     }
 }

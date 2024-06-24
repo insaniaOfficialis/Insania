@@ -10,4 +10,11 @@
         <Setter Property="TitleColor" Value="{StaticResource SecondaryButton}"/>
     </Style>
 
+    <Style TargetType="Picker" x:Key="PickerSecondary">
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="{OnIdiom Desktop=15, Phone=10}"/>
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
+        <Setter Property="TitleColor" Value="{StaticResource SecondaryButton}"/>
+    </Style>
+
 </ResourceDictionary>

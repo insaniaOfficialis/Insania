@@ -10,6 +10,7 @@ using Insania.Database.Entities.Chronology;
 using Insania.Database.Entities.Files;
 using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
+using Insania.Database.Entities.InformationArticles;
 using Insania.Database.Entities.Players;
 using Insania.Database.Entities.Politics;
 using Insania.Database.Entities.Sociology;
@@ -159,6 +160,21 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
     #region Информационные статьи
 
+    /// <summary>
+    /// Разделы информационных статей
+    /// </summary>
+    public DbSet<SectionInformationArticle> SectionsInformationArticles { get; set; }
+
+    /// <summary>
+    /// Оглавления информационных статей
+    /// </summary>
+    public DbSet<HeaderInformationArticle> HeadersInformationArticles { get; set; }
+
+    /// <summary>
+    /// Детальные части информационных статей
+    /// </summary>
+    public DbSet<DetailInformationArticle> DetailsInformationArticles { get; set; }
+
     #endregion
 
     #region Политика
@@ -277,6 +293,11 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     /// Файлы персонажей
     /// </summary>
     public DbSet<FileHero> FilesHeroes { get; set; }
+
+    /// <summary>
+    /// Файлы детальных частей информационных статей
+    /// </summary>
+    public DbSet<FileDetailInformationArticle> FilesDetailsInformationArticles { get; set; }
 
     #endregion
 
@@ -418,6 +439,15 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
         #region Информационные статьи
 
+        //Разделы информационных статей
+        modelBuilder.Entity< SectionInformationArticle>().HasIndex(x => x.Alias).IsUnique();
+
+        /// Оглавления информационных статей
+        modelBuilder.Entity<HeaderInformationArticle>();
+
+        //Детальные части информационных статей
+        modelBuilder.Entity<DetailInformationArticle>();
+
         #endregion
 
         #region Политика
@@ -511,6 +541,9 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
 
         //Типы файлов
         modelBuilder.Entity<TypeFile>().HasIndex(x => x.Alias).IsUnique();
+
+        //Файлы детальных частей информационных статей
+        modelBuilder.Entity<FileDetailInformationArticle>().HasIndex(x => new { x.FileId, x.DetailInformationArticleId }).IsUnique();
 
         #endregion
 

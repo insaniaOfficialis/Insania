@@ -46,7 +46,7 @@
                         Style="{StaticResource ButtonPrimary}"
                         Clicked="Authorize_Clicked"/>
                 <Button x:Name="RestorePasswordButton"
-                        Margin="0,25,0,0"
+                        Margin="0,15,0,0"
                         Text="Забыли пароль?"
                         Style="{StaticResource ButtonSecondary}"
                         Clicked="RestorePassword_Clicked"/>
@@ -54,15 +54,16 @@
                         Text="Зарегистрироваться"
                         Style="{StaticResource ButtonSecondary}"
                         Clicked="Registration_Clicked"/>
-                <Label x:Name="ErrorLabel"
-                       Margin="0,25,0,0"
-                       HorizontalOptions="Center"
-                       Style="{StaticResource ErrorPrimary}"/>
             </StackLayout>
             <ActivityIndicator x:Name="LoadActivityIndicator"
                                IsRunning="False"
                                Color="{StaticResource PrimaryText}"/>
         </StackLayout>
+        <Label x:Name="ErrorLabel"
+               Grid.Row="1"
+               HorizontalOptions="Center"
+               Margin="0,50,0,0"
+               Style="{StaticResource ErrorPrimary}"/>
         <Button x:Name="FeedbackButton"
                 Grid.Row="1"
                 HorizontalOptions="End"

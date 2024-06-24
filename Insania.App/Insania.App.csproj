@@ -112,6 +112,9 @@
 	  <MauiXaml Update="Pages\General\Users\RegistrationUser.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Mobile\OutCategories\MainMobile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Borders.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

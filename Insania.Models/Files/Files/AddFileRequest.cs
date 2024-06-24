@@ -31,7 +31,7 @@ public class AddFileRequest
     /// <summary>
     /// Порядковый номер
     /// </summary>
-    public long? OrdinalNumber { get; set; }
+    public long? SequenceNumber { get; set; }
 
     /// <summary>
     /// Конструктор модели запроса добавления файла
@@ -40,8 +40,8 @@ public class AddFileRequest
     /// <param name="name">Наименование файла</param>
     /// <param name="type">Тип файла</param>
     /// <param name="stream">Поток файла</param>
-    /// <param name="ordinalNumber">Порядковый номер</param>
-    public AddFileRequest(long? id, string? name, string? type, Stream? stream, long? ordinalNumber)
+    /// <param name="sequenceNumber">Порядковый номер</param>
+    public AddFileRequest(long? id, string? name, string? type, Stream? stream, long? sequenceNumber)
     {
         //Проверяем входные данные
         if (string.IsNullOrWhiteSpace(name)) throw new InnerException(Errors.EmptyNameFile);
@@ -52,6 +52,6 @@ public class AddFileRequest
         Name = name;
         Type = type;
         Stream = stream ?? throw new InnerException(Errors.EmptyStreamFile);
-        OrdinalNumber = ordinalNumber;
+        SequenceNumber = sequenceNumber;
     }
 }

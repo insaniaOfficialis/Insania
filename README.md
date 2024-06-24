@@ -16,6 +16,7 @@
   * xlmns
   * x:Name/x:Uid
   * Grid.Row/Column
+  * Grid.Row/ColumnSpan
   * IsVisible
   * IsEnabled
   * IsRunning
@@ -31,8 +32,9 @@
   * Wrap
   * JustifyContent
   * CornerRadius
-  * StrokeThickness
+  * Stroke
   * StrokeShape
+  * StrokeThickness
   * SelectionMode
   * SelectionChanged
 
@@ -58,6 +60,7 @@
   * Style
 
   * Loaded    
+  * PropertyChanged
   * Clicked
   * SelectedIndexChanged
 

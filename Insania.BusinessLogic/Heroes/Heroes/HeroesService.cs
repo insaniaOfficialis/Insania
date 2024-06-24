@@ -78,7 +78,7 @@ public class HeroesService(ApplicationContext applicationContext, ILogger<Heroes
 
             //Создаём пользователя
             User user = new(request.User?.Login!,
-                request.User?.Password,
+                request.User?.Email,
                 request.User?.PhoneNumber,
                 request.User?.LinkVK,
                 false,

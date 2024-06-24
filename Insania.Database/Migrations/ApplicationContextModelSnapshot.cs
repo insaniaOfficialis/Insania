@@ -904,6 +904,71 @@ namespace Insania.Database.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.Files.FileDetailInformationArticle", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<long>("DetailInformationArticleId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("detail_information_article_id")
+                        .HasComment("Ссылка на детальную часть информационной статьи");
+
+                    b.Property<long>("FileId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("file_id")
+                        .HasComment("Ссылка на файл");
+
+                    b.Property<int?>("SequenceNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence_number")
+                        .HasComment("Порядковый номер");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailInformationArticleId");
+
+                    b.HasIndex("FileId", "DetailInformationArticleId")
+                        .IsUnique();
+
+                    b.ToTable("un_files_details_information_articleses", t =>
+                        {
+                            t.HasComment("Файлы детальных частей информационных статей");
+                        });
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.Files.FileHero", b =>
                 {
                     b.Property<long>("Id")
@@ -1695,6 +1760,220 @@ namespace Insania.Database.Migrations
                     b.ToTable("dir_statuses_requests_heroes_registration", t =>
                         {
                             t.HasComment("Статусы заявок на регистрацию персонажей");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.DetailInformationArticle", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<long>("HeaderId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("header_id")
+                        .HasComment("Ссылка на оглавление");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_system")
+                        .HasComment("Признак системной записи");
+
+                    b.Property<int?>("SequenceNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence_number")
+                        .HasComment("Порядковый номер");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text")
+                        .HasComment("Текст");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title")
+                        .HasComment("Оглавление");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HeaderId");
+
+                    b.ToTable("re_details_information_articles", t =>
+                        {
+                            t.HasComment("Детальные части информационных статей");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.HeaderInformationArticle", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_system")
+                        .HasComment("Признак системной записи");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<long>("SectionId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("section_id")
+                        .HasComment("Ссылка на раздел");
+
+                    b.Property<int?>("SequenceNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence_number")
+                        .HasComment("Порядковый номер");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("re_headers_information_articles", t =>
+                        {
+                            t.HasComment("Оглавления информационных статей");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.SectionInformationArticle", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Псевдоним");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id")
+                        .HasComment("Ссылка на родителя");
+
+                    b.Property<int?>("SequenceNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence_number")
+                        .HasComment("Порядковый номер");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Alias")
+                        .IsUnique();
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("dir_sections_information_articles", t =>
+                        {
+                            t.HasComment("Разделы информационных статей");
                         });
                 });
 
@@ -3087,6 +3366,25 @@ namespace Insania.Database.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.Files.FileDetailInformationArticle", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.InformationArticles.DetailInformationArticle", "DetailInformationArticle")
+                        .WithMany()
+                        .HasForeignKey("DetailInformationArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Insania.Database.Entities.Files.File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DetailInformationArticle");
+
+                    b.Navigation("File");
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.Files.FileHero", b =>
                 {
                     b.HasOne("Insania.Database.Entities.Files.File", "File")
@@ -3270,6 +3568,37 @@ namespace Insania.Database.Migrations
                         .HasForeignKey("PreviousId");
 
                     b.Navigation("Previous");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.DetailInformationArticle", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.InformationArticles.HeaderInformationArticle", "Header")
+                        .WithMany()
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Header");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.HeaderInformationArticle", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.InformationArticles.SectionInformationArticle", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.InformationArticles.SectionInformationArticle", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.InformationArticles.SectionInformationArticle", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Players.Player", b =>
