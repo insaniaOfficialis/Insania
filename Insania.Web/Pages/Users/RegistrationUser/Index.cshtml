@@ -1,0 +1,27 @@
+﻿@page
+
+@{
+    ViewBag.Title = "Регистрация пользователя";
+    Layout = "/Pages/OutOfCategories/_Layout.cshtml";
+}
+
+<body>
+    <div class="divPrimary">
+        <button id="back" class="buttonThird">
+            <img class="imageSecondary" src="/images/back.png">
+        </button>
+        <label class="labelPrimary">Регистрация пользователя</label>
+    </div>
+    <div class="gridPrimary">
+        <label class="labelSecondary">Логин*:</label>
+        <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
+        <label class="labelSecondary">Пароль*:</label>
+        <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
+        <label class="labelSecondary">Фамилия*:</label>
+        <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
+        <label class="labelSecondary">Имя*:</label>
+        <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
+        <label class="labelSecondary">Отчество*:</label>
+        <input id="patronimyc" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
+    </div>
+</body>

@@ -70,7 +70,38 @@
 * События окна/страницы
 * События элементов
 * Методы
- 
+
+### CSS
+* display
+* position
+* top/bottom/left/right
+* transform
+* text-align
+* margin/padding
+* height
+* width
+* background-color
+* border/border-bottom
+* border-radius
+* outline
+* font-family
+* font-size
+* color
+* cursor
+
+### CSHML
+* name
+* class
+* style
+* type
+* autocomplete
+* placeholder
+* src
+* asp-action
+* asp-controller
+* visibility
+
+
 ## Развёртывание
 
 ### Создание новой базы

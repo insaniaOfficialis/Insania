@@ -1,0 +1,183 @@
+body {
+    background-color: #272727
+}
+
+a {
+    color: #D9D9D9;
+}
+
+a:visited {
+    color: #D9D9D9;
+}
+
+a:active {
+    color: #7A7A7A;
+}
+
+img {
+    background-color: transparent
+}
+
+.inputPrimary {
+    margin-top: 25px;
+    height: 50px;
+    width: 400px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #D9D9D9;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #D9D9D9;
+}
+
+.gridPrimary {
+    display: grid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.divPrimary {
+    display: inline;
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    height: 50px;
+    width: 500px;
+}
+
+.labelTitle {
+    position: relative;
+    text-align: center;
+    margin-top: 25px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: Ofont ru Optimus;
+    font-size: 25px;
+    color: #D9D9D9;
+}
+
+.labelError {
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #FFD700;
+}
+
+.labelPrimary {
+    position: relative;
+    top: -10%;
+    left: 5%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #D9D9D9;
+}
+
+.labelSecondary {
+    margin-top: 50px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #D9D9D9;
+}
+
+.buttonPrimary {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 50px;
+    height: 50px;
+    width: 160px;
+    background-color: #D9D9D9;
+    border: hidden;
+    border-radius: 10px;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #272727;
+    cursor: pointer;
+}
+
+.buttonSecondary {
+    height: 75px;
+    width: 75px;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+    cursor: pointer;
+}
+
+.buttonThird {
+    height: 25px;
+    width: 25px;
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+    cursor: pointer;
+}
+
+.linkPrimary {
+    position: relative;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 25px;
+    width: 200px;
+    border: none;
+    outline: none;
+    font-family: Georgia;
+    font-size: 15px;
+    color: #D9D9D9;
+}
+
+.imagePrimary {
+    height: 75px;
+    width: 75px;
+}
+
+.imageSecondary {
+    height: 25px;
+    width: 25px;
+}
+ 
+::-webkit-input-placeholder {
+    color: #7A7A7A;
+}
+
+:-moz-placeholder {
+    color: #7A7A7A;
+}
+
+::-moz-placeholder {
+    color: #7A7A7A;
+}
+
+:-ms-input-placeholder {
+    color: #7A7A7A;
+}
+
+@font-face {
+    font-family: 'Georgia';
+    src: url("/fonts/Georgia.ttf");
+}
+
+@font-face {
+    font-family: 'Ofont ru Optimus';
+    src: url("/fonts/Ofont_ru_Optimus.ttf");
+}

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insania.BusinessLogic", "In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insania.Database", "Insania.Database\Insania.Database.csproj", "{C5428E0E-1A50-4E92-84F9-31F033853AA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insania.Initializer", "Insania.Initializer\Insania.Initializer.csproj", "{1F1E2C8B-5D80-4AB6-8D34-C0451CD6DA96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insania.Initializer", "Insania.Initializer\Insania.Initializer.csproj", "{1F1E2C8B-5D80-4AB6-8D34-C0451CD6DA96}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Insania.Web", "Insania.Web\Insania.Web.csproj", "{30463D97-22B8-47D8-B36E-CDB6071E9EF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{1F1E2C8B-5D80-4AB6-8D34-C0451CD6DA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F1E2C8B-5D80-4AB6-8D34-C0451CD6DA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F1E2C8B-5D80-4AB6-8D34-C0451CD6DA96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30463D97-22B8-47D8-B36E-CDB6071E9EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30463D97-22B8-47D8-B36E-CDB6071E9EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30463D97-22B8-47D8-B36E-CDB6071E9EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30463D97-22B8-47D8-B36E-CDB6071E9EF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
