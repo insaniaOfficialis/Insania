@@ -6,22 +6,27 @@
 }
 
 <body>
-    <div class="divPrimary">
-        <button id="back" class="buttonThird">
-            <img class="imageSecondary" src="/images/back.png">
+    <div class="divInlinePrimary">
+        <button id="back" class="buttonThird" type="button">
+            <img class="imageSecondary" src="/images/back.png" title="Назад" />
         </button>
-        <label class="labelPrimary">Регистрация пользователя</label>
+        <p class="labelTextSecondary">Регистрация пользователя</p>
     </div>
-    <div class="gridPrimary">
-        <label class="labelSecondary">Логин*:</label>
+    <div class="divGridThird">
+        <p class="labelTextPrimary">Логин*:</p>
         <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
-        <label class="labelSecondary">Пароль*:</label>
+        <p class="labelTextPrimary">Пароль*:</p>
         <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
-        <label class="labelSecondary">Фамилия*:</label>
+        <p class="labelTextPrimary">Фамилия*:</p>
         <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
-        <label class="labelSecondary">Имя*:</label>
+        <p class="labelTextPrimary">Имя*:</p>
         <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
-        <label class="labelSecondary">Отчество*:</label>
+        <p class="labelTextPrimary">Отчество*:</p>
         <input id="patronimyc" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
+        <p class="labelTextPrimary">Пол*:</p>
+        <div class="divInlineSecondary">
+            <input id="gener" class="inputCheckPrimary" type="checkbox" placeholder="Укажите пол" checked />
+            <p class="labelTextSecondary">Мужской</p>
+        </div>
     </div>
 </body>

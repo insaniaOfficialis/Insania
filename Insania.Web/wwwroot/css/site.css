@@ -1,27 +1,122 @@
+/*БЛОКИ*/
+
+/*Общие свойства тела*/
 body {
     background-color: #272727
 }
 
-a {
+/*Блок 1*/
+.divPrimary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+/*Таблица 1*/
+.divGridPrimary {
+    display: grid;
+    position: relative;
+    top: 25%;
+}
+
+/*Таблица 2*/
+.divGridSecondary {
+    display: grid;
+    position: fixed;
+    right: 5%;
+    bottom: 5%;
+}
+
+/*Таблица 3*/
+.divGridThird {
+    display: grid;
+    position: relative;
+    top: 10%;
+}
+
+/*Строчная 1*/
+.divInlinePrimary {
+    display: flex;
+    position: absolute;
+    left: 5%;
+    top: 5%;
+}
+
+/*Строчная 1*/
+.divInlineSecondary {
+    display: flex;
+    position: relative;
+    left: 37.5%;
+    width: 25%;
+    margin-top: 50px;
+}
+
+
+/*ТЕКСТ*/
+
+/*Заголовок 1*/
+.labelTitlePrimary {
+    text-align: center;
+    font-family: Ofont ru Optimus;
+    font-size: 25px;
     color: #D9D9D9;
 }
 
-a:visited {
+/*Ошибка 1*/
+.labelErrorPrimary {
+    font-family: Georgia;
+    font-size: 20px;
+    color: #FFD700;
+}
+
+/*Текст 1*/
+.labelTextPrimary {
+    position: relative;
+    left: 37.5%;
+    width: 25%;
+    margin-top: 50px;
+    margin-bottom: 0;
+    font-family: Georgia;
+    font-size: 20px;
     color: #D9D9D9;
 }
 
-a:active {
+/*Текст 2*/
+.labelTextSecondary {
+    margin-top: 1px;
+    margin-left: 10px;
+    font-family: Georgia;
+    font-size: 20px;
+    color: #D9D9D9;
+}
+
+
+/*ПОЛЯ ВВОДА*/
+
+/*Общие свойства текста по-умолчанию в полях ввода на разных браузерах*/
+::-webkit-input-placeholder {
+    color: #7A7A7A;
+}
+:-moz-placeholder {
+    color: #7A7A7A;
+}
+::-moz-placeholder {
+    color: #7A7A7A;
+}
+:-ms-input-placeholder {
     color: #7A7A7A;
 }
 
-img {
-    background-color: transparent
-}
-
+/*Ввод 1*/
 .inputPrimary {
-    margin-top: 25px;
+    position: relative;
+    left: 37.5%;
     height: 50px;
-    width: 400px;
+    width: 25%;
+    margin-top: 25px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #D9D9D9;
@@ -31,99 +126,50 @@ img {
     color: #D9D9D9;
 }
 
-.gridPrimary {
-    display: grid;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-
-.divPrimary {
-    display: inline;
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    height: 50px;
-    width: 500px;
-}
-
-.labelTitle {
-    position: relative;
-    text-align: center;
-    margin-top: 25px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-family: Ofont ru Optimus;
-    font-size: 25px;
-    color: #D9D9D9;
-}
-
-.labelError {
-    position: relative;
-    text-align: center;
-    margin-top: 50px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-family: Georgia;
-    font-size: 20px;
-    color: #FFD700;
-}
-
-.labelPrimary {
-    position: relative;
-    top: -10%;
-    left: 5%;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-family: Georgia;
-    font-size: 20px;
-    color: #D9D9D9;
-}
-
-.labelSecondary {
-    margin-top: 50px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-family: Georgia;
-    font-size: 20px;
-    color: #D9D9D9;
-}
-
-.buttonPrimary {
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
-    margin-top: 50px;
-    height: 50px;
-    width: 160px;
+/*Флаг 1*/
+.inputCheckPrimary {
+    height: 20px;
+    width: 20px;
     background-color: #D9D9D9;
     border: hidden;
     border-radius: 10px;
     outline: none;
+}
+
+
+/*КНОПКИ*/
+
+/*Кнопка 1*/
+.buttonPrimary {
+    padding: 0;
+    position: relative;
+    left: 45%;
+    height: 40px;
+    width: 10%;
+    margin-top: 50px;
+    background-color: #D9D9D9;
+    border: hidden;
+    border-radius: 10px;
     font-family: Georgia;
     font-size: 20px;
     color: #272727;
     cursor: pointer;
 }
 
+/*Кнопка 2*/
 .buttonSecondary {
+    padding: 0;
     height: 75px;
     width: 75px;
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
     background-color: transparent;
     border: hidden;
     outline: none;
     cursor: pointer;
 }
 
+/*Кнопка 3*/
 .buttonThird {
+    padding: 0;
     height: 25px;
     width: 25px;
     background-color: transparent;
@@ -132,18 +178,38 @@ img {
     cursor: pointer;
 }
 
+/*ССЫЛКИ*/
+
+/*Общие свойства ссылки*/
+a {
+    color: #D9D9D9;
+}
+
+/*Общие свойства посещённой ссылки*/
+a:visited {
+    color: #D9D9D9;
+}
+
+/*Общие свойства активной ссылки*/
+a:active {
+    color: #7A7A7A;
+}
+
+/*Ссылка 1*/
 .linkPrimary {
-    position: relative;
     text-align: center;
-    left: 50%;
-    transform: translate(-50%, 0);
     margin-top: 25px;
-    width: 200px;
-    border: none;
-    outline: none;
     font-family: Georgia;
     font-size: 15px;
     color: #D9D9D9;
+}
+
+
+/*ИЗОБРАЖЕНИЯ*/
+
+/*Общие сойства изображения*/
+img {
+    background-color: transparent
 }
 
 .imagePrimary {
@@ -155,22 +221,8 @@ img {
     height: 25px;
     width: 25px;
 }
- 
-::-webkit-input-placeholder {
-    color: #7A7A7A;
-}
 
-:-moz-placeholder {
-    color: #7A7A7A;
-}
-
-::-moz-placeholder {
-    color: #7A7A7A;
-}
-
-:-ms-input-placeholder {
-    color: #7A7A7A;
-}
+/*ШРИФТЫ*/
 
 @font-face {
     font-family: 'Georgia';

@@ -9,22 +9,20 @@
 }
 
 <body>
-    <div class="gridPrimary">
-        <label class="labelTitle">Авторизация</label>
+    <div class="divGridPrimary">
+        <p class="labelTitlePrimary">Авторизация</p>
         <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Логин" />
         <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Пароль" />
         <button id="authentication" class="buttonPrimary" type="submit" onclick="Login()">Войти</button>
-        <div class="linkPrimary">
-            <a asp-action="Index" asp-controller="Users">Забыли пароль?</a>
-        </div>
-        <div class="linkPrimary">
-            <a asp-action="Index" asp-controller="Users">Зарегистрироваться</a>
-        </div>
-        <label id="error" class="labelError" style="display: none;" />
+        <a class="linkPrimary" asp-action="Index" asp-controller="Users">Забыли пароль?</a>
+        <a class="linkPrimary" asp-action="Index" asp-controller="Users">Зарегистрироваться</a>
+        <p id="error" class="labelErrorPrimary" style="display: none;"></p>
     </div>
-    <button class="buttonSecondary">
-        <img class="imagePrimary" src="/images/feedback.png">
-    </button>
+    <div class="divGridSecondary">
+        <button id="feedback" class="buttonSecondary" type="button">
+            <img class="imagePrimary" src="/images/feedback.png" title="Тех.поддержка" />
+        </button>
+    </div>
 </body>
 
 <script>

@@ -74,12 +74,13 @@
 ### CSS
 * display
 * position
-* top/bottom/left/right
+* left/right/top/bottom
 * transform
 * text-align
 * margin/padding
 * height
 * width
+* overflow
 * background-color
 * border/border-bottom
 * border-radius
@@ -90,7 +91,7 @@
 * cursor
 
 ### CSHML
-* name
+* id
 * class
 * style
 * type
@@ -100,7 +101,7 @@
 * asp-action
 * asp-controller
 * visibility
-
+* checked
 
 ## Развёртывание
 
