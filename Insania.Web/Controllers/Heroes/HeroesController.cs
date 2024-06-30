@@ -1,32 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using Insania.Models.OutCategories.Base;
 using Insania.Web.Controllers.OutCategories;
-using Insania.Models.OutCategories.Exceptions;
 using Insania.Models.Users.Users;
+using Insania.Models.OutCategories.Base;
+using Insania.Models.OutCategories.Exceptions;
 
-namespace Insania.Web.Controllers.Users;
+namespace Insania.Web.Controllers.Heroes;
 
 /// <summary>
-/// Контроллер пользователей
+/// Контроллер персонажей
 /// </summary>
 /// <param name="logger">Интерфейс записи логов</param>
-[Route("web/v1/user")]
-public class UsersController(ILogger<UsersController> logger) : BaseController(logger)
+[Route("web/v1/heroes")]
+public class HeroesController(ILogger<HeroesController> logger) : BaseController(logger)
 {
     /// <summary>
-    /// Метод получения страницы регистрации пользователей
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("view")]
-    public IActionResult Index()
-    {
-        //Возвращаем страницу
-        return View("/Pages/Users/RegistrationUser/Index.cshtml", new BaseResponse(true));
-    }
-
-    /// <summary>
-    /// Метод проверки запроса
+    /// Метод получения страницы регистрации персонажа
     /// </summary>
     /// <param name="login">Логин</param>
     /// <param name="password">Пароль</param>
@@ -38,10 +27,9 @@ public class UsersController(ILogger<UsersController> logger) : BaseController(l
     /// <param name="phoneNumber">Номер телефона</param>
     /// <param name="email">Почта</param>
     /// <param name="linkVK">Ссылка в вк</param>
-    /// <exception cref="Exception">Обработанное исключение</exception>
-    /// <exception cref="InnerException">Необработанное исключение</exception>
-    [HttpGet("checkRequest")]
-    public IActionResult CheckRequest([FromQuery] string? login, [FromQuery] string? password,
+    /// <returns></returns>
+    [HttpGet("view")]
+    public IActionResult Index([FromQuery] string? login, [FromQuery] string? password,
         [FromQuery] string? lastName, [FromQuery] string? firstName, [FromQuery] string? patronymic, [FromQuery] bool? gender,
         [FromQuery] DateTime? birthDate, [FromQuery] string? phoneNumber, [FromQuery] string? email, [FromQuery] string? linkVK)
     {
@@ -51,10 +39,10 @@ public class UsersController(ILogger<UsersController> logger) : BaseController(l
             AddUserRequest? request = new(login, password, lastName, firstName, patronymic, gender, birthDate, phoneNumber, email,
                 linkVK);
 
-            //Возвращаем результат
-            return Ok(request);
+            //Возвращаем страницу
+            return View("/Pages/Heroes/RegistrationHero/Index.cshtml", request);
         }
-        catch(InnerException ex)
+        catch (InnerException ex)
         {
             return StatusCode(400, new BaseResponse(false, new BaseError(400, ex.Message)));
         }

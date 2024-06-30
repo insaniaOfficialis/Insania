@@ -1,57 +1,109 @@
+
 /*БЛОКИ*/
+
+/*Общие свойства страницы*/
+html {
+    height: 100%;
+}
 
 /*Общие свойства тела*/
 body {
-    background-color: #272727
-}
-
-/*Блок 1*/
-.divPrimary {
-    position: absolute;
-    top: 0;
-    left: 0;
+    background-color: #272727;
     height: 100%;
-    width: 100%;
-    overflow: auto;
+    margin: 0;
+    padding: 0;
 }
 
-/*Таблица 1*/
-.divGridPrimary {
-    display: grid;
-    position: relative;
-    top: 25%;
+/*Главный блок*/
+.divMain {
+    height: 100%;
 }
 
-/*Таблица 2*/
-.divGridSecondary {
-    display: grid;
+/*Блок авторизации*/
+.divAuthorization {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+.divAuthorizationItems {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+.divAuthorizationItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+.divAuthorizationItemInput {
+
+}
+.divAuthorizationItemInput input.inputPrimary {
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
+}
+.divAuthorizationFixFeedback {
     position: fixed;
-    right: 5%;
-    bottom: 5%;
+    right: 50px;
+    bottom: 50px;
+    height: 75px;
+    width: 75px;
 }
 
-/*Таблица 3*/
-.divGridThird {
-    display: grid;
-    position: relative;
-    top: 10%;
-}
-
-/*Строчная 1*/
-.divInlinePrimary {
+/*Блок карточки элемента*/
+.divCard {
     display: flex;
-    position: absolute;
-    left: 5%;
-    top: 5%;
+    flex-direction: column;
+    gap: 50px;
+    height: 100%;
 }
-
-/*Строчная 1*/
-.divInlineSecondary {
+.divCardTitle {
     display: flex;
-    position: relative;
-    left: 37.5%;
-    width: 25%;
+    margin-left: 50px;
     margin-top: 50px;
+}
+.divCardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 50px;
+    height: 100%;
+}
+.divCardItems {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 50px;
+}
+.divCardItem {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.divCardItem input.inputPrimary {
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
+}
+.divCardItemCheckBox {
+    display: flex;
+    gap: 25px;
+}
+.divCardCenter {
+    display: flex;
+    gap: 25px;
+}
+
+/*Блок возврата назад*/
+.divBack {
+    height: 25px;
+    width: 25px;
 }
 
 
@@ -59,7 +111,6 @@ body {
 
 /*Заголовок 1*/
 .labelTitlePrimary {
-    text-align: center;
     font-family: Ofont ru Optimus;
     font-size: 25px;
     color: #D9D9D9;
@@ -68,26 +119,12 @@ body {
 /*Ошибка 1*/
 .labelErrorPrimary {
     font-family: Georgia;
-    font-size: 20px;
+    font-size: 15px;
     color: #FFD700;
 }
 
 /*Текст 1*/
 .labelTextPrimary {
-    position: relative;
-    left: 37.5%;
-    width: 25%;
-    margin-top: 50px;
-    margin-bottom: 0;
-    font-family: Georgia;
-    font-size: 20px;
-    color: #D9D9D9;
-}
-
-/*Текст 2*/
-.labelTextSecondary {
-    margin-top: 1px;
-    margin-left: 10px;
     font-family: Georgia;
     font-size: 20px;
     color: #D9D9D9;
@@ -112,11 +149,6 @@ body {
 
 /*Ввод 1*/
 .inputPrimary {
-    position: relative;
-    left: 37.5%;
-    height: 50px;
-    width: 25%;
-    margin-top: 25px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #D9D9D9;
@@ -126,56 +158,23 @@ body {
     color: #D9D9D9;
 }
 
-/*Флаг 1*/
-.inputCheckPrimary {
-    height: 20px;
-    width: 20px;
-    background-color: #D9D9D9;
-    border: hidden;
-    border-radius: 10px;
-    outline: none;
+/*Псевдоэлемент календаря у ввода даты*/
+input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
 }
 
 
 /*КНОПКИ*/
 
-/*Кнопка 1*/
-.buttonPrimary {
-    padding: 0;
-    position: relative;
-    left: 45%;
-    height: 40px;
-    width: 10%;
-    margin-top: 50px;
+/*Основной класс кнопки*/
+.button {
+    padding: 0 50px;
+    height: 50px;
     background-color: #D9D9D9;
-    border: hidden;
     border-radius: 10px;
     font-family: Georgia;
     font-size: 20px;
     color: #272727;
-    cursor: pointer;
-}
-
-/*Кнопка 2*/
-.buttonSecondary {
-    padding: 0;
-    height: 75px;
-    width: 75px;
-    background-color: transparent;
-    border: hidden;
-    outline: none;
-    cursor: pointer;
-}
-
-/*Кнопка 3*/
-.buttonThird {
-    padding: 0;
-    height: 25px;
-    width: 25px;
-    background-color: transparent;
-    border: hidden;
-    outline: none;
-    cursor: pointer;
 }
 
 /*ССЫЛКИ*/
@@ -197,8 +196,6 @@ a:active {
 
 /*Ссылка 1*/
 .linkPrimary {
-    text-align: center;
-    margin-top: 25px;
     font-family: Georgia;
     font-size: 15px;
     color: #D9D9D9;
@@ -212,15 +209,6 @@ img {
     background-color: transparent
 }
 
-.imagePrimary {
-    height: 75px;
-    width: 75px;
-}
-
-.imageSecondary {
-    height: 25px;
-    width: 25px;
-}
 
 /*ШРИФТЫ*/
 

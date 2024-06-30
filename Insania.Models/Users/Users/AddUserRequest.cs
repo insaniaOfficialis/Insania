@@ -102,7 +102,8 @@ public partial class AddUserRequest
     /// <param name="phoneNumber">Номер телефона</param>
     /// <param name="email">Почта</param>
     /// <param name="linkVK">Ссылка в вк</param>
-    /// <exception cref="InnerException"></exception>
+    /// <exception cref="Exception">Обработанное исключение</exception>
+    /// <exception cref="InnerException">Необработанное исключение</exception>
     public AddUserRequest(string? login, string? password, string? lastName, string? firstName, string? patronymic, bool? gender,
         DateTime? birthDate, string? phoneNumber, string? email, string? linkVK)
     {

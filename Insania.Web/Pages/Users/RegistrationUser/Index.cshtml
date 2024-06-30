@@ -1,32 +1,188 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
+@using Insania.Models.OutCategories.Base
+@using Insania.Models.OutCategories.Logging;
+
+@model BaseResponse
 @{
     ViewBag.Title = "Регистрация пользователя";
     Layout = "/Pages/OutOfCategories/_Layout.cshtml";
 }
 
 <body>
-    <div class="divInlinePrimary">
-        <button id="back" class="buttonThird" type="button">
-            <img class="imageSecondary" src="/images/back.png" title="Назад" />
-        </button>
-        <p class="labelTextSecondary">Регистрация пользователя</p>
-    </div>
-    <div class="divGridThird">
-        <p class="labelTextPrimary">Логин*:</p>
-        <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
-        <p class="labelTextPrimary">Пароль*:</p>
-        <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
-        <p class="labelTextPrimary">Фамилия*:</p>
-        <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
-        <p class="labelTextPrimary">Имя*:</p>
-        <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
-        <p class="labelTextPrimary">Отчество*:</p>
-        <input id="patronimyc" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
-        <p class="labelTextPrimary">Пол*:</p>
-        <div class="divInlineSecondary">
-            <input id="gener" class="inputCheckPrimary" type="checkbox" placeholder="Укажите пол" checked />
-            <p class="labelTextSecondary">Мужской</p>
+    <div class="divCard">
+        <div class="divCardTitle">
+            <div class="divBack">
+                <a class="linkPrimary" asp-action="Index" asp-controller="Authentication">
+                    <img class="imageSecondary" src="/images/back.png" title="Назад" />
+                </a>
+            </div>
+            <p class="labelTextPrimary">Регистрация пользователя</p>
+        </div>
+        <div class="divCardContent">
+            <div class="divCardItems">
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Логин*:</p>
+                    <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Пароль*:</p>
+                    <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Фамилия*:</p>
+                    <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Имя*:</p>
+                    <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Отчество*:</p>
+                    <input id="patronymic" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Пол*:</p>
+                    <div class="divCardItemCheckBox">
+                        <input id="gender" class="checkbox" type="checkbox" placeholder="Укажите пол" checked onclick="GenderChecked()" />
+                        <p id="genderText" class="labelTextPrimary">Мужской</p>
+                    </div>
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Дата рождения*:</p>
+                    <input id="birthDate" class="inputPrimary " type="date" autocomplete="new-password" placeholder="Введите день рождения" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Телефон:</p>
+                    <input id="phone" class="inputPrimary" type="text" autocomplete="new-password" placeholder="+7 (777) 777-77-77" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Почта:</p>
+                    <input id="email" class="inputPrimary" type="text" autocomplete="new-password" placeholder="ivanov@@mail.ru" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Ссылка в ВК:</p>
+                    <input id="linkVK" class="inputPrimary" type="text" autocomplete="new-password" placeholder="https://vk.com/ivanov" />
+                </div>
+            </div>
+            <div class="divCardCenter">
+                <p id="error" class="labelErrorPrimary" style="display: none;"></p>
+            </div>
+            <div class="divCardCenter">
+                <button id="next" class="button" type="submit" onclick="Next()">Далее</button>
+            </div>
         </div>
     </div>
 </body>
+
+<script>
+    //Устанавливаем маски
+    $(document).ready(function () {
+        $("#phone").inputmask("+7(999) 999-99-99");
+        $("#email").inputmask("*{3,20}@@*{3,20}.*{2,7}");
+        $("#linkVK").inputmask("https://vk.com/*{1,}");
+        $("#birthDate").val(GetDate());
+    })
+
+    //Получаем минимальную дату рождения
+    function GetDate() {
+        const date = new Date();
+        date.setDate(1);
+        let day = ("0" + date.getDate()).slice(-2)
+        let month = ("0" + date.getMonth()).slice(-2)
+        let year = date.getFullYear() - 16;
+        let formattedDate = year + "-" + (month) + "-" + (day);
+        console.log(formattedDate);
+        return formattedDate;
+    }
+
+    //Функция переключения пола
+    function GenderChecked() {
+        //Получаем элементы
+        var gender = document.getElementById("gender");
+        var genderText = document.getElementById("genderText");
+
+        //Меняем текст в зависимости от нажатия
+        if (gender.checked) genderText.innerHTML = "Мужской"
+        else genderText.innerHTML = "Женский"
+    }
+
+    //Функция перехода на следующую страницу
+    function Next() {
+        //Получаем элементы
+        var login = document.getElementById("login");
+        var password = document.getElementById("password");
+        var lastName = document.getElementById("lastName");
+        var firstName = document.getElementById("firstName");
+        var patronymic = document.getElementById("patronymic");
+        var gender = document.getElementById("gender");
+        var birthDate = document.getElementById("birthDate");
+        var phone = document.getElementById("phone");
+        var email = document.getElementById("email");
+        var linkVK = document.getElementById("linkVK");
+        var error = document.getElementById("error");
+
+        //Делаем ошибку невидимой
+        error.style.display = 'none';
+
+        //Проверяем данные
+        if (Check(login) == false) { ViewError('@Errors.EmptyLogin'); return; }
+        if (Check(password) == false) { ViewError('@Errors.EmptyPassword'); return; }
+        if (Check(lastName) == false) { ViewError('@Errors.EmptyLastName'); return; }
+        if (Check(firstName) == false) { ViewError('@Errors.EmptyFirstName'); return; }
+        if (Check(patronymic) == false) { ViewError('@Errors.EmptyPatronymic'); return; }
+        if (gender == null || gender == undefined) { ViewError('@Errors.EmptyGender'); return; }
+        if (Check(birthDate) == false) { ViewError('@Errors.EmptyBirthDate'); return; }
+        if (Check(phone) == false && Check(email) == false && Check(linkVK) == false) { ViewError('@Errors.EmptyPhoneNumberEmailLinkVK'); return; }
+
+        //Формируем запрос
+        let http = new XMLHttpRequest();
+        let url = new URL(CreateUrl(false, 1, "user", "checkRequest"));
+        url.searchParams.set('login', login.value);
+        url.searchParams.set('password', password.value);
+        url.searchParams.set('lastName', lastName.value);
+        url.searchParams.set('firstName', firstName.value);
+        url.searchParams.set('patronymic', patronymic.value);
+        url.searchParams.set('gender', gender.checked);
+        url.searchParams.set('birthDate', birthDate.value);
+        url.searchParams.set('phoneNumber', phone.value);
+        url.searchParams.set('email', email.value);
+        url.searchParams.set('linkVK', linkVK.value);
+        http.open('GET', url);
+        http.responseType = 'json';
+        let response;
+        http.onload = function () {
+            if (http.readyState == 4 && (http.status == 200 || http.status == 400 || http.status == 500)) {
+                response = http.response;
+                if (response == null || response == undefined) { ViewError('@Errors.Unknown'); return; }
+
+                if (response.success == false) {
+                    if (response.error == null || response.error == undefined || response.error.message == null || 
+                        response.error.message == null || response.error.message == undefined || response.error.message == "") {
+                        ViewError('@Errors.Unknown');
+                        return;
+                    }
+
+                    ViewError(response.error.message);
+                    return;
+                }
+            }
+        };
+        http.send();
+
+        //Формируем запрос
+        url = new URL(CreateUrl(false, 1, "heroes", "view"));
+        url.searchParams.set('login', login.value);
+        url.searchParams.set('password', password.value);
+        url.searchParams.set('lastName', lastName.value);
+        url.searchParams.set('firstName', firstName.value);
+        url.searchParams.set('patronymic', patronymic.value);
+        url.searchParams.set('gender', gender.checked);
+        url.searchParams.set('birthDate', birthDate.value);
+        url.searchParams.set('phoneNumber', phone.value);
+        url.searchParams.set('email', email.value);
+        url.searchParams.set('linkVK', linkVK.value);
+        window.location = url;
+    }
+</script>

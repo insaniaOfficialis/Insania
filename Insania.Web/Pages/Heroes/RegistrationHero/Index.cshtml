@@ -1,0 +1,76 @@
+﻿@page
+
+@using Insania.Models.OutCategories.Logging;
+@using Insania.Models.Users.Users;
+
+@model AddUserRequest
+@{
+    ViewBag.Title = "Регистрация пользователя";
+    Layout = "/Pages/OutOfCategories/_Layout.cshtml";
+}
+
+<body>
+    <div class="divCard">
+        <div class="divCardTitle">
+            <div class="divBack">
+                <a class="linkPrimary" asp-action="Index" asp-controller="Authentication">
+                    <img class="imageSecondary" src="/images/back.png" title="Назад" />
+                </a>
+            </div>
+            <p class="labelTextPrimary">Регистрация пользователя</p>
+        </div>
+        <div class="divCardContent">
+            <div class="divCardItems">
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Логин*:</p>
+                    <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Пароль*:</p>
+                    <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Фамилия*:</p>
+                    <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Имя*:</p>
+                    <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Отчество*:</p>
+                    <input id="patronymic" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Пол*:</p>
+                    <div class="divCardItemCheckBox">
+                        <input id="gender" class="checkbox" type="checkbox" placeholder="Укажите пол" checked onclick="GenderChecked()" />
+                        <p id="genderText" class="labelTextPrimary">Мужской</p>
+                    </div>
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Дата рождения*:</p>
+                    <input id="birthDate" class="inputPrimary " type="date" autocomplete="new-password" placeholder="Введите день рождения" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Телефон:</p>
+                    <input id="phone" class="inputPrimary" type="text" autocomplete="new-password" placeholder="+7 (777) 777-77-77" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Почта:</p>
+                    <input id="email" class="inputPrimary" type="text" autocomplete="new-password" placeholder="ivanov@@mail.ru" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Ссылка в ВК:</p>
+                    <input id="linkVK" class="inputPrimary" type="text" autocomplete="new-password" placeholder="https://vk.com/ivanov" />
+                </div>
+            </div>
+            <div class="divCardCenter">
+                <p id="error" class="labelErrorPrimary" style="display: none;"></p>
+            </div>
+            <div class="divCardCenter">
+                <button id="next" class="button" type="submit" onclick="Next()">Далее</button>
+            </div>
+        </div>
+    </div>
+</body>

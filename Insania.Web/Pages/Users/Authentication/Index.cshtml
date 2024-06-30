@@ -1,7 +1,7 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @using Insania.Models.OutCategories.Logging;
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewBag.Title = "Авторизация";
@@ -9,19 +9,35 @@
 }
 
 <body>
-    <div class="divGridPrimary">
-        <p class="labelTitlePrimary">Авторизация</p>
-        <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Логин" />
-        <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Пароль" />
-        <button id="authentication" class="buttonPrimary" type="submit" onclick="Login()">Войти</button>
-        <a class="linkPrimary" asp-action="Index" asp-controller="Users">Забыли пароль?</a>
-        <a class="linkPrimary" asp-action="Index" asp-controller="Users">Зарегистрироваться</a>
-        <p id="error" class="labelErrorPrimary" style="display: none;"></p>
-    </div>
-    <div class="divGridSecondary">
-        <button id="feedback" class="buttonSecondary" type="button">
-            <img class="imagePrimary" src="/images/feedback.png" title="Тех.поддержка" />
-        </button>
+    <div class="divAuthorization">
+        <div class="divAuthorizationItems">
+            <div class="divAuthorizationItem">
+                <p class="labelTitlePrimary">Авторизация</p>
+            </div>
+            <div class="divAuthorizationItem">
+                <div class="divAuthorizationItemInput">
+                    <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Логин" />
+                </div>
+                <div class="divAuthorizationItemInput">
+                    <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Пароль" />
+                </div>
+            </div>
+            <div class="divAuthorizationItem">
+                <button id="authentication" class="button" type="submit" onclick="Login()">Войти</button>
+            </div>
+            <div class="divAuthorizationItem">
+                <a class="linkPrimary" asp-action="Index" asp-controller="Users">Забыли пароль?</a>
+                <a class="linkPrimary" asp-action="Index" asp-controller="Users">Зарегистрироваться</a>
+            </div>
+            <div class="divAuthorizationItem">
+                <p id="error" class="labelErrorPrimary" style="display: none;"></p>
+            </div>
+        </div>
+        <div class="divAuthorizationFixFeedback">
+            <a class="linkPrimary" asp-action="Index" asp-controller="Users">
+                <img class="imagePrimary" src="/images/feedback.png" title="Тех.поддержка" />
+            </a>
+        </div>
     </div>
 </body>
 
@@ -35,7 +51,7 @@
 
         //Делаем ошибку невидимой
         error.style.display = 'none';
-        
+
         //Проверяем данные
         if (login == undefined || login == null || login.value == undefined || login.value == null || login.value == "") {
             //Выводим ошибку
@@ -51,17 +67,5 @@
             //Выходим
             return;
         }
-    }
-
-    //Функция отображения ошибки
-    function ViewError(text) { 
-        //Получаем элементы
-        var error = document.getElementById("error");
-
-        //Делаем ошибку видимой
-        error.style.display = 'inherit';
-
-        //Устанавливаем текст
-        error.innerHTML = text;
     }
 </script>

@@ -73,13 +73,18 @@
 
 ### CSS
 * display
+* flex-direction
+* align-items/justify-content/text-align
+* gap
+
 * position
 * left/right/top/bottom
 * transform
-* text-align
-* margin/padding
+* margin/padding (max/min)
+
 * height
 * width
+
 * overflow
 * background-color
 * border/border-bottom

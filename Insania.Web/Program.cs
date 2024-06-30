@@ -1,9 +1,13 @@
-//Создаём экземпляр построителя приложения
-using Microsoft.Extensions.WebEncoders;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
+using Microsoft.Extensions.WebEncoders;
+
+using Serilog;
+
+//Создаём экземпляр построителя приложения
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 //Добавляем поддержку страниц razor
 builder.Services.AddRazorPages();
@@ -19,6 +23,14 @@ builder.Services.Configure<WebEncoderOptions>(options =>
 {
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
 });
+
+//Добавляем параметры логирования
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.File(path: config["LoggingOptions:FilePath"]!, rollingInterval: RollingInterval.Day)
+    .WriteTo.Debug()
+    .CreateLogger();
+builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Log.Logger, dispose: true));
 
 //Строим приложение
 var app = builder.Build();
