@@ -93,7 +93,6 @@
         let month = ("0" + date.getMonth()).slice(-2)
         let year = date.getFullYear() - 16;
         let formattedDate = year + "-" + (month) + "-" + (day);
-        console.log(formattedDate);
         return formattedDate;
     }
 
@@ -136,9 +135,9 @@
         if (Check(birthDate) == false) { ViewError('@Errors.EmptyBirthDate'); return; }
         if (Check(phone) == false && Check(email) == false && Check(linkVK) == false) { ViewError('@Errors.EmptyPhoneNumberEmailLinkVK'); return; }
 
-        //Формируем запрос
+        //Формируем запрос за проверкой запроса
         let http = new XMLHttpRequest();
-        let url = new URL(CreateUrl(false, 1, "user", "checkRequest"));
+        let url = new URL(CreateUrl(false, 1, "users", "checkRequest"));
         url.searchParams.set('login', login.value);
         url.searchParams.set('password', password.value);
         url.searchParams.set('lastName', lastName.value);
@@ -149,40 +148,55 @@
         url.searchParams.set('phoneNumber', phone.value);
         url.searchParams.set('email', email.value);
         url.searchParams.set('linkVK', linkVK.value);
-        http.open('GET', url);
         http.responseType = 'json';
-        let response;
-        http.onload = function () {
+        http.open('GET', url, true);
+        var response;
+        http.onload = function() {
+            //Если выполнение закончено и статусы кодов корректные
             if (http.readyState == 4 && (http.status == 200 || http.status == 400 || http.status == 500)) {
+                //Получаем ответ
                 response = http.response;
+                //Проверяем ответ
                 if (response == null || response == undefined) { ViewError('@Errors.Unknown'); return; }
 
+                //Если ответ не успешный
                 if (response.success == false) {
-                    if (response.error == null || response.error == undefined || response.error.message == null || 
+                    //Если есть текст ошибки
+                    if (response.error == null || response.error == undefined || response.error.message == null ||
                         response.error.message == null || response.error.message == undefined || response.error.message == "") {
+                        //Выводим ошибку
                         ViewError('@Errors.Unknown');
+
+                        //Выходим
                         return;
                     }
 
+                    //Выводим ошибку
                     ViewError(response.error.message);
+
+                    //Выходим
                     return;
+                }
+                //Иначе
+                else {
+                    //Формируем ссылку для перехода
+                    url = new URL(CreateUrl(false, 1, "heroes", "view"));
+                    url.searchParams.set('login', login.value);
+                    url.searchParams.set('password', password.value);
+                    url.searchParams.set('lastName', lastName.value);
+                    url.searchParams.set('firstName', firstName.value);
+                    url.searchParams.set('patronymic', patronymic.value);
+                    url.searchParams.set('gender', gender.checked);
+                    url.searchParams.set('birthDate', birthDate.value);
+                    url.searchParams.set('phoneNumber', phone.value);
+                    url.searchParams.set('email', email.value);
+                    url.searchParams.set('linkVK', linkVK.value);
+
+                    //Переходим по ссылке
+                    window.location = url;
                 }
             }
         };
         http.send();
-
-        //Формируем запрос
-        url = new URL(CreateUrl(false, 1, "heroes", "view"));
-        url.searchParams.set('login', login.value);
-        url.searchParams.set('password', password.value);
-        url.searchParams.set('lastName', lastName.value);
-        url.searchParams.set('firstName', firstName.value);
-        url.searchParams.set('patronymic', patronymic.value);
-        url.searchParams.set('gender', gender.checked);
-        url.searchParams.set('birthDate', birthDate.value);
-        url.searchParams.set('phoneNumber', phone.value);
-        url.searchParams.set('email', email.value);
-        url.searchParams.set('linkVK', linkVK.value);
-        window.location = url;
     }
 </script>

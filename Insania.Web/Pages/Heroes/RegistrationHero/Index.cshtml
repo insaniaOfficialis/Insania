@@ -1,4 +1,5 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @using Insania.Models.OutCategories.Logging;
 @using Insania.Models.Users.Users;
@@ -13,33 +14,21 @@
     <div class="divCard">
         <div class="divCardTitle">
             <div class="divBack">
-                <a class="linkPrimary" asp-action="Index" asp-controller="Authentication">
+                <a class="linkPrimary" asp-action="Index" asp-controller="Users">
                     <img class="imageSecondary" src="/images/back.png" title="Назад" />
                 </a>
             </div>
-            <p class="labelTextPrimary">Регистрация пользователя</p>
+            <p class="labelTextPrimary">Регистрация персонажа</p>
         </div>
         <div class="divCardContent">
             <div class="divCardItems">
                 <div class="divCardItem">
-                    <p class="labelTextPrimary">Логин*:</p>
-                    <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите логин" />
+                    <p class="labelTextPrimary">Личное имя*:</p>
+                    <input id="personalName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите личное имя" />
                 </div>
                 <div class="divCardItem">
-                    <p class="labelTextPrimary">Пароль*:</p>
-                    <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Введите пароль" />
-                </div>
-                <div class="divCardItem">
-                    <p class="labelTextPrimary">Фамилия*:</p>
-                    <input id="lastName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите фамилию" />
-                </div>
-                <div class="divCardItem">
-                    <p class="labelTextPrimary">Имя*:</p>
-                    <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
-                </div>
-                <div class="divCardItem">
-                    <p class="labelTextPrimary">Отчество*:</p>
-                    <input id="patronymic" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
+                    <p class="labelTextPrimary">Имя семьи*:</p>
+                    <input id="familyName" class="inputPrimary" type="tel" autocomplete="new-password" placeholder="Введите имя семьи" />
                 </div>
                 <div class="divCardItem">
                     <p class="labelTextPrimary">Пол*:</p>
@@ -47,6 +36,22 @@
                         <input id="gender" class="checkbox" type="checkbox" placeholder="Укажите пол" checked onclick="GenderChecked()" />
                         <p id="genderText" class="labelTextPrimary">Мужской</p>
                     </div>
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Раса*:</p>
+                    <select id="races">
+
+                    </select>
+                </div>
+
+
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Имя*:</p>
+                    <input id="firstName" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите имя" />
+                </div>
+                <div class="divCardItem">
+                    <p class="labelTextPrimary">Отчество*:</p>
+                    <input id="patronymic" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Введите отчество" />
                 </div>
                 <div class="divCardItem">
                     <p class="labelTextPrimary">Дата рождения*:</p>
@@ -74,3 +79,74 @@
         </div>
     </div>
 </body>
+
+<script>
+    //Заполняем данные
+    $(document).ready(function () {
+        //Получаем расы
+        GetRaces();
+    })
+
+    //Функция переключения пола
+    function GenderChecked() {
+        //Получаем элементы
+        var gender = document.getElementById("gender");
+        var genderText = document.getElementById("genderText");
+
+        //Меняем текст в зависимости от нажатия
+        if (gender.checked) genderText.innerHTML = "Мужской"
+        else genderText.innerHTML = "Женский"
+    }
+
+    //Функция получения рас
+    function GetRaces() {
+        //Формируем запрос
+        let http = new XMLHttpRequest();
+        let url = new URL(CreateUrl(true, 1, "races", "list"));
+        http.open('GET', url);
+        http.withCredentials = true;
+        http.responseType = 'json';
+        let response;
+        http.onload = function () {
+            //Если выполнение закончено и статусы кодов корректные
+            if (http.readyState == 4 && (http.status == 200 || http.status == 400 || http.status == 500)) {
+                //Получаем ответ
+                response = http.response;
+
+                //Проверяем ответ
+                if (response == null || response == undefined) { ViewError('@Errors.Unknown'); return; }
+
+                //Если ответ не успешный
+                if (response.success == false) {
+                    //Если есть текст ошибки
+                    if (response.error == null || response.error == undefined || response.error.message == null ||
+                        response.error.message == null || response.error.message == undefined || response.error.message == "") {
+                        //Выводим ошибку
+                        ViewError('@Errors.Unknown');
+
+                        //Выходим
+                        return;
+                    }
+
+                    //Выводим ошибку
+                    ViewError(response.error.message);
+
+                    //Выходим
+                    return;
+                }
+                //Иначе
+                else
+                {
+                    //Получаем выпадающий список рас
+                    var races = document.getElementById("races");
+
+                    //Добавляем каждый элемент в список рас
+                    response.items.forEach((item) => {
+                        races.add(new Option(item.name, item.id));
+                    });
+                }
+            }
+        };
+        http.send();
+    }
+</script>

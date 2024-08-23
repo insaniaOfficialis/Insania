@@ -11,7 +11,7 @@ namespace Insania.Web.Controllers.Users;
 /// Контроллер пользователей
 /// </summary>
 /// <param name="logger">Интерфейс записи логов</param>
-[Route("web/v1/user")]
+[Route("web/v1/users")]
 public class UsersController(ILogger<UsersController> logger) : BaseController(logger)
 {
     /// <summary>
