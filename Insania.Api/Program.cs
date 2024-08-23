@@ -143,6 +143,18 @@ services.AddSwaggerGen(options =>
     options.OperationFilter<AuthenticationRequirementsOperationFilter>();
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BadPolicy", policyBuilder => policyBuilder
+        .SetIsOriginAllowed(origin => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+    );
+
+    options.DefaultPolicyName = "BadPolicy";
+});
+
 //Внедряем зависимости для сервисов
 services.AddScoped<IAuthentication, AuthenticationService>(); //аутентифкация
 services.AddScoped<IUsers, UsersService>(); //сервис работы с пользователями
@@ -182,6 +194,7 @@ app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Insania API V1");
 });
+app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 

@@ -22,7 +22,7 @@ function CreateUrl(api, versionNumber, controller, action) {
     var hosts = [
         "https://localhost:44312", //web локальный
         //"https://localhost", //web внешний
-        "https://192.168.31.132" //api внешний
+        "http://192.168.31.132:8080" //api внешний
     ];
     var host;
     if (api) host = hosts[1];
