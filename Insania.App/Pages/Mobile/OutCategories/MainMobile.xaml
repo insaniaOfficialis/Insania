@@ -19,7 +19,7 @@
                         StrokeShape = "RoundRectangle 100"
                         Stroke="{StaticResource PrimaryText}">
                     <Image x:Name="HeroImage"
-                           Background="{StaticResource SecondaryButtonPressed}"
+                           Background="{StaticResource ThirdBackgroundDisable}"
                            Aspect="AspectFill"/>
                 </Border>
                 <Picker x:Name="HeroPicker"

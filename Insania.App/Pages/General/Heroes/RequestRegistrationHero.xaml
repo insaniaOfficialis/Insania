@@ -550,7 +550,7 @@
                                Margin="0,25,0,0"
                                WidthRequest="{OnIdiom Desktop=400, Phone=280}"
                                HeightRequest="{OnIdiom Desktop=400, Phone=280}"
-                               Background="{StaticResource SecondaryButtonPressed}"
+                               Background="{StaticResource ThirdBackgroundDisable}"
                                Aspect="AspectFill"/>
                         <Button x:Name="DownloadButton"
                                 Margin="0,25,0,0"

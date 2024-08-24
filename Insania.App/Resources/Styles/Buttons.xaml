@@ -10,7 +10,7 @@
         <Setter Property="TextColor" Value="{StaticResource PrimaryBackground}"/>
         <Style.Triggers>
             <Trigger TargetType="Button" Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondaryButton}"/>
+                <Setter Property="Background" Value="{StaticResource ThirdBackgrouns}"/>
             </Trigger>
             <Trigger TargetType="Button" Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="{StaticResource PrimaryTextDisable}"/>
@@ -26,7 +26,7 @@
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
         <Style.Triggers>
             <Trigger TargetType="Button" Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondaryButton}"/>
+                <Setter Property="Background" Value="{StaticResource ThirdBackgrouns}"/>
             </Trigger>
             <Trigger TargetType="Button" Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="{StaticResource PrimaryTextDisable}"/>
@@ -47,14 +47,14 @@
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
         <Style.Triggers>
             <Trigger TargetType="Button" Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondaryButton}"/>
+                <Setter Property="Background" Value="{StaticResource ThirdBackgrouns}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="ButtonFifth" TargetType="Button">
         <Setter Property="CornerRadius" Value="0"/>
-        <Setter Property="Background" Value="{StaticResource SecondaryButton}"/>
+        <Setter Property="Background" Value="{StaticResource ThirdBackgrouns}"/>
         <Setter Property="FontFamily" Value="Georgia"/>
         <Setter Property="FontSize" Value="{OnIdiom Desktop=20, Phone=15}"/>
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>

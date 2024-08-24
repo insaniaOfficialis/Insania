@@ -11,7 +11,7 @@
                 <VisualStateGroup x:Name="CustomStates">
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="Color" Value="{StaticResource SecondaryButton}" />
+                            <Setter Property="Color" Value="{StaticResource ThirdBackgrouns}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -19,7 +19,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger TargetType="CheckBox" Property="IsEnabled" Value="False">
-                <Setter Property="Color" Value="{StaticResource SecondaryButton}" />
+                <Setter Property="Color" Value="{StaticResource ThirdBackgrouns}" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -42,36 +42,36 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var config = builder.Configuration;
 
-//Вводим переменные для токена
+//Введение переменных для токена
 var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config["TokenOptions:Key"]!));
 var issuer = config["TokenOptions:Issuer"];
 var audience = config["TokenOptions:Audience"];
 
-//Добавляем параметры для контекста базы данных
+//Добавление параметров для контекста базы данных
 services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseNpgsql(config.GetConnectionString("DefaultPostgresConnectionString"));
     options.EnableSensitiveDataLogging();
 });
 
-//Добавляем параметры маппера моделей
+//Добавление параметров преобразования моделей
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
-//Добавляем параметры идентификации
+//Добавление параметров идентификации
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddControllersWithViews();
 
-//Устанавливаем игнорирование типов даты и времени
+//Установка игнорирования типов даты и времени
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-//Добавляем параметры авторизации
+//Добавление параметров авторизации
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Bearer", new AuthorizationPolicyBuilder()
     .AddAuthenticationSchemes("Bearer")
     .RequireAuthenticatedUser().Build());
 
-//Добавляем параметры сериализации и десериализации json
+//Добавление параметров сериализации и десериализации json
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
@@ -79,7 +79,7 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.WriteIndented = true;
 });
 
-//Добавляем параметры политики паролей
+//Добавление параметров политики паролей
 services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -89,7 +89,7 @@ services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 
-//Добавляем параметры аутентификации
+//Добавление параметров аутентификации
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -116,7 +116,7 @@ builder.Services.AddAuthentication(options => {
         };
     });
 
-//Добавляем параметры логирования
+//Добавление параметров логирования
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
     .WriteTo.File(path: config["LoggingOptions:FilePath"]!, rollingInterval: RollingInterval.Day)
@@ -124,7 +124,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Log.Logger, dispose: true));
 
-//Добавляем параметры документации
+//Добавление параметров документации
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Insania API", Version = "v1" });
@@ -143,6 +143,7 @@ services.AddSwaggerGen(options =>
     options.OperationFilter<AuthenticationRequirementsOperationFilter>();
 });
 
+//Добавление корсов
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("BadPolicy", policyBuilder => policyBuilder
@@ -155,7 +156,7 @@ builder.Services.AddCors(options =>
     options.DefaultPolicyName = "BadPolicy";
 });
 
-//Внедряем зависимости для сервисов
+//Внедрение зависимостей для сервисов
 services.AddScoped<IAuthentication, AuthenticationService>(); //аутентифкация
 services.AddScoped<IUsers, UsersService>(); //сервис работы с пользователями
 services.AddScoped<IRaces, RacesService>(); //сервис работы с расами
@@ -179,10 +180,10 @@ services.AddScoped<IAdministrators, AdministratorsService>(); //сервис работы с 
 services.AddScoped<IBiographiesHeroes, BiographiesHeroesService>(); //сервис работы с биографиями персонажей
 services.AddScoped<IBiographiesRequestsHeroesRegistration, BiographiesRequestsHeroesRegistrationService>(); //сервис работы с биографиями заявок на регистрацию персонажей
 
-//Строим приложение
+//Построение приложения
 var app = builder.Build();
 
-//Добавляем параметры конвеера запросов
+//Добавление параметров конвеера запросов
 app.UseMiddleware<LoggingMiddleware>();
 
 app.UseRouting();
@@ -198,5 +199,5 @@ app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 
-//Запускаем приложение
+//Запуск приложения
 app.Run();

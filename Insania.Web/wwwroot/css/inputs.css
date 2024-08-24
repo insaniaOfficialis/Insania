@@ -1,0 +1,22 @@
+﻿/*Ввод 1*/
+.inputPrimary {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #D9D9D9;
+    outline: none;
+    font-family: Georgia;
+    font-size: 20px;
+    color: var(--primary-text);
+}
+
+/*Цвет теста по-умолчанию*/
+::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder { color: var(--primary-text-disable); }
+
+/*Цвет выделения текста*/
+::selection, ::-moz-selection {
+    background-color: var(--third-background-disable);
+    color: var(--primary-text);
+}
+
+/*Псевдоэлемент календаря у ввода даты*/
+input[type='date']::-webkit-calendar-picker-indicator { filter: invert(100%); }

@@ -1,0 +1,11 @@
+﻿:root {
+    /*Фон*/
+    --primary-background: #272727;
+    --secondary-background: #2F2F2F;
+    --third-background: #888888;
+    --third-background-disable: #88888877;
+    /*Текст*/
+    --primary-text: #D9D9D9;
+    --primary-text-disable: #D9D9D977;
+    --secondary-text: #FFD700;
+}
