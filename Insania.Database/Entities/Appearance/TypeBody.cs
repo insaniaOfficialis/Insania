@@ -24,7 +24,7 @@ public class TypeBody : Guide
     /// <summary>
     /// Конструктор модели сущности типа телосложения без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public TypeBody(string user, string name) : base(user, name)
     {

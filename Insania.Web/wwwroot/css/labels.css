@@ -1,0 +1,20 @@
+﻿/*Заголовок 1*/
+.labelTitlePrimary {
+    font-family: Ofont ru Optimus;
+    font-size: 25px;
+    color: var(--primary-text);
+}
+
+/*Ошибка 1*/
+.labelErrorPrimary {
+    font-family: Georgia;
+    font-size: 15px;
+    color: var(--secondary-text);
+}
+
+/*Текст 1*/
+.labelTextPrimary {
+    font-family: Georgia;
+    font-size: 20px;
+    color: var(--primary-text);
+}

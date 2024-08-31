@@ -43,7 +43,7 @@ public class SectionInformationArticle : Guide
     /// <summary>
     /// Конструктор модели сущности радела информационной статьи без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="sequenceNumber">Порядковый номер</param>
     /// <param name="parent">Родитель</param>

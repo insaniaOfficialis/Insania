@@ -98,7 +98,7 @@ public class BiographyHero : Reestr
     /// <summary>
     /// Конструктор модели сущности биографии персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="dayBegin">День начала</param>
@@ -128,7 +128,7 @@ public class BiographyHero : Reestr
     /// Конструктор модели сущности биографии персонажа c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="dayBegin">День начала</param>

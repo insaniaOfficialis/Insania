@@ -123,7 +123,7 @@
                             Style="{StaticResource ButtonSecondary}"/>
                     <Label VerticalOptions="Center"
                            Text="Справка"
-                           Style="{StaticResource TitleFourth}"/>
+                           Style="{StaticResource TitleThird}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Button x:Name="SettingsButton"
@@ -134,7 +134,7 @@
                             Style="{StaticResource ButtonSecondary}"/>
                     <Label VerticalOptions="Center"
                            Text="Настройки"
-                           Style="{StaticResource TitleFourth}"/>
+                           Style="{StaticResource TitleThird}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Button x:Name="FeedbackButton"
@@ -145,7 +145,7 @@
                             Style="{StaticResource ButtonSecondary}"/>
                     <Label VerticalOptions="Center"
                            Text="Тех.поддержка"
-                           Style="{StaticResource TitleFourth}"/>
+                           Style="{StaticResource TitleThird}"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Button x:Name="LogoutButton"
@@ -157,7 +157,7 @@
                             Clicked="LogoutButton_Clicked"/>
                     <Label VerticalOptions="Center"
                            Text="Выход"
-                           Style="{StaticResource TitleFourth}"/>
+                           Style="{StaticResource TitleThird}"/>
                 </StackLayout>
             </StackLayout>
         </Grid>

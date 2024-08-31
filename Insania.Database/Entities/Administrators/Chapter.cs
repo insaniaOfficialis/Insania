@@ -56,7 +56,7 @@ public class Chapter : Reestr
     /// <summary>
     /// Конструктор модели сущности капитула без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="country">Ссылка на страну</param>

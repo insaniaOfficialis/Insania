@@ -31,7 +31,7 @@ public class EyesColor : Guide
     /// <summary>
     /// Конструктор модели сущности рас цвета глаз id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="rgb">Rgb-модель цвета</param>
     public EyesColor(string user, string name, string? rgb) : base(user, name)

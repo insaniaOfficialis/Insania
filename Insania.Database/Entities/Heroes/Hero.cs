@@ -224,7 +224,7 @@ public class Hero : Reestr
     /// <summary>
     /// Конструктор модели сущности персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="player">Игрок</param>
     /// <param name="personalName">Личное имя</param>
@@ -285,7 +285,7 @@ public class Hero : Reestr
     /// Конструктор модели сущности персонажа c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="player">Игрок</param>
     /// <param name="personalName">Личное имя</param>

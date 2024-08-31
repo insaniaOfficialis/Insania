@@ -36,7 +36,7 @@ public class FileDetailInformationArticle : FileEntity
     /// <summary>
     /// Конструктор модели сущности файла детальной части информационной статьи без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="detailInformationArticle">Ссылка на детальную часть информационной статьи</param>
     public FileDetailInformationArticle(string user, File file, DetailInformationArticle detailInformationArticle) : 
@@ -63,7 +63,7 @@ public class FileDetailInformationArticle : FileEntity
     /// <summary>
     /// Конструктор модели сущности файла детальной части информационной статьи без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="sequenceNumber">орядковый номер</param>
     /// <param name="detailInformationArticle">Ссылка на детальную часть информационной статьи</param>

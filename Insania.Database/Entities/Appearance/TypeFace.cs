@@ -24,7 +24,7 @@ public class TypeFace : Guide
     /// <summary>
     /// Конструктор модели сущности типа лица без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public TypeFace(string user, string name) : base(user, name)
     {

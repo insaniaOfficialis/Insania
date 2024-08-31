@@ -49,7 +49,7 @@ public class RegionOwnership : BaseEntity
     /// <summary>
     /// Конструктор модели сущности региона владения без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="region">Регион</param>
     /// <param name="ownership">Владение</param>
     public RegionOwnership(string user, Region region, Ownership ownership) : base(user)

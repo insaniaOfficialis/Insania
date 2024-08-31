@@ -36,7 +36,7 @@ public class StatusRequestHeroRegistration : Guide
     /// <summary>
     /// Конструктор модели сущности статуса заявки на регистрацию персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="previous">Ссылка на предыдущий статус</param>
     public StatusRequestHeroRegistration(string user, string name, StatusRequestHeroRegistration? previous) : base(user, name)

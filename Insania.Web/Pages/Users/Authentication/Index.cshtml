@@ -16,10 +16,10 @@
             </div>
             <div class="divAuthorizationItem">
                 <div class="divAuthorizationItemInput">
-                    <input id="login" class="inputPrimary" type="text" autocomplete="new-password" placeholder="Логин" />
+                    <input id="login" class="inputPrimary" type="text" autocomplete="off" placeholder="Логин" />
                 </div>
                 <div class="divAuthorizationItemInput">
-                    <input id="password" class="inputPrimary" type="password" autocomplete="new-password" placeholder="Пароль" />
+                    <input id="password" class="inputPrimary" type="text" autocomplete="off" placeholder="Пароль" />
                 </div>
             </div>
             <div class="divAuthorizationItem">
@@ -42,30 +42,62 @@
 </body>
 
 <script>
+    //Объявление переменных
+    /*var password = ""; //пароль
+
+    //Получение элементов
+    var passwordInput = document.getElementById("password");
+
+    //Задание событий
+    passwordInput.onkeyup = InputPassword;*/
+
     //Функция авторизации
     function Login() {
-        //Получаем элементы
+        //Получение элементов
         var login = document.getElementById("login");
-        var password = document.getElementById("password");
         var error = document.getElementById("error");
 
-        //Делаем ошибку невидимой
+        //Скрытие ошибки
         error.style.display = 'none';
 
-        //Проверяем данные
+        //Проверка данных
         if (login == undefined || login == null || login.value == undefined || login.value == null || login.value == "") {
-            //Выводим ошибку
+            //Вывод ошибки
             ViewError('@Errors.EmptyLogin');
 
-            //Выходим
+            //Выход
             return;
         }
-        if (password == undefined || password == null || password.value == undefined || password.value == null || password.value == "") {
-            //Выводим ошибку
+        if (password == undefined || password == null || password.value == "") {
+            //Вывод ошибки
             ViewError('@Errors.EmptyPassword');
             
-            //Выходим
+            //Выход
             return;
         }
     }
+
+    //Функция ввода пароля
+    /*function InputPassword(event) {
+        //Получение введённого символа
+        var key = event.key;
+        var keyCode = event.keyCode || event.charCode;
+
+        if (keyCode == 8 || keyCode == 46) {
+            password = "";
+
+            //Выход
+            return;
+        }
+
+        if (key.length != 1) {
+            //Выход
+            return;
+        }
+
+        console.log(event.key);
+        password += event.key;
+        console.log(password);
+        passwordInput.value = passwordInput.value.replace(/[\s\S]/g, "*");
+    }*/
 </script>

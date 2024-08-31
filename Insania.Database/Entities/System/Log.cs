@@ -74,7 +74,7 @@ public class Log : Reestr
     /// <summary>
     /// Конструктор модели сущности записи лога без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="method">Наименование вызываемого метода</param>
     /// <param name="type">Тип вызываемого метода</param>
@@ -91,7 +91,7 @@ public class Log : Reestr
     /// Конструктор модели сущности сущности записи лога с id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="method">Наименование вызываемого метода</param>
     /// <param name="type">Тип вызываемого метода</param>

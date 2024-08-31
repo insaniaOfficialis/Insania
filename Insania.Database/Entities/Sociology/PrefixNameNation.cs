@@ -51,7 +51,7 @@ public class PrefixNameNation : BaseEntity
     /// <summary>
     /// Конструктор модели сущности префикса имени нации без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="prefixName">Префикс имени</param>
     /// <param name="nation">Нация</param>
     public PrefixNameNation(string user, PrefixName prefixName, Nation nation) : base(user)

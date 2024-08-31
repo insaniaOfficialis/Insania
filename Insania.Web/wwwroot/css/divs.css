@@ -1,0 +1,99 @@
+﻿/*Главный блок*/
+.divMain {
+    height: 100%;
+}
+
+/*Блок авторизации*/
+.divAuthorization {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+
+.divAuthorizationItems {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.divAuthorizationItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.divAuthorizationItemInput { }
+.divAuthorizationItemInput input.inputPrimary {
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
+}
+
+.divAuthorizationFixFeedback {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    height: 75px;
+    width: 75px;
+}
+
+/*Блок карточки элемента*/
+.divCard {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    height: 100%;
+}
+
+.divCardTitle {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.divCardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 50px;
+    height: 100%;
+}
+
+.divCardItems {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 50px;
+}
+
+.divCardItem {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.divCardItem input.inputPrimary {
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
+}
+
+.divCardItemCheckBox {
+    display: flex;
+    gap: 25px;
+}
+
+.divCardCenter {
+    display: flex;
+    gap: 25px;
+}
+
+/*Блок возврата назад*/
+.divBack {
+    height: 25px;
+    width: 25px;
+}

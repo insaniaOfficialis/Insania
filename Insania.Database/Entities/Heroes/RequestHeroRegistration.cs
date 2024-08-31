@@ -131,7 +131,7 @@ public class RequestHeroRegistration : Reestr
     /// <summary>
     /// Конструктор модели сущности заявки на регистрацию персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="status">Ссылка на статус</param>
@@ -148,7 +148,7 @@ public class RequestHeroRegistration : Reestr
     /// Конструктор модели сущности заявки на регистрацию персонажа c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="hero">Ссылка на персонажа</param>
     /// <param name="status">Ссылка на статус</param>

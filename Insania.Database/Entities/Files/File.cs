@@ -52,7 +52,7 @@ public class File : Reestr
     /// <summary>
     /// Конструктор модели сущности файла без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="type">Ссылка на тип</param>
@@ -68,7 +68,7 @@ public class File : Reestr
     /// Конструктор модели сущности файла c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="type">Ссылка на тип</param>

@@ -41,7 +41,7 @@ public abstract class InformationArticleEntity : BaseEntity
     /// <summary>
     /// Конструктор модели сущности информационной статьи сущности без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="informationArticle">Ссылка на информационную статью</param>
     public InformationArticleEntity(string user, HeaderInformationArticle informationArticle) : base(user)
     {
@@ -64,7 +64,7 @@ public abstract class InformationArticleEntity : BaseEntity
     /// <summary>
     /// Конструктор модели сущности информационной статьи сущности без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="informationArticle">Ссылка на информационную статью</param>
     /// <param name="sequenceNumber">орядковый номер</param>
     public InformationArticleEntity(string user, HeaderInformationArticle informationArticle, int sequenceNumber) : base(user)

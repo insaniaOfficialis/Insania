@@ -61,7 +61,7 @@ public class Organization : Reestr
     /// <summary>
     /// Конструктор модели сущности организации без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="type">Ссылка на тип</param>

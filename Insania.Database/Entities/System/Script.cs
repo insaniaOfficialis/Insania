@@ -47,7 +47,7 @@ public class Script : Reestr
     /// <summary>
     /// Конструктор модели сущности скрипта без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="isSuccess">Успешность</param>
@@ -64,7 +64,7 @@ public class Script : Reestr
     /// Конструктор модели сущности скрипта c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="name">Наименование</param>
     /// <param name="isSuccess">Успешность</param>

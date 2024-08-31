@@ -1,0 +1,17 @@
+﻿/*Общие свойства ссылки*/
+a {
+    color: var(--primary-text);
+}
+a:visited {
+    color: var(--primary-text);
+}
+a:active {
+    color: var(--third-text);
+}
+
+/*Ссылка 1*/
+.linkPrimary {
+    font-family: Georgia;
+    font-size: 15px;
+    color: var(--primary-text);
+}

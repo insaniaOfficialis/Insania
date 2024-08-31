@@ -31,7 +31,7 @@ public class Rank : Guide
     /// <summary>
     /// Конструктор модели сущности звания без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="сoefficientAccrualHonorPoints">Коэффициент начисления баллов почёта</param>
     public Rank(string user, string name, double сoefficientAccrualHonorPoints) : base(user,

@@ -24,6 +24,10 @@
     <ProjectReference Include="..\Insania.Models\Insania.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
   </Target>
 

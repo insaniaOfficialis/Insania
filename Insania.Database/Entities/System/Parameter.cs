@@ -31,7 +31,7 @@ public class Parameter : Guide
     /// <summary>
     /// Конструктор модели сущности параметра без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="value">Значение</param>
     public Parameter(string user, string name, string? value) : base(user, name)

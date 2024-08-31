@@ -31,7 +31,7 @@ public class TypeFile : Guide
     /// <summary>
     /// Конструктор модели сущности типа файла без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="path">Путь</param>
     public TypeFile(string user, string name, string path) : base(user, name)

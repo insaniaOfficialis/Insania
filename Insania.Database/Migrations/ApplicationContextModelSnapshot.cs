@@ -835,6 +835,204 @@ namespace Insania.Database.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Insania.Database.Entities.Feedback.Feedback", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("AuthorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("author_id")
+                        .HasComment("Ссылка на автора");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_system")
+                        .HasComment("Признак системной записи");
+
+                    b.Property<long>("StatusId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("status_id")
+                        .HasComment("Ссылка на статус");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text")
+                        .HasComment("Текст");
+
+                    b.Property<long>("TypeId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("type_id")
+                        .HasComment("Ссылка на тип");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("re_feedback", t =>
+                        {
+                            t.HasComment("Обратная связь");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Feedback.StatusFeedback", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Псевдоним");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("dir_statuses_feedback", t =>
+                        {
+                            t.HasComment("Статусы обратной связи");
+                        });
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Feedback.TypeFeedback", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id")
+                        .HasComment("Первичный ключ таблицы");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Псевдоним");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_create")
+                        .HasComment("Дата создания");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted")
+                        .HasComment("Дата удаления");
+
+                    b.Property<DateTime>("DateUpdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_update")
+                        .HasComment("Дата обновления");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id")
+                        .HasComment("Ссылка на родителя");
+
+                    b.Property<string>("UserCreate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_create")
+                        .HasComment("Пользователь, создавший");
+
+                    b.Property<string>("UserUpdate")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_update")
+                        .HasComment("Пользователь, обновивший");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("dir_types_feedback", t =>
+                        {
+                            t.HasComment("Типы обратной связи");
+                        });
+                });
+
             modelBuilder.Entity("Insania.Database.Entities.Files.File", b =>
                 {
                     b.Property<long>("Id")
@@ -3353,6 +3551,40 @@ namespace Insania.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Season");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Feedback.Feedback", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Users.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("Insania.Database.Entities.Feedback.StatusFeedback", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Insania.Database.Entities.Feedback.TypeFeedback", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Insania.Database.Entities.Feedback.TypeFeedback", b =>
+                {
+                    b.HasOne("Insania.Database.Entities.Feedback.TypeFeedback", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Insania.Database.Entities.Files.File", b =>

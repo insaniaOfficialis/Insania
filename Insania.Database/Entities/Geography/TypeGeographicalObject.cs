@@ -24,7 +24,7 @@ public class TypeGeographicalObject : Guide
     /// <summary>
     /// Конструктор модели сущности типа географического объекта без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public TypeGeographicalObject(string user, string name) : base(user, name)
     {

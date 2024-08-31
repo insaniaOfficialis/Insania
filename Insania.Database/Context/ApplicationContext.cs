@@ -7,6 +7,7 @@ using Insania.Database.Entities.Administrators;
 using Insania.Database.Entities.Appearance;
 using Insania.Database.Entities.Biology;
 using Insania.Database.Entities.Chronology;
+using Insania.Database.Entities.Feedback;
 using Insania.Database.Entities.Files;
 using Insania.Database.Entities.Geography;
 using Insania.Database.Entities.Heroes;
@@ -238,6 +239,22 @@ public class ApplicationContext : IdentityDbContext<User, Role, long, IdentityUs
     #endregion
 
     #region Обращения
+
+    /// <summary>
+    /// Типы обратной связи
+    /// </summary>
+    public DbSet<TypeFeedback> TypesFeedback { get; set; }
+
+    /// <summary>
+    /// Статусы обратной связи
+    /// </summary>
+    public DbSet<StatusFeedback> StatusesFeedback { get; set; }
+
+    /// <summary>
+    /// Обратная связь
+    /// </summary>
+    public DbSet<Feedback> Feedback { get; set; }
+
 
     #endregion
 

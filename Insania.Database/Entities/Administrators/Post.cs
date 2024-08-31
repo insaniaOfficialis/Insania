@@ -31,7 +31,7 @@ public class Post : Guide
     /// <summary>
     /// Конструктор модели сущности должности без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="scopeActivity">Сфера деятельности</param>
     public Post(string user, string name, string scopeActivity) : base(user, name)

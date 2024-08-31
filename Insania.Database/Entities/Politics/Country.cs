@@ -67,7 +67,7 @@ public class Country : Reestr
     /// <summary>
     /// Конструктор модели сущности страны без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="numberOnMap">Номер на карте/param>
     /// <param name="colorOnMap">Цвет на карте</param>

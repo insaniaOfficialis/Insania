@@ -47,7 +47,7 @@ public abstract class Guide : Base
     /// <summary>
     /// Конструктор модели сущности справочника без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public Guide(string user, string name) : base(user)
     {

@@ -63,7 +63,7 @@ public class BiographyRequestHeroRegistration : Reestr
     /// <summary>
     /// Конструктор модели сущности биографии заявки на регистрацию персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="request">Ссылка на заявку</param>
     /// <param name="biography">Ссылка на биографию</param>
@@ -80,7 +80,7 @@ public class BiographyRequestHeroRegistration : Reestr
     /// Конструктор модели сущности биографии заявки на регистрацию персонажа c id
     /// </summary>
     /// <param name="id">Первичный ключ таблицы</param>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     /// <param name="request">Ссылка на заявку</param>
     /// <param name="biography">Ссылка на биографию</param>

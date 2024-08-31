@@ -36,7 +36,7 @@ public class FileHero : FileEntity
     /// <summary>
     /// Конструктор модели сущности файла персонажа без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="hero">Ссылка на персонажа</param>
     public FileHero(string user, File file, Hero hero) : base(user, file)
@@ -61,7 +61,7 @@ public class FileHero : FileEntity
     /// <summary>
     /// Конструктор модели сущности файла персонажа без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="sequenceNumber">орядковый номер</param>
     /// <param name="hero">Ссылка на персонажа</param>

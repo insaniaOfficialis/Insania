@@ -24,7 +24,7 @@ public class Race : Guide
     /// <summary>
     /// Конструктор модели сущности рас без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public Race(string user, string name) : base(user, name)
     {

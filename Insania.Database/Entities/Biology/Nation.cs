@@ -44,7 +44,7 @@ public class Nation : Guide
     /// <summary>
     /// Конструктор модели сущности нации без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="race">Ссылка на расу</param>
     /// <param name="languageForNames">Язык для имён</param>

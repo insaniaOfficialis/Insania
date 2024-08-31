@@ -29,7 +29,7 @@ public class PrefixName : Guide
     /// <summary>
     /// Конструктор модели сущности префикса имени без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public PrefixName(string user, string name) : base(user, name)
     {

@@ -31,7 +31,7 @@ public class Season : Guide
     /// <summary>
     /// Конструктор модели сущности сезона без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="sequenceNumber">Порядковый номер</param>
     public Season(string user, string name, int sequenceNumber) : base(user, name)

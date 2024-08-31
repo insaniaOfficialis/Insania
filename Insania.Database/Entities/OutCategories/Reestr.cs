@@ -27,7 +27,7 @@ public abstract class Reestr : Base
     /// <summary>
     /// Конструктор модели сущности реестра без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="isSystem">Признак системной записи</param>
     public Reestr(string user, bool isSystem): base(user)
     {

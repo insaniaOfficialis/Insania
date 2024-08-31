@@ -50,6 +50,8 @@ public partial class App : Application
     /// <returns></returns>
     protected override Window CreateWindow(IActivationState? activationState)
     {
+        //MainPage ??= new MainPage();
+
         var window = base.CreateWindow(activationState);
         window.MinimumHeight = Height;
         window.Height = Height;

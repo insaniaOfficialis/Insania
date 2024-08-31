@@ -77,7 +77,7 @@ public abstract class Base
     /// <summary>
     /// Конструктор базовой сущности без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     public Base(string user): this()
     {
         DateCreate = DateTime.UtcNow;

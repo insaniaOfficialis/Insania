@@ -43,7 +43,7 @@ public class Month : Guide
     /// <summary>
     /// Конструктор модели сущности месяца без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="season">Ссылка на сезон</param>
     /// <param name="sequenceNumber">Порядковый номер</param>

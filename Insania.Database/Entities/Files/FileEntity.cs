@@ -41,7 +41,7 @@ public abstract class FileEntity : BaseEntity
     /// <summary>
     /// Конструктор модели сущности файла сущности без id и порядкового номера
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     public FileEntity(string user, File file) : base(user)
     {
@@ -64,7 +64,7 @@ public abstract class FileEntity : BaseEntity
     /// <summary>
     /// Конструктор модели сущности файла сущности без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="file">Ссылка на файл</param>
     /// <param name="sequenceNumber">орядковый номер</param>
     public FileEntity(string user, File file, int sequenceNumber) : base(user)

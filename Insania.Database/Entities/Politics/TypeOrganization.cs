@@ -24,7 +24,7 @@ public class TypeOrganization : Guide
     /// <summary>
     /// Конструктор модели сущности типа организации без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     public TypeOrganization(string user, string name) : base(user, name)
     {

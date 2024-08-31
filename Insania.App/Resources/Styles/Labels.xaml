@@ -18,12 +18,6 @@
 
     <Style x:Key="TitleThird" TargetType="Label">
         <Setter Property="FontFamily" Value="Georgia"/>
-        <Setter Property="FontSize" Value="{OnIdiom Desktop=20, Phone=15}"/>
-        <Setter Property="TextColor" Value="{StaticResource ThirdBackground}"/>
-    </Style>
-
-    <Style x:Key="TitleFourth" TargetType="Label">
-        <Setter Property="FontFamily" Value="Georgia"/>
         <Setter Property="FontSize" Value="{OnIdiom Desktop=15, Phone=10}"/>
         <Setter Property="TextColor" Value="{StaticResource PrimaryText}"/>
     </Style>

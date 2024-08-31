@@ -40,7 +40,7 @@ public class Fraction : Guide
     /// <summary>
     /// Конструктор модели сущности фракции без id
     /// </summary>
-    /// <param name="user">Пользователь, изменивший</param>
+    /// <param name="user">Пользователь, создавший</param>
     /// <param name="name">Наименование</param>
     /// <param name="colorOnMap">Цвет на карте</param>
     /// <param name="functions">Функции</param>
